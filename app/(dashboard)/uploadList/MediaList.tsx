@@ -67,6 +67,6 @@ export default function MediaList() {
     if (isLoading) return <div>Loading...</div>;
 
     return (
-        <MediaGrid error={error} mediaUploads={mediaUploads} onDelete={handleDelete} />
+        <MediaGrid error={error || undefined} mediaUploads={mediaUploads} onDelete={handleDelete} />
     );
 }

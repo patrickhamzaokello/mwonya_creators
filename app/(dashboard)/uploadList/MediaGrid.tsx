@@ -9,8 +9,7 @@ const formatDate = (dateString: string) => {
     });
 };
 
-
-const MediaCard = ({ upload, onDelete }) => (
+const MediaCard = ({ upload, onDelete }: { upload: any, onDelete: (upload: any) => void }) => (
     <div key={upload.id} className="bg-white rounded-lg shadow-sm overflow-hidden p-4 flex items-center space-x-4">
         {upload.type === 'image' && (
             <div className="relative w-24 h-24 flex-shrink-0">
@@ -62,7 +61,13 @@ const MediaCard = ({ upload, onDelete }) => (
     </div>
 );
 
-const MediaGrid = ({error, mediaUploads, onDelete }) => (
+interface MediaGridProps {
+    error?: { success: boolean; message: string };
+    mediaUploads: Array<any>;
+    onDelete: (upload: any) => void;
+}
+
+const MediaGrid: React.FC<MediaGridProps> = ({ error, mediaUploads, onDelete }) => (
     <div>
     {error && (
         <div className={`p-4 mb-4 rounded-lg ${error.success ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
