@@ -16,5 +16,3 @@ export const DEFAULT_LOGIN_REDIRECT = "/studio";
 export const ARTIST_ROUTES = ['/studio', '/albums'];
 
 export const ROOT = '/';
-export const PUBLIC_ROUTES = ['/'];
-export const DEFAULT_REDIRECT = '/protected';
