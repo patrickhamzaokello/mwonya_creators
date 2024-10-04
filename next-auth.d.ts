@@ -4,8 +4,8 @@ import "next-auth/jwt"
 declare module "next-auth" {
     interface User {
         id: string;
+        name: string;
         email: string;
-        password: string;
         role: string;
     }
 

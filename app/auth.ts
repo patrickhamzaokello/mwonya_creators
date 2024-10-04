@@ -7,54 +7,59 @@ import { getUserByEmail } from "@/data-layer/user"
 import bcrypt from "bcryptjs"
 import { authConfig } from "./auth.config"
 import { LoginSchema } from "@/lib/schemas"
- 
+import { User } from "@auth/core/types";
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
     ...authConfig,
     providers: [
         Github(
             {
-              allowDangerousEmailAccountLinking: true
+                allowDangerousEmailAccountLinking: true
             }
-          ),
-          Google({
+        ),
+        Google({
             allowDangerousEmailAccountLinking: true
-          }),
-          Credentials({
+        }),
+        Credentials({
             name: "Credentials",
             credentials: {
-              email: { label: "Email", type: "email" },
-              password: { label: "Password", type: "password" },
+                email: { label: "Email", type: "email" },
+                password: { label: "Password", type: "password" },
             },
-            async authorize(credentials) {
-              try {
-                // Validate the credentials given by the user
-                const validatedFields = await LoginSchema.safeParse(credentials)
-                let user = null
-                if (validatedFields.success) {
-                  const { email, password } = validatedFields.data;
-      
-                  const user = await getUserByEmail(email);
-      
-                  if (!user || !user.password) throw new Error("User not found.");
-      
-                  // check if passwords match
-                  const passwordsMatch = await bcrypt.compare(
-                    password,
-                    user.password
-                  );
-                  // if the passwords match, return the user
-                  if (passwordsMatch) return user;
+            async authorize(credentials, request): Promise<User | null> {
+                try {
+                    // Validate the credentials given by the user
+                    const validatedFields = await LoginSchema.safeParse(credentials)
+                    if (!validatedFields.success) {
+                        return null;
+                    }
+
+                    const { email, password } = validatedFields.data;
+                    const user = await getUserByEmail(email);
+
+                    if (!user || !user.password) {
+                        return null;
+                    }
+                    const passwordsMatch = await bcrypt.compare(password, user.password);
+
+                    if (passwordsMatch) {
+                        // Make sure the returned user object matches the User type
+                        return {
+                          id: user.id,
+                          name: user.name,
+                          email: user.email,
+                          image: user.image,
+                          role: user.role,
+                        };
+                      }
+                    return null;
+                } catch (error) {
+                    console.error("Error in authorize function:", error);
+                    return null;
                 }
-                return user;
-              } catch (error) {
-                if (error instanceof ZodError) {
-                  // Return `null` to indicate that the credentials are invalid
-                  return null
-                }
-              }
             }
-      
-      
-          })
+
+
+        })
     ],
 });
