@@ -22,8 +22,9 @@ import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast';
 import { SocialProviders } from './SocialProviders'
 import { useRouter } from 'next/navigation'
+import { Suspense } from 'react'
 
-export const LoginForm = () => {
+const LoginForm = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -147,5 +148,13 @@ export const LoginForm = () => {
       <SocialProviders />
 
     </CardWrapper>
+  )
+}
+
+export const MainLoginForm=()=>{
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   )
 }

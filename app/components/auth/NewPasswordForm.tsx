@@ -20,11 +20,12 @@ import { FormSuccess } from "@/components/FormSuccess";
 import { useState, useTransition } from "react";
 import { newPassword } from "@/actions/new-password";
 import toast, { Toaster } from 'react-hot-toast';
+import { Suspense } from 'react'
 
-export const NewPasswordForm = () => {
+const NewPasswordForm = () => {
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
-    
+
     const [isPending, startTransition] = useTransition();
     const form = useForm<z.infer<typeof NewPasswordSchema>>({
         resolver: zodResolver(NewPasswordSchema),
@@ -35,15 +36,15 @@ export const NewPasswordForm = () => {
     const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
         startTransition(() => {
             newPassword(values, token)
-              .then((data) => {
-                if (data?.error) {
-                    toast.error(data.error)
-                  }
-                  if (data?.success) {
-                    toast.success(data.success)
-                    form.reset({ password: ''})
-                  }
-             })
+                .then((data) => {
+                    if (data?.error) {
+                        toast.error(data.error)
+                    }
+                    if (data?.success) {
+                        toast.success(data.success)
+                        form.reset({ password: '' })
+                    }
+                })
         })
     }
 
@@ -56,19 +57,19 @@ export const NewPasswordForm = () => {
         >
             <Toaster />
             <Form {...form}>
-                <form 
+                <form
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-5"
                 >
                     <div className="space-y-4">
-                        <FormField 
+                        <FormField
                             control={form.control}
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
-                                        <Input 
+                                        <Input
                                             {...field}
                                             placeholder="••••••••"
                                             disabled={isPending}
@@ -92,5 +93,13 @@ export const NewPasswordForm = () => {
                 </form>
             </Form>
         </CardWrapper>
+    )
+}
+
+export const PasswordForm = () => {
+    return (
+        <Suspense>
+            <NewPasswordForm />
+        </Suspense>
     )
 }

@@ -7,9 +7,9 @@ import { useCallback, useEffect, useState } from "react";
 import { FormError } from "@/components/FormError";
 import { FormSuccess } from "@/components/FormSuccess";
 import { CircularProgress } from "@mui/material"
+import { Suspense } from 'react'
 
-
-export const NewVerificationForm = () => {
+const NewVerificationForm = () => {
     const [error, setError] = useState<string | undefined>();
     const [success, setSuccess] = useState<string | undefined>();
 
@@ -18,7 +18,7 @@ export const NewVerificationForm = () => {
 
     const onSubmit = useCallback(() => {
         if (success || error) return;
-        
+
         if (!token) {
             setError("No token provided");
             return;
@@ -54,5 +54,13 @@ export const NewVerificationForm = () => {
                 )}
             </div>
         </CardWrapper>
+    )
+}
+
+export const VerificationForm = () => {
+    return (
+        <Suspense>
+            <NewVerificationForm />
+        </Suspense>
     )
 }
