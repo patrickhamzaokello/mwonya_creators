@@ -30,7 +30,7 @@ export default async function LandingPage() {
                         <a href="#testimonials" className="text-sm hover:text-gray-300">Testimonials</a>
 
 
-                        <Link href="/api/auth/signin">
+                        <Link href="/auth/login">
                             <Button variant="outline" size="sm"
                                     className="bg-purple-600 border border-grey-100 hover:border-slate-400">
                                 Log in

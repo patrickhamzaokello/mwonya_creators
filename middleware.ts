@@ -19,9 +19,6 @@ export default auth(async (req) => {
     if (isPublicRoute && isAuthenticated)
         return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl));
 
-    if (!isAuthenticated && !isPublicRoute)
-        return Response.redirect(new URL(ROOT, nextUrl));
-
     if (isArtistRoute && req.auth?.user.id) {
         const roleCheckResult = await loginRoleChecks(req.auth?.user.id);
         if (!roleCheckResult.profileStatus.hasArtistProfile) {
