@@ -2,7 +2,7 @@
 export default function Home() {
   return (
     <div>
-      Added a database
+      add login a database
     </div>
   );
 }
