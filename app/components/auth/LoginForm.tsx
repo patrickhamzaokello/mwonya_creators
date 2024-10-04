@@ -24,7 +24,7 @@ import { SocialProviders } from './SocialProviders'
 import { useRouter } from 'next/navigation'
 import { Suspense } from 'react'
 
-const LoginForm = () => {
+const MainLoginForm = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -151,10 +151,10 @@ const LoginForm = () => {
   )
 }
 
-export const MainLoginForm=()=>{
+export const LoginForm=()=>{
   return (
     <Suspense>
-      <LoginForm />
+      <MainLoginForm />
     </Suspense>
   )
 }

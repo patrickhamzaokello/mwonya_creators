@@ -22,7 +22,7 @@ import { newPassword } from "@/actions/new-password";
 import toast, { Toaster } from 'react-hot-toast';
 import { Suspense } from 'react'
 
-const NewPasswordForm = () => {
+const PasswordForm = () => {
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
 
@@ -96,10 +96,10 @@ const NewPasswordForm = () => {
     )
 }
 
-export const PasswordForm = () => {
+export const NewPasswordForm = () => {
     return (
         <Suspense>
-            <NewPasswordForm />
+            <PasswordForm />
         </Suspense>
     )
 }

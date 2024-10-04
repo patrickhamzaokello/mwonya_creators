@@ -9,7 +9,7 @@ import { FormSuccess } from "@/components/FormSuccess";
 import { CircularProgress } from "@mui/material"
 import { Suspense } from 'react'
 
-const NewVerificationForm = () => {
+const VerificationForm = () => {
     const [error, setError] = useState<string | undefined>();
     const [success, setSuccess] = useState<string | undefined>();
 
@@ -57,10 +57,10 @@ const NewVerificationForm = () => {
     )
 }
 
-export const VerificationForm = () => {
+export const NewVerificationForm = () => {
     return (
         <Suspense>
-            <NewVerificationForm />
+            <VerificationForm />
         </Suspense>
     )
 }
