@@ -55,11 +55,9 @@ export async function getSignedURL(fileType: string, fileSize: number, checksum:
             userId: session.user.id ?? "null",
         }
     })
-
-
-    const signedURL = await getSignedUrl(s3, putObjectCommand,
-        { expiresIn: 300 } // link available for only 5 mins 60 * 5
-    )
+    const signedURL = await getSignedUrl(s3 as any, putObjectCommand as any, {
+        expiresIn: 300, // link available for only 5 mins 60 * 5
+    });
 
     const mediaResult = await prisma.mediaUpload.create({
         data: {
