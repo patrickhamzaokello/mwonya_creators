@@ -226,6 +226,7 @@ const ArtistPage = () => {
                       </div>
                       <FormControl>
                         <Switch
+                        className="dark"
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />

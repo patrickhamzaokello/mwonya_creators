@@ -16,3 +16,5 @@ export const DEFAULT_LOGIN_REDIRECT = "/studio";
 export const ARTIST_ROUTES = ['/studio', '/albums'];
 
 export const ROOT = '/';
+
+export const CREATE_ARTIST_PROFILE = '/create_profile';

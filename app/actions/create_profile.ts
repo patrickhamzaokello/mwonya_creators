@@ -42,7 +42,7 @@ export const  registerArtist = async (formData: FormData): Promise<MessageType> 
             if (createArtist) {
                 return { status: "success", message: "Artist profile created successfully" };
             } else {
-                return { status: "error", message: "Failure" };
+                return { status: "error", message: "Failed to create Artist profile" };
             }
 
         } catch (error) {

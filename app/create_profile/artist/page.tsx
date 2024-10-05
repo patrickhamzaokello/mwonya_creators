@@ -100,14 +100,14 @@ export default function Component() {
                         isIndependent: true,
                         labelId: ''
                     })
-                    router.push("/sent_artist-email")
+                    router.push("/studio")
                 }
             })
         })
     }
     return (
-        <div className="container mx-auto max-w-7xl  bg-gray-50 border">
-            <div className="grid md:grid-cols-5 gap-8 bg-white">
+        <div className="container mx-auto max-w-7xl  bg-gray-50 border text-[#000]">
+            <div className="grid md:grid-cols-5 gap-8">
                 <div className="md:col-span-3  p-8">
                     <h2 className="text-3xl font-bold text-primary mb-2">Add New Artist</h2>
                     <p className="mb-8 text-gray-600 font-regular">Enter the details of the new artist to save.</p>
