@@ -24,11 +24,11 @@ COPY . .
 
 # Example: Create a new database
 # RUN rm -rf /app/prisma
-# RUN npx prisma init --datasource-provider sqlite
-# COPY prisma/schema.prisma ./prisma/
-# COPY prisma/migrations ./prisma/
-# RUN npx prisma migrate dev --name init
-# RUN npx prisma generate
+RUN npx prisma init --datasource-provider postgresql
+COPY prisma/schema.prisma ./prisma/
+COPY prisma/migrations ./prisma/
+RUN npx prisma migrate dev --name init
+RUN npx prisma generate
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
