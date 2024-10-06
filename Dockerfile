@@ -1,64 +1,79 @@
-# Use Node.js 20 Alpine as the base image
 FROM node:20-alpine AS base
 
-# Create a builder stage
-FROM base AS builder
-
-# Set the working directory
+# Install dependencies only when needed
+FROM base AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package.json package-lock.json* ./
+# Install dependencies based on the preferred package manager
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
-# Install dependencies
-RUN npm ci
 
-# Copy the prisma directory specifically
-COPY prisma ./prisma
-
-# Copy the rest of the application code
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Set environment variables
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=production
+# Example: Create a new database
+# RUN rm -rf /app/prisma
+# RUN npx prisma init --datasource-provider sqlite
+# COPY prisma/schema.prisma ./prisma/
+# COPY prisma/migrations ./prisma/
+# RUN npx prisma migrate dev --name init
+# RUN npx prisma generate
 
-# Build the Next.js application
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Comment the following line in case you want to enable telemetry during runtime.
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# RUN yarn build
+
+# If using npm comment out above and use below instead
 RUN npm run build
 
-# Create a runner stage
+# Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
 
-# Set environment variables
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=production
+ENV NODE_ENV production
+# Comment the following line in case you want to enable telemetry during runtime.
+ENV NEXT_TELEMETRY_DISABLED 1
 
-# Create a non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy necessary files from the builder stage
 COPY --from=builder /app/public ./public
+
+# Set the correct permission for prerender cache
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+# Environment Variable Example: COPY --from=builder --chown=nextjs:nodejs /app/.env ./
+# App with Database Example: COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma/
+COPY --from=builder --chown=nextjs:nodejs /app/.next/ ./.next/
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Install only production dependencies
-RUN npm ci --only=production
 
-# Generate Prisma client
-RUN npx prisma generate
-
-# Set permissions
-RUN chown -R nextjs:nodejs .
-
-# Switch to the non-root user
 USER nextjs
 
-# Expose the port the app runs on
 EXPOSE 3000
 
-# Set the command to run the application
+ENV PORT 3000
+# set hostname to localhost
+ENV HOSTNAME "0.0.0.0"
+
 CMD ["node", "server.js"]
