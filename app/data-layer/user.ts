@@ -24,10 +24,12 @@ export const comparePassword = async (password: string, hash: string) => {
 // Get User Id
 export const getUserById = async (id:string) => {
     try {
-        const user = await prisma.user.findUnique({ where: { id }});
+        const user = await prisma.user.findUnique({ 
+            where: { id: id }
+        });
         return user;
     } catch {
-        return null;
+         return null;
     }
 }
 

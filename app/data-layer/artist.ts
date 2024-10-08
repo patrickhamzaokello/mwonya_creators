@@ -21,7 +21,7 @@ export const getArtistsForaLabelbyLabelID = async (recordlableID: string) => {
 export const getArtistProfileByUserId = async (userId: string) => {
     try {
         const artistProfile = await prisma.artist.findFirst({
-            where: { name: userId }
+            where: { userId: userId }
         });
 
         return artistProfile;

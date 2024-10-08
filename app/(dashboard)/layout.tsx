@@ -20,10 +20,11 @@ export default async function DashboardLayout({
   const session = await auth();
 
   //redirect if session is null
-  if (!session) {
+  if (!session?.user.id) {
     redirect("/auth/login");
   }
   const userId = session.user.id ?? "null";
+  console.log(userId)
   const roleCheckResult = await loginRoleChecks(userId);
   if(roleCheckResult.profileStatus.needsProfileCreation){
     redirect("/create_profile");

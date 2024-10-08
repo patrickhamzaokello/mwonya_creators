@@ -1,29 +1,45 @@
 import NextAuth from 'next-auth';
 import { authConfig } from '@/auth.config';
-import { DEFAULT_LOGIN_REDIRECT,CREATE_ARTIST_PROFILE,  ROOT, ARTIST_ROUTES } from '@/lib/routes';
 import { loginRoleChecks } from '@/actions/loginRoleCheck';
+import { type NextRequest, NextResponse } from 'next/server';
 
 const { auth } = NextAuth(authConfig);
+
+export default async function middleware(req: NextRequest){
+    // 1 check if route is protected
+    const authRoutes = [
+        '/auth/login',
+        '/auth/register',
+        '/auth/error',
+        '/auth/reset',
+        '/auth/new-password',
+        '/'
+    ]
+
+    const protectedRoute = ['/studio','/artist']
+
+    const currentPath = req.nextUrl.pathname
+    const isProtectedRoute = protectedRoute.includes(currentPath)
+    const isAuthRoutes = authRoutes.includes(currentPath)
+
+    if(isAuthRoutes){
+        //redirect if session is active
+        const session = await auth();
+        if (session?.user.id) {
+          return NextResponse.redirect(new URL ("/studio", req.nextUrl));
+        }
+    }
+
+    if(isProtectedRoute){
+        const session = await auth();
+        if (!session?.user.id) {
+          return NextResponse.redirect(new URL ("/auth/login", req.nextUrl));
+        }
+    }
+
+    return NextResponse.next()
+}
 
 export const config = {
     matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)", "/", "/(api|trpc)(.*)"]
 }
-
-export default auth(async (req) => {
-    const { nextUrl } = req;
-
-    const isAuthenticated = !!req.auth;
-    const isROOT = ROOT.includes(nextUrl.pathname);
-    const isArtistRoute = ARTIST_ROUTES.includes(nextUrl.pathname);
-
-    if (isROOT && isAuthenticated)
-        return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-
-    if (isArtistRoute && req.auth?.user.id) {
-        const roleCheckResult = await loginRoleChecks(req.auth?.user.id);
-        if (!roleCheckResult.profileStatus.hasArtistProfile) {
-            return Response.redirect(new URL(CREATE_ARTIST_PROFILE, nextUrl));
-        }
-        return Response.redirect(new URL("/awareds", nextUrl));
-     }
-});

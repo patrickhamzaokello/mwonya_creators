@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { logout } from '@/actions/logout'
+import { SignOutButton } from "./SignOutButton";
 const menuItems = [
   {
     title: "MENU",
@@ -48,9 +49,9 @@ const menuItems = [
         href: "/uploadList",
         visible: ["admin", "teacher", "student", "parent"],
       },
-     
 
-    
+
+
     ],
   },
   {
@@ -92,14 +93,13 @@ export default function Menu() {
           {i.items.map((item) => {
             const isActive = currentPath === item.href;
             return item.label === "Logout" ? (
-              <button onClick={() => {
-                logout();
-              }}
-                className="flex items-center hover:bg-accent hover:text-accent-foreground justify-center px-2 rounded-sm lg:justify-start gap-4 text-gray-500 py-2 w-full"
-              >
+
+              <SignOutButton className="flex items-center hover:bg-accent hover:text-accent-foreground justify-center px-2 rounded-sm lg:justify-start gap-4 text-gray-500 py-2 w-full">
                 <Image src={item.icon} alt="" width={20} height={20} />
                 <span className="hidden lg:block">{item.label}</span>
-              </button>
+              </SignOutButton>
+
+
             ) : (
               <Link
                 href={item.href}

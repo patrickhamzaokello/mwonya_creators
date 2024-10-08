@@ -1,7 +1,7 @@
 import localFont from 'next/font/local'
 import { cn } from '@/lib/utils'
 import "@/globals.css"
-
+import OnboardingHeading from './Heading'
 
 
 
@@ -14,7 +14,8 @@ export default async function CreateProfile({
 
 
     return (
-        <div className={cn('antialiased', 'w-full h-full bg-[#f8fafd] py-12 md:py-16 lg:py-20 flex')}>
+        <div className='container mx-auto px-4 max-w-7xl '>
+           <OnboardingHeading/>
             {children}
         </div>
 

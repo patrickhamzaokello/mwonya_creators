@@ -1,20 +1,11 @@
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
-import {auth, signIn, signOut} from '@/auth';
-import Image from 'next/image';
 import Link from 'next/link';
 import {Card, CardContent} from "@/components/ui/card"
 import {MusicIcon, Share2Icon, TrendingUpIcon, HeadphonesIcon, PlayCircleIcon} from "lucide-react"
-import {redirect} from "next/navigation";
 
 
 export default async function LandingPage() {
-    const session = await auth();
-
-
-    if (session) {
-        redirect("/studio");
-    }
 
     return (
         <div className="flex flex-col min-h-screen bg-[#272727] text-gray-100">

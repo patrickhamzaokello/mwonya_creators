@@ -19,7 +19,6 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { CreateArtistSchema } from '@/lib/schemas';
 import { useRef, useState, useEffect, useTransition } from 'react'
@@ -118,7 +117,7 @@ export default function Component() {
             })
     }
     return (
-        <div className="container mx-auto max-w-7xl  bg-gray-50 border text-[#000]">
+        <div className="bg-white border text-[#000] my-8">
             <div className="grid md:grid-cols-5 gap-8">
                 <div className="md:col-span-3  p-8">
                     <h2 className="text-3xl font-bold text-primary mb-2">Add New Artist</h2>

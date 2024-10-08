@@ -96,7 +96,7 @@ export default function CreateNewRecordLabel() {
     })
   }
   return (
-    <div className="container mx-auto max-w-7xl  bg-gray-50 border">
+    <div className="bg-gray-50 border my-8">
       <div className="grid md:grid-cols-5 gap-8 bg-white">
         <div className="md:col-span-3  p-8">
           <h2 className="text-3xl font-bold text-primary mb-2">Add New Record Label</h2>

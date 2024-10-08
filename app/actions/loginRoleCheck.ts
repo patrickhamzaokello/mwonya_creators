@@ -3,7 +3,7 @@ import { getArtistProfileByUserId } from '@/data-layer/artist';
 import { UserRole } from "@/types/user"
 
 export const loginRoleChecks = async (userid: string) => {
-    let profileStatus = {
+    const profileStatus = {
         hasArtistProfile: false,
         hasLabelProfile: false,
         needsProfileCreation: false
@@ -39,7 +39,7 @@ export const loginRoleChecks = async (userid: string) => {
                 }
 
                 // If user has neither artist nor label profile, they need to create one
-                if (!profileStatus.hasArtistProfile && !profileStatus.hasLabelProfile) {
+                if (!profileStatus.hasArtistProfile || !profileStatus.hasLabelProfile) {
                     profileStatus.needsProfileCreation = true;
                 }
 
