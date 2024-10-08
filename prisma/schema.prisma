@@ -21,68 +21,68 @@ enum UserRole {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  username      String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          UserRole  @default(USER)
-  accounts      Account[]
-  playlists     Playlist[]
-  followedArtists UserFollowedArtist[]
-  listeningHistory UserListeningHistory[]
-  currentSubscription UserSubscription?  @relation(name: "CurrentUserSubscription")
-  subscriptionHistory UserSubscription[]    @relation(name: "SubscriptionHistory")
-  comments        Comment[]
-  likes           Like[]
+  id                      String                        @id @default(cuid())
+  name                    String?
+  username                String?
+  email                   String?                       @unique
+  emailVerified           DateTime?
+  image                   String?
+  password                String?
+  role                    UserRole                      @default(USER)
+  accounts                Account[]
+  playlists               Playlist[]
+  followedArtists         UserFollowedArtist[]
+  listeningHistory        UserListeningHistory[]
+  currentSubscription     UserSubscription?             @relation(name: "CurrentUserSubscription")
+  subscriptionHistory     UserSubscription[]            @relation(name: "SubscriptionHistory")
+  comments                Comment[]
+  likes                   Like[]
   artistCircleMemberships ArtistCircleMembership[]
-  languagePreference String?
-  language           Language? @relation(fields: [languagePreference], references: [code])
-  reportedFlags      ContentFlag[] @relation("ReportedFlags")
-  resolvedFlags      ContentFlag[] @relation("ResolvedFlags")
-  analyticsEvents    AnalyticsEvent[]
-  recommendations    Recommendation[]
-  createdPlaylists   CollaborativePlaylist[] @relation("CreatedPlaylists")
-  collaborativePlaylists CollaborativePlaylistMember[]
-  createdAt     DateTime  @default(now())
-  updatedAt       DateTime @updatedAt
-  mediaUploads  MediaUpload[] // Add this line
-  notifications Notification[]
-  recordLabel   RecordLabel? @relation(fields: [recordLabelId], references: [id])
-  recordLabelId String?
-  artists Artist[]
+  languagePreference      String?
+  language                Language?                     @relation(fields: [languagePreference], references: [code])
+  reportedFlags           ContentFlag[]                 @relation("ReportedFlags")
+  resolvedFlags           ContentFlag[]                 @relation("ResolvedFlags")
+  analyticsEvents         AnalyticsEvent[]
+  recommendations         Recommendation[]
+  createdPlaylists        CollaborativePlaylist[]       @relation("CreatedPlaylists")
+  collaborativePlaylists  CollaborativePlaylistMember[]
+  createdAt               DateTime                      @default(now())
+  updatedAt               DateTime                      @updatedAt
+  mediaUploads            MediaUpload[] // Add this line
+  notifications           Notification[]
+  recordLabel             RecordLabel?                  @relation(fields: [recordLabelId], references: [id])
+  recordLabelId           String?
+  artists                 Artist[]
 }
 
 model SubscriptionTier {
-  name              String   @id
+  name              String             @id
   price             Float
   features          String[]
-  duration          Int      // Subscription duration in days
+  duration          Int // Subscription duration in days
   userSubscriptions UserSubscription[]
 }
 
 model UserSubscription {
-  id                String   @id @default(uuid())
-  userId            String
-  user              User     @relation(name: "SubscriptionHistory", fields: [userId], references: [id])
-  tierName          String
-  subscriptionTier  SubscriptionTier @relation(fields: [tierName], references: [name])
-  startDate         DateTime @default(now())
-  endDate           DateTime
-  isActive          Boolean  @default(true)
-  autoRenew         Boolean  @default(true)
-  currentUser       User?    @relation(name: "CurrentUserSubscription", fields: [currentUserId], references: [id])
-  currentUserId     String?  @unique
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id               String           @id @default(cuid())
+  userId           String
+  user             User             @relation(name: "SubscriptionHistory", fields: [userId], references: [id])
+  tierName         String
+  subscriptionTier SubscriptionTier @relation(fields: [tierName], references: [name])
+  startDate        DateTime         @default(now())
+  endDate          DateTime
+  isActive         Boolean          @default(true)
+  autoRenew        Boolean          @default(true)
+  currentUser      User?            @relation(name: "CurrentUserSubscription", fields: [currentUserId], references: [id])
+  currentUserId    String?          @unique
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 
   @@index([userId, isActive])
 }
 
 model Comment {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   content   String
   userId    String
   user      User     @relation(fields: [userId], references: [id])
@@ -93,7 +93,7 @@ model Comment {
 }
 
 model Like {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   songId    String
@@ -105,20 +105,20 @@ model Like {
 
 // Account Model
 model Account {
-  id                String  @id @default(cuid())
+  id                String   @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?  @db.Text
+  access_token      String?  @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?  @db.Text
   session_state     String?
-  createdAt     DateTime  @default(now())
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -151,23 +151,26 @@ enum MediaUploadType {
 
 // Media Upload Table
 model MediaUpload {
-  id      String   @id @default(cuid())
-  type    MediaUploadType  @default(image)
-  userId  String
-  fileUrl String
-  createdAt DateTime  @default(now())
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  mediaDescriptions  MediaDescription[] 
-} 
+  id                  String             @id @default(cuid())
+  type                MediaUploadType    @default(image)
+  userId              String
+  fileUrl             String
+  createdAt           DateTime           @default(now())
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mediaDescriptions   MediaDescription[]
+  artists             Artist[]           @relation("MediaUploadArtists")
+  profileImageArtists Artist[]           @relation("artistProfileMediaUpload")
+  coverImageArtists   Artist[]           @relation("artistCoverMediaUpload")
+}
 
 // Album Table
 model MediaDescription {
-  id      String   @id @default(cuid())
-  content String
-  mediaId String
-  createdAt DateTime  @default(now())
-  media MediaUpload @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-} 
+  id        String      @id @default(cuid())
+  content   String
+  mediaId   String
+  createdAt DateTime    @default(now())
+  media     MediaUpload @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+}
 
 model Notification {
   id               String           @id @default(cuid())
@@ -181,9 +184,9 @@ model Notification {
   isRead           Boolean          @default(false)
   isSent           Boolean          @default(false)
   status           Boolean          @default(false) // for when to turn on or off a notification
-  users            User[]           // For specific user notifications
-  contentType      ContentType?     // For content-specific notifications
-  contentId        String?          // ID of the related content
+  users            User[] // For specific user notifications
+  contentType      ContentType? // For content-specific notifications
+  contentId        String? // ID of the related content
 }
 
 enum NotificationType {
@@ -203,7 +206,7 @@ enum ContentType {
 }
 
 model Royalty {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   songId    String
   song      Song     @relation(fields: [songId], references: [id])
   artistId  String
@@ -216,7 +219,7 @@ model Royalty {
 }
 
 model RadioStation {
-  id          String   @id @default(uuid())
+  id          String   @id @default(cuid())
   name        String
   description String?
   genreId     String
@@ -227,13 +230,13 @@ model RadioStation {
 }
 
 model Mood {
-  id    String @id @default(uuid())
+  id    String @id @default(cuid())
   name  String @unique
   songs Song[]
 }
 
 model Event {
-  id          String   @id @default(uuid())
+  id          String   @id @default(cuid())
   name        String
   description String?
   date        DateTime
@@ -246,139 +249,146 @@ model Event {
 }
 
 model ArtistCircleMembership {
-  id            String   @id @default(uuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id])
+  id             String       @id @default(cuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
   artistCircleId String
-  artistCircle  ArtistCircle @relation(fields: [artistCircleId], references: [id])
-  amount        Float
-  joinedAt      DateTime @default(now())
-  expiresAt     DateTime?
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  artistCircle   ArtistCircle @relation(fields: [artistCircleId], references: [id])
+  amount         Float
+  joinedAt       DateTime     @default(now())
+  expiresAt      DateTime?
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   @@unique([userId, artistCircleId])
 }
 
 model ArtistCircle {
-  id                String   @id @default(uuid())
-  artistId          String   @unique
-  artist            Artist   @relation(fields: [artistId], references: [id])
-  minimumAmount     Float
-  maximumAmount     Float
-  description       String?
-  perks             String[]
-  members           ArtistCircleMembership[]
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id            String                   @id @default(cuid())
+  artistId      String                   @unique
+  artist        Artist                   @relation(fields: [artistId], references: [id])
+  minimumAmount Float
+  maximumAmount Float
+  description   String?
+  perks         String[]
+  members       ArtistCircleMembership[]
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
 }
 
 model Artist {
-  id            String   @id @default(uuid())
-  name          String
-  biography     String?
-  profileImage String
-  coverImage String
-  isIndependent Boolean  @default(true)
-  labelId       String?
-  label         RecordLabel? @relation(fields: [labelId], references: [id])
-  userId        String?
-  user          User? @relation(fields: [userId], references: [id])
-  socialMedia   ArtistSocialMedia?
-  songs         Song[]
-  featuredIn    SongFeaturedArtist[]
-  albums        Album[]
-  credits       Credit[]
-  metrics       ArtistMetrics[]
-  royalties   Royalty[]
-  events      Event[]
-  followers      UserFollowedArtist[]
-  artistCircle  ArtistCircle?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                   String               @id @default(cuid())
+  name                 String
+  biography            String?
+  profileImageId       String?
+  profileImage         MediaUpload?         @relation(name: "artistProfileMediaUpload", fields: [profileImageId], references: [id])
+  coverImageId         String?
+  coverImage           MediaUpload?         @relation(name: "artistCoverMediaUpload", fields: [coverImageId], references: [id])
+  mediaUploads         MediaUpload[]        @relation("MediaUploadArtists")
+  isIndependent        Boolean              @default(true)
+  AgreeToTermsPolicy   Boolean              @default(true)
+  AgreeToContentPolicy Boolean              @default(true)
+  genreId              String?
+  genre                Genre?               @relation(fields: [genreId], references: [id])
+  labelId              String?
+  label                RecordLabel?         @relation(fields: [labelId], references: [id])
+  userId               String?
+  user                 User?                @relation(fields: [userId], references: [id])
+  socialMedia          ArtistSocialMedia?
+  songs                Song[]
+  featuredIn           SongFeaturedArtist[]
+  albums               Album[]
+  credits              Credit[]
+  metrics              ArtistMetrics[]
+  royalties            Royalty[]
+  events               Event[]
+  followers            UserFollowedArtist[]
+  artistCircle         ArtistCircle?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
 }
 
 model ArtistSocialMedia {
-  id            String   @id @default(uuid())
-  artistId      String   @unique
-  artist        Artist   @relation(fields: [artistId], references: [id])
-  instagram     String?
-  contactEmail  String
-  contactPhone  String?
-  tiktok        String?
-  twitter       String?
-  facebook      String?
-  youtube       String?
-  spotify       String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id @default(cuid())
+  artistId     String   @unique
+  artist       Artist   @relation(fields: [artistId], references: [id])
+  instagram    String?
+  contactEmail String
+  contactPhone String?
+  tiktok       String?
+  twitter      String?
+  facebook     String?
+  youtube      String?
+  spotify      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model RecordLabel {
-  id            String   @id @default(uuid())
-  name          String
-  contactEmail  String
-  contactPhone  String?
-  website       String?
-  address       String?
-  city          String?
-  state         String?
-  country       String
-  users         User[]
-  artists       Artist[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id @default(cuid())
+  name         String
+  contactEmail String
+  contactPhone String?
+  website      String?
+  address      String?
+  city         String?
+  state        String?
+  country      String
+  users        User[]
+  artists      Artist[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Album {
-  id        String   @id @default(uuid())
-  title     String
+  id          String         @id @default(cuid())
+  title       String
   releaseDate DateTime
-  type      AlbumType
-  artistId  String
-  coverImage String
-  artist    Artist   @relation(fields: [artistId], references: [id])
-  songs     Song[]
-  genres    Genre[]
-  metrics       AlbumMetrics[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  type        AlbumType
+  artistId    String
+  coverImage  String
+  artist      Artist         @relation(fields: [artistId], references: [id])
+  songs       Song[]
+  genres      Genre[]
+  metrics     AlbumMetrics[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 }
 
 model Song {
-  id              String   @id @default(uuid())
-  title           String
-  duration        Int      // Duration in seconds
-  releaseDate     DateTime
-  type            SongType
-  artistId        String
-  filePath        String
-  artist          Artist   @relation(fields: [artistId], references: [id])
-  albumId         String?
-  album           Album?   @relation(fields: [albumId], references: [id])
-  genres          Genre[]
-  lyrics          Lyrics?
-  featuredArtists SongFeaturedArtist[]
-  credits         Credit[]
-  metrics         SongMetrics[]
-  playlists       Playlist[]
-  listeningHistory UserListeningHistory[]
-  comments    Comment[]
-  likes       Like[]
-  royalties   Royalty[]
-  radioStations RadioStation[]
-  moods       Mood[]
-  languageCode String?
-  language     Language? @relation(fields: [languageCode], references: [code])
-  recommendations Recommendation[]
+  id                     String                  @id @default(cuid())
+  title                  String
+  duration               Int // Duration in seconds
+  releaseDate            DateTime
+  type                   SongType
+  artistId               String
+  filePath               String
+  artist                 Artist                  @relation(fields: [artistId], references: [id])
+  albumId                String?
+  album                  Album?                  @relation(fields: [albumId], references: [id])
+  genres                 Genre[]
+  lyrics                 Lyrics?
+  featuredArtists        SongFeaturedArtist[]
+  credits                Credit[]
+  metrics                SongMetrics[]
+  playlists              Playlist[]
+  listeningHistory       UserListeningHistory[]
+  comments               Comment[]
+  likes                  Like[]
+  royalties              Royalty[]
+  radioStations          RadioStation[]
+  moods                  Mood[]
+  languageCode           String?
+  language               Language?               @relation(fields: [languageCode], references: [code])
+  recommendations        Recommendation[]
   collaborativePlaylists CollaborativePlaylist[]
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
 }
 
 model Lyrics {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   content   String
   language  String
   songId    String   @unique
@@ -388,7 +398,7 @@ model Lyrics {
 }
 
 model SongFeaturedArtist {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   songId    String
   song      Song     @relation(fields: [songId], references: [id])
   artistId  String
@@ -400,7 +410,7 @@ model SongFeaturedArtist {
 }
 
 model Credit {
-  id        String     @id @default(uuid())
+  id        String     @id @default(cuid())
   role      CreditRole
   songId    String
   song      Song       @relation(fields: [songId], references: [id])
@@ -414,72 +424,72 @@ model Credit {
 }
 
 model Genre {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  songs     Song[]
-  albums    Album[]
+  id            String         @id @default(cuid())
+  name          String         @unique
+  songs         Song[]
+  albums        Album[]
+  artists       Artist[]
   radioStations RadioStation[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
-
 model UserListeningHistory {
-  id        String   @id @default(uuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  songId    String
-  song      Song     @relation(fields: [songId], references: [id])
-  listenedAt DateTime @default(now())
-  listenDuration Int  
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  songId         String
+  song           Song     @relation(fields: [songId], references: [id])
+  listenedAt     DateTime @default(now())
+  listenDuration Int
 }
 
 model Playlist {
-  id        String   @id @default(uuid())
-  name      String
-  userId    String
-  coverImage  String
-  user      User     @relation(fields: [userId], references: [id])
-  songs     Song[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(cuid())
+  name       String
+  userId     String
+  coverImage String
+  user       User     @relation(fields: [userId], references: [id])
+  songs      Song[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model UserFollowedArtist {
-  id        String   @id @default(uuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  artistId  String
-  artist    Artist   @relation(fields: [artistId], references: [id])
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  artistId   String
+  artist     Artist   @relation(fields: [artistId], references: [id])
   followedAt DateTime @default(now())
 
   @@unique([userId, artistId])
 }
 
 model SongMetrics {
-  id              String   @id @default(uuid())
-  songId          String
-  song            Song     @relation(fields: [songId], references: [id])
-  playCount       Int
-  uniqueListeners Int
-  skipRate        Float    // Percentage of skips before song completion
-  completionRate  Float    // Percentage of full song plays
+  id                    String   @id @default(cuid())
+  songId                String
+  song                  Song     @relation(fields: [songId], references: [id])
+  playCount             Int
+  uniqueListeners       Int
+  skipRate              Float // Percentage of skips before song completion
+  completionRate        Float // Percentage of full song plays
   averageListenDuration Int // Average listen duration in seconds
-  popularityScore Float    // Calculated popularity score
-  date            DateTime // Date of these metrics
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  popularityScore       Float // Calculated popularity score
+  date                  DateTime // Date of these metrics
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   @@unique([songId, date])
 }
 
 model AlbumMetrics {
-  id              String   @id @default(uuid())
+  id              String   @id @default(cuid())
   albumId         String
   album           Album    @relation(fields: [albumId], references: [id])
   totalPlayCount  Int
   uniqueListeners Int
-  popularityScore Float    // Calculated popularity score
+  popularityScore Float // Calculated popularity score
   date            DateTime // Date of these metrics
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -488,13 +498,13 @@ model AlbumMetrics {
 }
 
 model ArtistMetrics {
-  id              String   @id @default(uuid())
+  id              String   @id @default(cuid())
   artistId        String
   artist          Artist   @relation(fields: [artistId], references: [id])
   totalPlayCount  Int
   uniqueListeners Int
   followerCount   Int
-  popularityScore Float    // Calculated popularity score
+  popularityScore Float // Calculated popularity score
   date            DateTime // Date of these metrics
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -503,29 +513,31 @@ model ArtistMetrics {
 }
 
 model Language {
-  id       String @id @default(uuid())
-  code     String @unique
-  name     String
-  songs    Song[] // For songs with lyrics in this language
-  users    User[] // For user interface language preference
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  songs     Song[] // For songs with lyrics in this language
+  users     User[] // For user interface language preference
 }
 
 model ContentFlag {
-  id        String   @id @default(uuid())
+  id          String     @id @default(cuid())
   contentType String // e.g., "comment", "playlist", "user_profile"
-  contentId  String
-  reporterId String
-  reporter   User     @relation("ReportedFlags", fields: [reporterId], references: [id])
-  reason     String
-  status     FlagStatus
-  resolvedBy String?
-  resolver   User?    @relation("ResolvedFlags", fields: [resolvedBy], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  contentId   String
+  reporterId  String
+  reporter    User       @relation("ReportedFlags", fields: [reporterId], references: [id])
+  reason      String
+  status      FlagStatus
+  resolvedBy  String?
+  resolver    User?      @relation("ResolvedFlags", fields: [resolvedBy], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model AnalyticsEvent {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   eventType String
@@ -534,7 +546,7 @@ model AnalyticsEvent {
 }
 
 model Recommendation {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   songId    String
@@ -546,26 +558,25 @@ model Recommendation {
   @@unique([userId, songId])
 }
 
-
 model CollaborativePlaylist {
-  id        String   @id @default(uuid())
-  name      String
-  creatorId String
-  creator   User     @relation("CreatedPlaylists", fields: [creatorId], references: [id])
-  songs     Song[]
+  id            String                        @id @default(cuid())
+  name          String
+  creatorId     String
+  creator       User                          @relation("CreatedPlaylists", fields: [creatorId], references: [id])
+  songs         Song[]
   collaborators CollaborativePlaylistMember[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime                      @default(now())
+  updatedAt     DateTime                      @updatedAt
 }
 
 model CollaborativePlaylistMember {
-  id        String   @id @default(uuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  id         String                @id @default(cuid())
+  userId     String
+  user       User                  @relation(fields: [userId], references: [id])
   playlistId String
-  playlist  CollaborativePlaylist @relation(fields: [playlistId], references: [id])
-  role      CollaboratorRole
-  joinedAt  DateTime @default(now())
+  playlist   CollaborativePlaylist @relation(fields: [playlistId], references: [id])
+  role       CollaboratorRole
+  joinedAt   DateTime              @default(now())
 
   @@unique([userId, playlistId])
 }

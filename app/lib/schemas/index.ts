@@ -57,14 +57,15 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export const CreateArtistSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  genre: z.string().min(1, { message: "Please select a genre." }),
   biography: z
-  .string()
-  .min(10, "Biography should be at least 10 characters long")
-  .optional()
-  .or(z.literal("")),
+    .string()
+    .min(10, "Biography should be at least 10 characters long")
+    .optional()
+    .or(z.literal("")),
   profileImage: z
     .instanceof(File)
-    .refine((file) => file.size <= MAX_FILE_SIZE,  `Image size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB.`)
+    .refine((file) => file.size <= MAX_FILE_SIZE, `Image size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB.`)
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
       `Only the following image types are allowed: ${ACCEPTED_IMAGE_TYPES.join(
@@ -73,15 +74,29 @@ export const CreateArtistSchema = z.object({
     ),
   coverImage: z
     .instanceof(File)
-    .refine((file) => file.size <= MAX_FILE_SIZE,  `Image size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB.`)
+    .refine((file) => file.size <= MAX_FILE_SIZE, `Image size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB.`)
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
       `Only the following image types are allowed: ${ACCEPTED_IMAGE_TYPES.join(
         ", "
       )}.`
     ),
+  terms_conditions_pp: z
+    .boolean()
+    .default(false)
+    .refine((val) => val === true, {
+      message: "Terms and conditions must be accepted.",
+    })
+    .optional(),
+  content_upload_policy: z
+    .boolean()
+    .default(false)
+    .refine((val) => val === true, {
+      message: "Content upload policy must be accepted.",
+    })
+    .optional(),
   isIndependent: z.boolean().optional(),
-  labelId: z.string().optional(),
+  labelId: z.string().nullable().optional(),
 }).refine(
   (data) => data.isIndependent || (data.labelId && data.labelId.length > 0),
   {

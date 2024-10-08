@@ -6,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,10 +22,13 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { CreateArtistSchema } from '@/lib/schemas';
-import { useRef, useState, useTransition } from 'react'
+import { useRef, useState, useEffect, useTransition } from 'react'
 import { registerArtist } from '@/actions/create_profile';
 import { useRouter } from 'next/navigation'
 import Image from 'next/image';
+import Link from "next/link"
+import { Checkbox } from "@/components/ui/checkbox"
+import { retrieveAllGenres } from "@/actions/genre"
 
 export default function Component() {
     const [isPending, startTransition] = useTransition()
@@ -39,49 +41,60 @@ export default function Component() {
         defaultValues: {
             name: "",
             biography: "",
+            genre: "",
             isIndependent: true,
             labelId: "",
+            terms_conditions_pp: true,
+            content_upload_policy: true
         },
     });
 
+    const [genres, setGenres] = useState<{ id: string; name: string }[]>([]);
+
+    useEffect(() => {
+        // Fetch genres from the database
+        async function fetchGenres() {
+            try {
+                const result = await retrieveAllGenres();
+                if (result.status === "success" && Array.isArray(result.fetchedgenres)) {
+                    setGenres(result.fetchedgenres);
+                } else {
+                    toast({
+                        title: "Error",
+                        description: "Unable to fetch Genre Data",
+                    });
+                }
+            } catch (error) {
+                toast({
+                    title: "Error",
+                    description: "Unknown Error with Genre Fetching Occurred",
+                });
+            }
+        }
+
+        fetchGenres();
+    }, []);
+
     const {
-        register,
         handleSubmit,
         setValue,
         formState: { errors, isSubmitting },
     } = form;
 
-    const hiddenFileInputRef = useRef<HTMLInputElement | null>(null);
-    const [preview, setPreview] = useState<string | null>(null);
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onloadend = () => {
-                setPreview(reader.result as string);
-                setValue("profileImage", file); // manually set the image in the form state
-            };
-
-            reader.readAsDataURL(file);
-        } else {
-            setPreview(null);
-        }
-    };
-
-
-
-    const onSubmitForm: SubmitHandler<z.infer<typeof CreateArtistSchema>> = async (values) => {
-        // call the server action     
-        startTransition(() => {
+   
+    const onSubmitForm = (values: z.infer<typeof CreateArtistSchema>)  => {     
             const formData = new FormData();
             formData.append("name", values.name);
+            formData.append("genre", values.genre);
             formData.append("biography", values.biography || "");
-            formData.append("labelId", values.labelId || "");
-            formData.append("isIndependent", values.isIndependent ? "true" : "false");
             formData.append("profileImage", values.profileImage as File);
             formData.append("coverImage", values.coverImage as File);
+            formData.append("labelId",values.biography || "")
+            formData.append("isIndependent", values.isIndependent ? "true" : "false");
+            formData.append("terms_conditions_pp", values.terms_conditions_pp ? "true" : "false");
+            formData.append("content_upload_policy", values.content_upload_policy ? "true" : "false");
+
+            console.log({formData})
 
             registerArtist(formData).then((data: MessageType) => {
                 if (data.status === "error") {
@@ -103,7 +116,6 @@ export default function Component() {
                     router.push("/studio")
                 }
             })
-        })
     }
     return (
         <div className="container mx-auto max-w-7xl  bg-gray-50 border text-[#000]">
@@ -130,6 +142,35 @@ export default function Component() {
 
                             <FormField
                                 control={form.control}
+                                name="genre"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-lg font-semibold">Artist Genre</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value} >
+                                            <FormControl>
+                                                <SelectTrigger className="rounded-md border-2 border-gray-300 px-4 py-3 text-base focus:border-primary">
+                                                    <SelectValue placeholder="Select artist main genre" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {genres.map((genre) => (
+                                                    <SelectItem key={genre.id} value={genre.id}>
+                                                        {genre.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormDescription>
+                                            You can manage email addresses in your{" "}
+                                            <Link href="/examples/forms">email settings</Link>.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
                                 name="biography"
                                 render={({ field }) => (
                                     <FormItem>
@@ -148,6 +189,8 @@ export default function Component() {
                                 )}
                             />
 
+
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <FormField
                                     control={form.control}
@@ -165,10 +208,15 @@ export default function Component() {
                                                             const reader = new FileReader();
                                                             reader.onloadend = () => {
                                                                 setProfileImagePreview(reader.result as string);
+                                                                setValue("profileImage", file);
                                                             };
                                                             reader.readAsDataURL(file);
                                                             onChange(file);
+                                                        }else {
+                                                            setProfileImagePreview("");
                                                         }
+
+                                                       
                                                     }}
                                                     className="cursor-pointer file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90"
                                                     {...rest}
@@ -196,9 +244,12 @@ export default function Component() {
                                                             const reader = new FileReader();
                                                             reader.onloadend = () => {
                                                                 setCoverImagePreview(reader.result as string);
+                                                                setValue("coverImage", file);
                                                             };
                                                             reader.readAsDataURL(file);
                                                             onChange(file);
+                                                        } else {
+                                                            setCoverImagePreview("");
                                                         }
                                                     }}
                                                     className="cursor-pointer  file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90"
@@ -211,45 +262,53 @@ export default function Component() {
                                     )}
                                 />
                             </div>
-
                             <FormField
                                 control={form.control}
-                                name="isIndependent"
+                                name="terms_conditions_pp"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border-2 border-gray-300 p-4">
-                                        <div className="space-y-0.5">
-                                            <FormLabel className="text-base font-semibold">Independent Artist</FormLabel>
-                                            <FormDescription>
-                                                Is this artist independent or signed to a label?
-                                            </FormDescription>
-                                        </div>
+                                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                         <FormControl>
-                                            <Switch
+                                            <Checkbox
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
                                             />
                                         </FormControl>
+                                        <div className="space-y-1 leading-none">
+                                            <FormLabel>
+                                                Agree to Terms and Conditions & Privacy Policy
+                                            </FormLabel>
+                                            <FormDescription>
+                                                I agree to the platform's Terms and Conditions and Privacy Policy{" "}
+                                                <Link href="/examples/forms">Read more</Link> link.
+                                            </FormDescription>
+                                        </div>
                                     </FormItem>
                                 )}
                             />
 
-                            {!form.watch("isIndependent") && (
-                                <FormField
-                                    control={form.control}
-                                    name="labelId"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel className="text-lg font-semibold">Record Label</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Enter label ID" className="rounded-md border-2 border-gray-300 px-4 py-3 text-base focus:border-primary" {...field} />
-                                            </FormControl>
-                                            <FormDescription>Enter the ID of the artist's record label.</FormDescription>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            )}
-
+                            <FormField
+                                control={form.control}
+                                name="content_upload_policy"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                        <FormControl>
+                                            <Checkbox
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                        <div className="space-y-1 leading-none">
+                                            <FormLabel>
+                                                Agree to Content Upload Policy
+                                            </FormLabel>
+                                            <FormDescription>
+                                                I confirm that I hold all rights to the content I upload.{" "}
+                                                <Link href="/examples/forms">Read more</Link> link.
+                                            </FormDescription>
+                                        </div>
+                                    </FormItem>
+                                )}
+                            />
                             <Button type="submit" className="w-full py-3 text-lg font-semibold rounded-md bg-primary text-white shadow-md hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" disabled={isSubmitting}>
                                 {isSubmitting ? "Submitting..." : "Add Artist"}
                             </Button>
