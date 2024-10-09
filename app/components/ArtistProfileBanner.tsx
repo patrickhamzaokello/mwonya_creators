@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, ExternalLink, Music, Users, Calendar, NotebookPen,BadgeCheck } from 'lucide-react';
+import { boolean, number } from 'zod';
+
+interface ArtistProfileBannerProps {
+    artistName: string;
+    tagline: string;
+    backgroundImageUrl: string;
+    profileImageUrl: string;
+    isVerified: boolean;
+    followerCount: number;
+    genre: string
+}
 
 const ArtistProfileBanner = ({
     artistName,
@@ -9,16 +20,13 @@ const ArtistProfileBanner = ({
     profileImageUrl,
     isVerified = false,
     followerCount,
-    latestRelease,
-    upcomingEvent,
     genre,
-    socialLinks
-}) => {
+}: ArtistProfileBannerProps) => {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
         <motion.div
-            className="relative w-full h-[400px] overflow-hidden"
+            className="relative w-full h-full overflow-hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}

@@ -44,31 +44,22 @@ import ArtistProfileBanner from '@/components/ArtistProfileBanner';
 const DashboardLayout = () => {
     return (
 
-        <div className="grid w-full gap-6 grid-cols-[1fr_auto]  items-stretch my-8">
+        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 items-stretch my-8">
+            <div className='xl:col-span-2'>
+                <ArtistProfileBanner
+                    artistName="Drillz The Rapper"
+                    tagline="I am here to spread positivity"
+                    backgroundImageUrl="https://assets.mwonya.com/images/artistprofiles/Lukas Blacc_profile_20230317135613_04099.JPG"
+                    profileImageUrl="https://assets.mwonya.com/images/artistprofiles/Lukas Blacc_cover_20230317135613_04099.JPG"
+                    isVerified={true}
+                    followerCount={1000000}
+                    genre="Hip-Hop / Rap"
+                   
+                />
+            </div>
 
 
-
-
-            <ArtistProfileBanner
-                artistName="Drillz The Rapper"
-                tagline="I am here to spread positivity"
-                backgroundImageUrl="https://assets.mwonya.com/images/artistprofiles/Lukas Blacc_profile_20230317135613_04099.JPG"
-                profileImageUrl="https://assets.mwonya.com/images/artistprofiles/Lukas Blacc_cover_20230317135613_04099.JPG"
-                isVerified={true}
-                followerCount={1000000}
-                latestRelease="Positive Vibes (Album)"
-                upcomingEvent="World Tour 2024"
-                genre="Hip-Hop / Rap"
-                socialLinks={[
-                    { icon: Twitter, url: "https://twitter.com/drillztherapper" },
-                    { icon: Instagram, url: "https://instagram.com/drillztherapper" },
-                    { icon: Youtube, url: "https://open.spotify.com/artist/drillztherapper" },
-                ]}
-            />
-
-
-            <Card
-                className="lg:max-w-md" x-chunk="charts-01-chunk-0"
+            <Card x-chunk="charts-01-chunk-0"
             >
                 <CardHeader className="space-y-0 pb-2">
                     <CardDescription>Today</CardDescription>
