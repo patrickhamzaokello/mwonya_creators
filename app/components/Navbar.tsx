@@ -11,14 +11,9 @@ import { useArtist } from "@/contexts/ArtistContext"
 import { useRouter } from 'next/navigation'
 import { getArtistsForUser } from '@/actions/getArtists';
 import { useToast } from "@/hooks/use-toast";
-interface Artist {
-    id: string;
-    name: string;
-    image: string;
-}
 
 const Navbar = ({ session, userRole }: any) => {
-    const [artists, setArtists] = useState<Artist[]>([]);
+    const [artists, setArtists] = useState<TArtist[]>([]);
     const [selectedArtist, setSelectedArtist] = useArtist();
     const [isOpen, setIsOpen] = useState(false);
     const [role, setUserRole] = useState("");
@@ -51,13 +46,13 @@ const Navbar = ({ session, userRole }: any) => {
                         title: "success",
                         description: fetchArtists.message,
                     });
-                    const artistsData: Artist[] = fetchArtists.formattedArtists || [];
+                    const artistsData: TArtist[] = fetchArtists.formattedArtists || [];
 
                     setArtists(artistsData);
 
                     // Set the first artist as the default selected artist if not already selected
                     if (artistsData.length > 0 && !selectedArtist) {
-                        setSelectedArtist(artistsData[0].id);
+                        setSelectedArtist(artistsData[0]);
                     }
                 }
             } catch (error) {
@@ -73,7 +68,10 @@ const Navbar = ({ session, userRole }: any) => {
 
 
     const handleSelectArtist = (artistId: string) => {
-        setSelectedArtist(artistId);
+        const artist = artists.find(a => a.id === artistId);
+        if (artist) {
+            setSelectedArtist(artist); // Update the context with the selected artist object
+        }
         setIsOpen(false);
         if (artistId == 'add-new') {
 
@@ -89,14 +87,14 @@ const Navbar = ({ session, userRole }: any) => {
     return (
         <div className='flex items-center justify-between py-4 px-4 bg-[#fff] border-b-[1px] border-[#e7e7e7]'>
             <div className="relative block">
-                <Select onValueChange={handleSelectArtist} value={selectedArtist || undefined}>
+                <Select onValueChange={handleSelectArtist} value={selectedArtist?.id || undefined}>
                     <SelectTrigger className="w-[200px] text-bold">
                         <SelectValue placeholder="Select Artist" />
                     </SelectTrigger>
                     <SelectContent>
                         {artists.map((artist) => (
                             <div key={artist.id} className='flex items-center justify-center'>
-                                <Image className="mr-0 h-4 w-4 ml-2 rounded-full" src={artist.image} alt="" width={25} height={25} />
+                                <Image className="mr-0 h-4 w-4 ml-2 rounded-full" src={artist.profileImage} alt="" width={25} height={25} />
                                 <SelectItem key={artist.id} value={artist.id}>
                                     {artist.name}
                                 </SelectItem>

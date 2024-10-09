@@ -39,6 +39,7 @@ export const fetchUserArtists = async (userId: string) => {
             select: {
                 id: true,
                 name: true,
+                biography: true,
                 genre: {
                     select: {
                         id: true,

@@ -11,10 +11,16 @@ export const getArtistsForUser = async () => {
         if (userArtists.fetchedArtists) {
 
             const artists = userArtists.fetchedArtists;
-            const formattedArtists = artists.map(artist => ({
+            const formattedArtists:TArtist[] = artists.map(artist => ({
                 id: artist.id,
                 name: artist.name,
-                image: artist.profileImage?.fileUrl || '', 
+                genreID: artist.genre?.id || '',
+                genreName: artist.genre?.name || '', 
+                profileImage: artist.profileImage?.fileUrl || '', 
+                coverImage: artist.coverImage?.fileUrl || '',
+                followers: "12k",
+                verified: false,
+                shortbio: artist.biography|| ''
             }));
             
             return { status: "success", message: "Retrived artist Successfully",formattedArtists};

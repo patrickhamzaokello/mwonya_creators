@@ -46,18 +46,26 @@ const DashboardLayout = () => {
     return (
 
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 items-stretch my-8">
-            <p>Selected Artist: {selectedArtist}</p>
+
             <div className='xl:col-span-2'>
-                <ArtistProfileBanner
-                    artistName="Drillz The Rapper"
-                    tagline="I am here to spread positivity"
-                    backgroundImageUrl="https://assets.mwonya.com/images/artistprofiles/Lukas Blacc_profile_20230317135613_04099.JPG"
-                    profileImageUrl="https://assets.mwonya.com/images/artistprofiles/Lukas Blacc_cover_20230317135613_04099.JPG"
-                    isVerified={true}
-                    followerCount={1000000}
-                    genre="Hip-Hop / Rap"
-                   
-                />
+
+
+                {selectedArtist ? (
+                    <ArtistProfileBanner
+                        artistName={selectedArtist.name}
+                        tagline={selectedArtist.shortbio}
+                        backgroundImageUrl={selectedArtist.coverImage}
+                        profileImageUrl={selectedArtist.profileImage}
+                        isVerified={selectedArtist.verified}
+                        followerCount={selectedArtist.followers}
+                        genre={selectedArtist.genreName}
+
+                    />
+
+                ) : (
+                    <p>No artist selected</p>
+                )}
+
             </div>
 
 

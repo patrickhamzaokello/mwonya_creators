@@ -9,7 +9,7 @@ interface ArtistProfileBannerProps {
     backgroundImageUrl: string;
     profileImageUrl: string;
     isVerified: boolean;
-    followerCount: number;
+    followerCount: string;
     genre: string
 }
 
@@ -54,7 +54,7 @@ const ArtistProfileBanner = ({
                     <img
                         src={profileImageUrl || '/api/placeholder/120/120'}
                         alt={`${artistName}'s profile`}
-                        className="w-40 h-40 border-2 border-inherit  transition-transform group-hover:scale-105 object-cover"
+                        className="w-40 h-40 rounded-full  transition-transform group-hover:scale-105 object-cover"
                     />
                     
                   
