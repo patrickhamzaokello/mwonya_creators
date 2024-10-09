@@ -29,7 +29,7 @@ import Link from "next/link"
 import { Checkbox } from "@/components/ui/checkbox"
 import { retrieveAllGenres } from "@/actions/genre"
 
-export default function Component() {
+export default function CreateArtistPage() {
     const [isPending, startTransition] = useTransition()
     const [profileImagePreview, setProfileImagePreview] = useState("/placeholder.svg");
     const [coverImagePreview, setCoverImagePreview] = useState("/placeholder.svg");
