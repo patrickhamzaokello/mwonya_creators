@@ -9,32 +9,32 @@ const menuItems = [
     title: "MENU",
     items: [
       {
-        icon: "/home.png",
+        icon: "/menu_icon.svg",
         label: "Dashboard",
         href: "/studio",
         visible: ["admin", "teacher", "student", "parent"],
       },
       {
-        icon: "/artist.png",
+        icon: "/menu_icon.svg",
         label: "Artists",
         href: "/artist",
         visible: ["admin", "teacher", "student", "parent"],
       },
       {
-        icon: "/result.png",
+        icon: "/menu_icon.svg",
         label: "Album",
         href: "/album",
         visible: ["admin", "teacher", "student", "parent"],
       },
       {
-        icon: "/result.png",
+        icon: "/menu_icon.svg",
         label: "New Release",
         href: "/revenue",
         visible: ["admin", "teacher", "student", "parent"],
       },
 
       {
-        icon: "/lesson.png",
+        icon: "/menu_icon.svg",
         label: "Uploads",
         href: "/upload",
         visible: ["admin", "teacher"],
@@ -44,7 +44,7 @@ const menuItems = [
 
 
       {
-        icon: "/calendar.png",
+        icon: "/menu_icon.svg",
         label: "Upload List",
         href: "/uploadList",
         visible: ["admin", "teacher", "student", "parent"],
@@ -58,19 +58,19 @@ const menuItems = [
     title: "OTHER",
     items: [
       {
-        icon: "/profile.png",
+        icon: "/menu_icon.svg",
         label: "Profile",
         href: "/profile",
         visible: ["admin", "teacher", "student", "parent"],
       },
       {
-        icon: "/setting.png",
+        icon: "/menu_icon.svg",
         label: "Settings",
         href: "/settings",
         visible: ["admin", "teacher", "student", "parent"],
       },
       {
-        icon: "/logout.png",
+        icon: "/menu_icon.svg",
         label: "Logout",
         href: "/logout",
         visible: ["admin", "teacher", "student", "parent"],

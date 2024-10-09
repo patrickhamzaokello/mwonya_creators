@@ -37,7 +37,7 @@ export default async function DashboardLayout({
         {/* Left Sidebar */}
         <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] h-screen p-4 fixed top-0 left-0 overflow-y-auto bg-[#f9fafd] z-10 border-r-[1px] border-[#e7e7e7]">
           <Link href="/" className="flex items-center justify-center lg:justify-start gap-2">
-            <Image src="/logo.png" alt="logo" width={32} height={32} />
+            <Image src="/MwonyaLogo.PNG" alt="logo" width={32} height={32} />
             <span className="hidden lg:block text-bold">MWONYA</span>
           </Link>
           <Menu />
