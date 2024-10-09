@@ -62,10 +62,10 @@ export const registerArtist = async (formData: FormData): Promise<MessageType> =
         } = validatedFields;
 
         // check if user is independent,
-        const isUserIndependent = await isAnyArtistIndependentByUserId(current_userId)
-        if (isUserIndependent) {
-            return { status: "error", message: "You can not create more than one Artist Profile. This option is only available for Record Labels" };
-        }
+        // const isUserIndependent = await isAnyArtistIndependentByUserId(current_userId)
+        // if (isUserIndependent) {
+        //     return { status: "error", message: "You can not create more than one Artist Profile. This option is only available for Record Labels" };
+        // }
 
         // confirm name is not taken
         const exisitingName = await getArtistProfileByName(artistName)
