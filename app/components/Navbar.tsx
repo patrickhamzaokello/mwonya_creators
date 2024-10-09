@@ -67,7 +67,7 @@ const Navbar = ({ session, userRole }: any) => {
 
         fetchUserRole();
         fetchArtists();
-    }, []);
+    }, [selectedArtist]);
 
 
 
