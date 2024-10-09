@@ -9,7 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useArtist } from "@/contexts/ArtistContext"
 
 import { useRouter } from 'next/navigation'
-
+import { getArtistsForUser } from '@/actions/getArtists';
+import { useToast } from "@/hooks/use-toast";
 interface Artist {
     id: string;
     name: string;
@@ -22,23 +23,40 @@ const Navbar = ({ session, userRole }: any) => {
     const [isOpen, setIsOpen] = useState(false);
     const [role, setUserRole] = useState("");
     const router = useRouter()
+    const { toast } = useToast()
+
 
     useEffect(() => {
         const fetchUserRole = async () => {
-        
+
             if (userRole) {
                 setUserRole(userRole);
             } else {
-                setUserRole("dinna");  
+                setUserRole("dinna");
             }
         };
         const fetchArtists = async () => {
             try {
-                const response = await fetch('/api/artists'); // Replace with your actual API endpoint
-                const data = await response.json();
-                setArtists(data);
+
+                const fetchArtists = await getArtistsForUser();
+
+                if (fetchArtists.status === "error") {
+                    toast({
+                        title: "Error",
+                        description: fetchArtists.message,
+                    });
+                }
+                if (fetchArtists.status === "success") {
+                    toast({
+                        title: "success",
+                        description: fetchArtists.message,
+                    });
+                    const artistsData: Artist[] = fetchArtists.formattedArtists || [];
+
+                    setArtists(artistsData);
+                }
             } catch (error) {
-                throw(error)
+                throw (error)
             }
         };
 
@@ -47,7 +65,7 @@ const Navbar = ({ session, userRole }: any) => {
     }, []);
 
 
-    
+
 
     const handleSelectArtist = (artistId: string) => {
         setSelectedArtist(artistId);
@@ -65,7 +83,7 @@ const Navbar = ({ session, userRole }: any) => {
 
     return (
         <div className='flex items-center justify-between py-4 px-4 bg-[#fff] border-b-[1px] border-[#e7e7e7]'>
-            <div className="relative">
+            <div className="relative block">
                 <Select onValueChange={handleSelectArtist} value={selectedArtist || undefined}>
                     <SelectTrigger className="w-[200px] text-bold">
                         <SelectValue placeholder="Select Artist" />
@@ -93,7 +111,7 @@ const Navbar = ({ session, userRole }: any) => {
                 <div>
                     <Link className={buttonVariants({ variant: "secondary" })} href={"/upload"}> <FileUp className="mr-2 h-4 w-4" />New Release</Link>
                 </div>
-              
+
                 {session?.user ? (
                     <>
                         <div className="flex flex-col">

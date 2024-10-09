@@ -30,6 +30,46 @@ export const getArtistProfileByUserId = async (userId: string) => {
     }
 }
 
+export const fetchUserArtists = async (userId: string) => {
+    try {
+        const artists = await prisma.artist.findMany({
+            where: {
+                userId: userId, // Assuming you have a userId field in your Artist model
+            },
+            select: {
+                id: true,
+                name: true,
+                genre: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+                profileImage: {
+                    select: {
+                        fileUrl: true,
+                    },
+                },
+                coverImage: {
+                    select: {
+                        fileUrl: true,
+                    },
+                },
+            },
+        });
+
+        return {
+            status: "success",
+            fetchedArtists: artists,
+        };
+    } catch (error) {
+        return {
+            status: "error",
+            message: "Fetch Error Has occured",
+        };
+    }
+};
+
 // check if artist name exists
 export const getArtistProfileByName = async (artist_name: string) => {
     try {
