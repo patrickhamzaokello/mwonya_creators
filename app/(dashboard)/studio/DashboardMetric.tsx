@@ -38,13 +38,15 @@ import {
 } from "recharts"
 import RevenueCard from '@/components/RevenueCard';
 import ArtistProfileBanner from '@/components/ArtistProfileBanner';
-
+import { useArtist } from "@/contexts/ArtistContext";
 
 
 const DashboardLayout = () => {
+    const [selectedArtist, setSelectedArtist] = useArtist();
     return (
 
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 items-stretch my-8">
+            <p>Selected Artist: {selectedArtist}</p>
             <div className='xl:col-span-2'>
                 <ArtistProfileBanner
                     artistName="Drillz The Rapper"

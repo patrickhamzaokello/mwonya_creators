@@ -54,6 +54,11 @@ const Navbar = ({ session, userRole }: any) => {
                     const artistsData: Artist[] = fetchArtists.formattedArtists || [];
 
                     setArtists(artistsData);
+
+                    // Set the first artist as the default selected artist if not already selected
+                    if (artistsData.length > 0 && !selectedArtist) {
+                        setSelectedArtist(artistsData[0].id);
+                    }
                 }
             } catch (error) {
                 throw (error)
