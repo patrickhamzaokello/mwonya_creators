@@ -51,7 +51,7 @@ export default async function DashboardLayout({
           </div>
 
           {/* Main Content Section */}
-          <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 mt-10 bg-[#fff]">
+          <div className="flex flex-1 flex-col gap-4 mt-[65px] p-4 md:gap-8 md:p-4 bg-[#fff]">
             {/* Main dashboard section to scroll */}
             {children}
           </div>
