@@ -9,7 +9,7 @@ export default async function OnboardingHeading() {
     const session = await auth();
 
     return (
-        <header className="w-full bg-background py-4 block" >
+        <header className="w-full py-4 block mx-auto container max-w-7xl" >
             <div className="container flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <Link href="/create_profile/" className="text-lg font-bold" prefetch={false}>

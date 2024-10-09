@@ -55,7 +55,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(myFont.className,)}>
+      <body className={cn(myFont.className, ' bg-[#f3f3f3]')}>
         <main className="h-full">{children}</main>
         <Toaster />
       </body>

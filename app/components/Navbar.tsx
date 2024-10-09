@@ -64,7 +64,7 @@ const Navbar = ({ session, userRole }: any) => {
 
 
     return (
-        <div className='flex items-center justify-between py-4 px-4 bg-[#101010] border-b-[1px] border-[#ffffff14]'>
+        <div className='flex items-center justify-between py-4 px-4 bg-[#fff] border-b-[1px] border-[#e7e7e7]'>
             <div className="relative">
                 <Select onValueChange={handleSelectArtist} value={selectedArtist || undefined}>
                     <SelectTrigger className="w-[200px] text-bold">
@@ -98,7 +98,7 @@ const Navbar = ({ session, userRole }: any) => {
                     <>
                         <div className="flex flex-col">
                             <span className="text-xs leading-3 font-medium">{session.user.name}</span>
-                            <span className="text-[12px] text-gray-500 font-medium text-right">Role: {role}</span>
+                            <span className="text-[12px]  font-medium text-right">{role}</span>
                         </div>
                         {session.user.name && session.user.image && (
                             <Image className="rounded-full"
@@ -113,7 +113,7 @@ const Navbar = ({ session, userRole }: any) => {
                     <>
                         <div className="flex flex-col">
                             <span className="text-xs leading-3 font-medium">User</span>
-                            <span className="text-[10px] text-gray-500 text-right">Role</span>
+                            <span className="text-[10px] text-right">Role</span>
                         </div>
                         <Image src="/avatar.png" alt="" width={36} height={36} className="rounded-full" />
                     </>

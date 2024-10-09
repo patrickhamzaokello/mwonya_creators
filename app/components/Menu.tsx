@@ -94,7 +94,7 @@ export default function Menu() {
             const isActive = currentPath === item.href;
             return item.label === "Logout" ? (
 
-              <SignOutButton className="flex items-center hover:bg-accent hover:text-accent-foreground justify-center px-2 rounded-sm lg:justify-start gap-4 text-gray-500 py-2 w-full">
+              <SignOutButton className="flex items-center hover:bg-primary hover:text-accent-foreground justify-center px-2 rounded-sm lg:justify-start gap-4 text-gray-500 py-2 w-full">
                 <Image src={item.icon} alt="" width={20} height={20} />
                 <span className="hidden lg:block">{item.label}</span>
               </SignOutButton>
@@ -104,7 +104,7 @@ export default function Menu() {
               <Link
                 href={item.href}
                 key={item.label}
-                className={`flex items-center hover:bg-[#6519fb]  hover:text-white justify-center px-2 rounded-sm lg:justify-start  gap-4 py-2 ${isActive ? 'text-white bg-[#6519fb]' : 'text-[#a2a5ab]'}`}
+                className={`flex items-center hover:bg-[#6519fb]  hover:text-white justify-center px-2 rounded-sm lg:justify-start  gap-4 py-2 ${isActive ? 'bg-[#6519fb] text-white' : 'text-[#1d1a18]'}`}
               >
                 <Image src={item.icon} alt="" width={20} height={20} />
                 <span className="hidden lg:block">{item.label}</span>

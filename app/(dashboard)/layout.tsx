@@ -33,9 +33,9 @@ export default async function DashboardLayout({
   const user = await getUserById(userId);
   return (
     <ArtistProvider>
-      <div className='flex text-[#f1f1f1]'>
+      <div className='flex text-[#000]'>
         {/* Left Sidebar */}
-        <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] h-screen p-4 fixed top-0 left-0 overflow-y-auto bg-[#000000] z-10 border-r-[1px] border-[#ffffff14]">
+        <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] h-screen p-4 fixed top-0 left-0 overflow-y-auto bg-[#f9fafd] z-10 border-r-[1px] border-[#e7e7e7]">
           <Link href="/" className="flex items-center justify-center lg:justify-start gap-2">
             <Image src="/logo.png" alt="logo" width={32} height={32} />
             <span className="hidden lg:block text-bold">MWONYA</span>
@@ -51,7 +51,7 @@ export default async function DashboardLayout({
           </div>
 
           {/* Main Content Section */}
-          <div className="flex-1 mt-[60px] px-4 py-6">
+          <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 mt-10 bg-[#fff]">
             {/* Main dashboard section to scroll */}
             {children}
           </div>
