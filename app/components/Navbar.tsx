@@ -7,10 +7,11 @@ import { FileUp, ChevronDown, Plus } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useArtist } from "@/contexts/ArtistContext"
-
+import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation'
 import { getArtistsForUser } from '@/actions/getArtists';
 import { useToast } from "@/hooks/use-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Navbar = ({ session, userRole }: any) => {
     const [artists, setArtists] = useState<TArtist[]>([]);
@@ -85,60 +86,52 @@ const Navbar = ({ session, userRole }: any) => {
 
 
     return (
-        <div className='flex items-center justify-between py-4 px-4 bg-[#fff] border-b-[1px] border-[#e7e7e7]'>
-            <div className="relative block">
+        <div className="flex items-center justify-between py-2 px-4 bg-background border-b">
+            <div className="flex items-center space-x-4">
                 <Select onValueChange={handleSelectArtist} value={selectedArtist?.id || undefined}>
-                    <SelectTrigger className="w-[200px] text-bold">
-                        <SelectValue placeholder="Select Artist" />
+                    <SelectTrigger className="w-[250px] py-6">
+                        <SelectValue  placeholder="Select Artist" />
                     </SelectTrigger>
                     <SelectContent>
                         {artists.map((artist) => (
-                            <div key={artist.id} className='flex items-center justify-center'>
-                                <Image className="mr-0 h-4 w-4 ml-2 rounded-full" src={artist.profileImage} alt="" width={25} height={25} />
-                                <SelectItem key={artist.id} value={artist.id}>
-                                    {artist.name}
-                                </SelectItem>
-                            </div>
-
+                            <SelectItem key={artist.id} value={artist.id}>
+                                <div className="flex items-center space-x-3 py-1">
+                                    <Avatar className="h-8 w-8">
+                                        <AvatarImage src={artist.profileImage} alt={artist.name} />
+                                        <AvatarFallback>{artist.name.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <span className='text-bold'>{artist.name}</span>
+                                </div>
+                            </SelectItem>
                         ))}
-                        <SelectItem value="add-new" className="mt-2 text-bold border-1 pt-2">
-                            <span className="flex items-center text-purple-500">
+                        <SelectItem value="add-new">
+                            <div className="flex items-center text-primary py-2">
                                 <Plus className="mr-2 h-4 w-4" />
                                 Add New Artist
-                            </span>
+                            </div>
                         </SelectItem>
                     </SelectContent>
                 </Select>
             </div>
-            <div className="flex items-center gap-6 justify-end w-full">
-                <div>
-                    <Link className={buttonVariants({ variant: "secondary" })} href={"/upload"}> <FileUp className="mr-2 h-4 w-4" />New Release</Link>
-                </div>
 
-                {session?.user ? (
-                    <>
-                        <div className="flex flex-col">
-                            <span className="text-xs leading-3 font-medium">{session.user.name}</span>
-                            <span className="text-[12px]  font-medium text-right">{role}</span>
-                        </div>
-                        {session.user.name && session.user.image && (
-                            <Image className="rounded-full"
-                                src={session.user.image}
-                                alt={session.user.name}
-                                width={28}
-                                height={28}
-                            />
-                        )}
-                    </>
-                ) : (
-                    <>
-                        <div className="flex flex-col">
-                            <span className="text-xs leading-3 font-medium">User</span>
-                            <span className="text-[10px] text-right">Role</span>
-                        </div>
-                        <Image src="/avatar.png" alt="" width={36} height={36} className="rounded-full" />
-                    </>
-                )}
+            <div className="flex items-center space-x-6">
+                <Button variant="outline" asChild>
+                    <Link href="/upload" className="flex items-center">
+                        <FileUp className="mr-2 h-4 w-4" />
+                        New Release
+                    </Link>
+                </Button>
+
+                <div className="flex items-center space-x-3">
+                    <div className="flex flex-col items-end">
+                        <span className="text-sm font-semibold">{session?.user?.name || "User"}</span>
+                        <span className="text-xs text-muted-foreground">{role || "Role"}</span>
+                    </div>
+                    <Avatar>
+                        <AvatarImage src={session?.user?.image || "/avatar.png"} alt={session?.user?.name || "User"} />
+                        <AvatarFallback>{session?.user?.name?.charAt(0) || "U"}</AvatarFallback>
+                    </Avatar>
+                </div>
             </div>
         </div>
     )
