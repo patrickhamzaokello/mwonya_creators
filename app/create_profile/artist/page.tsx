@@ -77,11 +77,12 @@ export default function CreateArtistPage() {
     const {
         handleSubmit,
         setValue,
-        formState: { errors, isSubmitting },
+        formState,
     } = form;
 
-   
-    const onSubmitForm = (values: z.infer<typeof CreateArtistSchema>)  => {     
+    const onSubmitForm: SubmitHandler<z.infer<typeof CreateArtistSchema>> = async (values) => {
+        // call the server action     
+        startTransition(() => {
             const formData = new FormData();
             formData.append("name", values.name);
             formData.append("genre", values.genre);
@@ -115,7 +116,9 @@ export default function CreateArtistPage() {
                     router.push("/studio")
                 }
             })
-    }
+        })
+      }
+
     return (
         <div className="bg-white border text-[#000] my-8">
             <div className="grid md:grid-cols-5 gap-8">
@@ -145,7 +148,7 @@ export default function CreateArtistPage() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-lg font-semibold">Artist Genre</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value} >
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}  disabled={isPending}>
                                             <FormControl>
                                                 <SelectTrigger className="rounded-md border-2 border-gray-300 px-4 py-3 text-base focus:border-primary">
                                                     <SelectValue placeholder="Select artist main genre" />
@@ -217,6 +220,7 @@ export default function CreateArtistPage() {
 
                                                        
                                                     }}
+                                                    disabled={isPending}
                                                     className="cursor-pointer file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90"
                                                     {...rest}
                                                 />
@@ -251,6 +255,7 @@ export default function CreateArtistPage() {
                                                             setCoverImagePreview("");
                                                         }
                                                     }}
+                                                    disabled={isPending}
                                                     className="cursor-pointer  file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90"
                                                     {...rest}
                                                 />
@@ -270,6 +275,7 @@ export default function CreateArtistPage() {
                                             <Checkbox
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
+                                                disabled={isPending}
                                             />
                                         </FormControl>
                                         <div className="space-y-1 leading-none">
@@ -294,6 +300,7 @@ export default function CreateArtistPage() {
                                             <Checkbox
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
+                                                disabled={isPending}
                                             />
                                         </FormControl>
                                         <div className="space-y-1 leading-none">
@@ -308,8 +315,8 @@ export default function CreateArtistPage() {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="w-full py-3 text-lg font-semibold rounded-md bg-primary text-white shadow-md hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" disabled={isSubmitting}>
-                                {isSubmitting ? "Submitting..." : "Add Artist"}
+                            <Button type="submit" className="w-full py-3 text-lg font-semibold rounded-md bg-primary text-white shadow-md hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" disabled={formState.isSubmitting}>
+                                {formState.isSubmitting ? "Submitting..." : "Add Artist"}
                             </Button>
                         </form>
                     </Form>

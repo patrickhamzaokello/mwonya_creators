@@ -105,6 +105,7 @@ export const registerArtist = async (formData: FormData): Promise<MessageType> =
                         "Content-Type": file.type,
                     },
                 });
+                
 
                 const validType: "profile" | "cover" = type as "profile" | "cover";
                 await updateArtistProfileImage(createArtist.id, mediaId, validType);

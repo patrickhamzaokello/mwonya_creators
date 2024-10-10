@@ -82,13 +82,10 @@ const Navbar = ({ session, userRole }: any) => {
 
             router.push('/add-artist')
         } else {
-
-            router.push('/studio')
+            router.refresh
         }
     };
 
-
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     return (
         <div className="flex items-center justify-between py-3 px-4 bg-background border-b sticky top-0 z-10">
@@ -136,20 +133,7 @@ const Navbar = ({ session, userRole }: any) => {
             </div>
 
             <div className="flex items-center space-x-4">
-                <div className={`transition-all duration-300 ease-in-out ${isSearchOpen ? 'w-64' : 'w-8'}`}>
-                    <div className="relative">
-                        <Search
-                            className={`h-5 w-5 absolute top-1/2 transform -translate-y-1/2 left-2 text-muted-foreground cursor-pointer transition-opacity duration-300 ${isSearchOpen ? 'opacity-100' : 'opacity-50'}`}
-                            onClick={() => setIsSearchOpen(!isSearchOpen)}
-                        />
-                        <Input
-                            type="text"
-                            placeholder="Search..."
-                            className={`pl-9 pr-4 py-2 w-full ${isSearchOpen ? 'opacity-100' : 'opacity-0'}`}
-                            onBlur={() => setIsSearchOpen(false)}
-                        />
-                    </div>
-                </div>
+              
 
                 <Button variant="outline" asChild>
                     <Link href="/upload" className="flex items-center">
