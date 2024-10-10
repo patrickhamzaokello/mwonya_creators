@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, ExternalLink, Music, Users, Calendar, NotebookPen,BadgeCheck } from 'lucide-react';
 import { boolean, number } from 'zod';
+import Image from 'next/image';
 
 interface ArtistProfileBannerProps {
     artistName: string;
@@ -95,6 +96,8 @@ const ArtistProfileBanner = ({
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.3 }}
                     >
+                        <Image className='mr-2' src="/verified_white.svg" alt="omsdf" width={18} height={18} />
+
                          {isVerified && (
                         <motion.div
                             initial={{ opacity: 0, scale: 0.5 }}
