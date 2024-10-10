@@ -281,6 +281,7 @@ model Artist {
   id                   String               @id @default(cuid())
   name                 String
   biography            String?
+  verified             Boolean?              @default(false)
   profileImageId       String?
   profileImage         MediaUpload?         @relation(name: "artistProfileMediaUpload", fields: [profileImageId], references: [id])
   coverImageId         String?

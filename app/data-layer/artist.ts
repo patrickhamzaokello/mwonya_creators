@@ -40,6 +40,7 @@ export const fetchUserArtists = async (userId: string) => {
                 id: true,
                 name: true,
                 biography: true,
+                verified: true,
                 genre: {
                     select: {
                         id: true,

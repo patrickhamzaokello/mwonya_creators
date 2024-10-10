@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle, ExternalLink, Music, Users, Calendar, NotebookPen,BadgeCheck } from 'lucide-react';
+import { CheckCircle, ExternalLink, Music, Users, Calendar, NotebookPen, BadgeCheck } from 'lucide-react';
 import { boolean, number } from 'zod';
 import Image from 'next/image';
 
@@ -19,7 +19,7 @@ const ArtistProfileBanner = ({
     tagline,
     backgroundImageUrl,
     profileImageUrl,
-    isVerified = false,
+    isVerified,
     followerCount,
     genre,
 }: ArtistProfileBannerProps) => {
@@ -57,8 +57,8 @@ const ArtistProfileBanner = ({
                         alt={`${artistName}'s profile`}
                         className="w-40 h-40 rounded-full  transition-transform group-hover:scale-105 object-cover"
                     />
-                    
-                  
+
+
                 </div>
             </div>
 
@@ -86,8 +86,8 @@ const ArtistProfileBanner = ({
 
                 {/* Follow Button and Follower Count */}
                 <div className="flex items-center mb-4 gap-4">
-                  
-                   
+
+
 
                     {/* Genre Tag */}
                     <motion.div
@@ -96,17 +96,17 @@ const ArtistProfileBanner = ({
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.3 }}
                     >
-                        <Image className='mr-2' src="/verified_white.svg" alt="omsdf" width={18} height={18} />
 
-                         {isVerified && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.5 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="mr-2"
-                        >
-                            <BadgeCheck/>
-                        </motion.div>
-                    )}
+                        {isVerified && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.5 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="mr-2"
+                            >
+                                <Image  src="/verified_white.svg" alt="omsdf" width={18} height={18} />
+
+                            </motion.div>
+                        )}
                         Verified
 
                     </motion.div>
@@ -131,12 +131,12 @@ const ArtistProfileBanner = ({
                         <span>{genre} Genre</span>
                     </motion.div>
 
-                    
-                    
+
+
                 </div>
 
-        
-                
+
+
             </div>
 
             {/* Decorative Element */}

@@ -19,7 +19,7 @@ export const getArtistsForUser = async () => {
                 profileImage: artist.profileImage?.fileUrl || '', 
                 coverImage: artist.coverImage?.fileUrl || '',
                 followers: "12k",
-                verified: false,
+                verified: artist.verified || false,
                 shortbio: artist.biography|| ''
             }));
             
