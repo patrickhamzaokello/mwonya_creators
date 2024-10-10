@@ -7,6 +7,7 @@ import { auth } from '@/auth';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { getUserById } from "@/data-layer/user";
+import { createMediaUploadDescription } from "@/data-layer/mediaUpload_Description";
 
 
 export const transformZodErrors = (error: z.ZodError) => {
@@ -23,9 +24,9 @@ const computeSHA256 = async (file: File) => {
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("")
     return hashHex
 }
-export const registerArtist = async (formData: FormData): Promise<MessageType> => {
+export const registerArtist = async (formData: FormData): Promise<CreateAristFormState<undefined>> => {
     const session = await auth();
-    const session_userID = session?.user.id;
+    const session_userID = session?.user.id; 
     //check user id exist in the database
     const user = await getUserById(session_userID ?? "")
     if (!user) {
@@ -62,10 +63,10 @@ export const registerArtist = async (formData: FormData): Promise<MessageType> =
         } = validatedFields;
 
         // check if user is independent,
-        // const isUserIndependent = await isAnyArtistIndependentByUserId(current_userId)
-        // if (isUserIndependent) {
-        //     return { status: "error", message: "You can not create more than one Artist Profile. This option is only available for Record Labels" };
-        // }
+        const isUserIndependent = await isAnyArtistIndependentByUserId(current_userId)
+        if (isUserIndependent) {
+            return { status: "error", message: "You can not create more than one Artist Profile. This option is only available for Record Labels" };
+        }
 
         // confirm name is not taken
         const exisitingName = await getArtistProfileByName(artistName)
@@ -105,10 +106,11 @@ export const registerArtist = async (formData: FormData): Promise<MessageType> =
                         "Content-Type": file.type,
                     },
                 });
-                
+
 
                 const validType: "profile" | "cover" = type as "profile" | "cover";
                 await updateArtistProfileImage(createArtist.id, mediaId, validType);
+                await createMediaUploadDescription({content: `${createArtist.name} - ${validType}`, mediaId})
 
             }
 

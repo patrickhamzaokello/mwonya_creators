@@ -70,12 +70,8 @@ export async function getSignedURL(fileType: string, fileSize: number, checksum:
     return { success: { url: signedURL, mediaId: mediaResult.id } }
 }
 
-type CreateAlbumArgs = {
-    content: string
-    mediaId?: string
-}
 
-export async function createMediaDescription({ content, mediaId }: CreateAlbumArgs) {
+export async function createMediaDescription({ content, mediaId }: TMediaUploadDescription) {
     const session = await auth();
     if (!session) {
         return { failure: "Not authenticate" }

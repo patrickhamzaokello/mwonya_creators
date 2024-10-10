@@ -58,6 +58,9 @@ export const fetchUserArtists = async (userId: string) => {
                     },
                 },
             },
+            orderBy: {
+                createdAt: 'desc',
+            }
         });
 
         return {
