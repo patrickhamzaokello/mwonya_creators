@@ -16,6 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Bell, FileUp, LogOut, Plus, Search, Settings, User } from "lucide-react";
 import { SignOutButton } from './SignOutButton';
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
 const Navbar = ({ session, userRole }: any) => {
     const [artists, setArtists] = useState<TArtist[]>([]);
@@ -89,7 +90,10 @@ const Navbar = ({ session, userRole }: any) => {
 
     return (
         <div className="flex items-center justify-between py-3 px-4 bg-background border-b sticky top-0 z-10">
+            
             <div className="flex items-center space-x-4">
+                <SidebarTrigger /> 
+
                 <Select onValueChange={handleSelectArtist} value={selectedArtist?.id || undefined}>
                     <SelectTrigger className="w-[250px] text-bold py-4 rounded-lg">
                         <SelectValue placeholder="Select Artist" />
@@ -135,16 +139,7 @@ const Navbar = ({ session, userRole }: any) => {
             <div className="flex items-center space-x-4">
               
 
-                <Button variant="outline" asChild>
-                    <Link href="/upload" className="flex items-center">
-                        <FileUp className="mr-2 h-4 w-4" />
-                        New Release
-                    </Link>
-                </Button>
 
-                <Button variant="ghost" size="icon">
-                    <Bell className="h-5 w-5" />
-                </Button>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

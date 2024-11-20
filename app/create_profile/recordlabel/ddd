@@ -1,0 +1,10 @@
+SELECT `id`, `title`, `artist`,  `album`, `genre`, `duration`,  `path`, `tag`, `dateAdded`, `releaseDate`, `available`,  FROM `songs`
+
+
+SELECT  `id`, `name`, `email`, `phone`, `facebookurl`, `twitterurl`, `instagramurl`, `RecordLable`, `profilephoto`, `coverimage`, `bio`, `genre`, `datecreated`, `available`, `lastupdate`, `tag`, `verified`FROM `artists` 
+
+
+SELECT  `id`, `title`, `artist`, `genre`, `artworkPath`, `tag`, `description`, `datecreated`, `releaseDate` `exclusive` FROM `albums`
+
+
+SELECT `id`, `userid`, `songid`,  `datelastPlayed`, `dateFirstPlayed`, FROM `frequency`
