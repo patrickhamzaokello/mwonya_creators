@@ -40,14 +40,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import ArtistProfileHero from "@/components/artist-hero";
 
 const ArtistStudio = () => {
   const [selectedArtist, setSelectedArtist] = useArtist();
   return (
-
-
     <div >
-      <DashboardMetrics />
+
+
+      {selectedArtist ? (
+        <ArtistProfileHero
+          name={selectedArtist.name}
+          coverArt={selectedArtist.coverImage}
+          profileImage={selectedArtist.profileImage}
+          followers={selectedArtist.followers}
+          isVerified={selectedArtist.verified}
+        />
+
+      ) : (
+        <p>No artist selected</p>
+      )}
+
+      {/* <DashboardMetrics /> */}
 
       <div className="flex flex-1 flex-col gap-4 md:gap-8">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
