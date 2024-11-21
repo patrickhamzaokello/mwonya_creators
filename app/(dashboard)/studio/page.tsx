@@ -54,7 +54,8 @@ const ArtistStudio = () => {
           coverArt={selectedArtist.coverImage}
           profileImage={selectedArtist.profileImage}
           followers={selectedArtist.followers}
-          isVerified={selectedArtist.verified}
+          monthlyListeners={selectedArtist.followers}
+          isVerified={true}
         />
 
       ) : (
