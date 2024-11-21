@@ -95,7 +95,7 @@ export default function Component() {
 
             console.log({formData})
 
-            registerArtist(formData).then((data: MessageType) => {
+            registerArtist(formData).then((data: CreateAristFormState<undefined>) => {
                 if (data.status === "error") {
                     toast({
                         title: "Error",
