@@ -32,7 +32,7 @@ export default function ArtistProfileHero({
                     className="object-cover"
                     priority
                 />
-                <div className="absolute inset-0 bg-background/60" /> {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparen" /> {/* Overlay */}
             </div>
 
             {/* Content Container */}

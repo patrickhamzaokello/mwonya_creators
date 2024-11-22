@@ -1,6 +1,5 @@
 "use client"
 import { useArtist } from "@/contexts/ArtistContext";
-import DashboardMetrics from "./DashboardMetric";
 import ArtistPerformanceChart from './ArtistPerformanceChart';
 import Link from "next/link"
 import {
@@ -55,14 +54,13 @@ const ArtistStudio = () => {
           profileImage={selectedArtist.profileImage}
           followers={selectedArtist.followers}
           monthlyListeners={selectedArtist.followers}
-          isVerified={true}
+          isVerified={selectedArtist.verified}
         />
 
       ) : (
         <p>No artist selected</p>
       )}
 
-      {/* <DashboardMetrics /> */}
 
       <div className="flex flex-1 flex-col gap-4 md:gap-8">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
