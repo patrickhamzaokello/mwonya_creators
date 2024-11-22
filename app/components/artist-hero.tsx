@@ -22,7 +22,7 @@ export default function ArtistProfileHero({
     isVerified,
 }: ArtistProfileHeroProps) {
     return (
-        <div className="relative h-[40vh] min-h-[400px] w-full overflow-hidden">
+        <div className="relative h-[30vh] min-h-[300px] w-full overflow-hidden">
             {/* Cover Art Background */}
             <div className="absolute inset-0">
                 <Image
