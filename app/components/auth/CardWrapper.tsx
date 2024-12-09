@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card'
 import { Header } from '@/components/auth/Header'
 import { BackButton } from '@/components/auth/BackButton'
 
-// interface
 interface CardWrapperProps {
   children: React.ReactNode
   headerTitle: string
@@ -21,16 +20,20 @@ export const CardWrapper = ({
   headerTitle
 }: CardWrapperProps) => {
   return (
-    <Card className="mx-auto max-w-xl border bg-base100 border-baseContent rounded-xl">
-      <CardHeader>
-        <Header title={headerTitle} />
-      </CardHeader>
+    <div className="min-h-screen flex items-center justify-center  px-4 py-12">
+      <Card className="w-full max-w-xl bg-white shadow-lg rounded-xl border-0">
+        <CardHeader className="space-y-3 pb-6">
+          <Header title={headerTitle} />
+        </CardHeader>
 
-      <CardContent>{children}</CardContent>
+        <CardContent className="pb-8">
+          {children}
+        </CardContent>
 
-      <CardFooter>
-        <BackButton label={backButtonLabel} href={backButtonHref} />
-      </CardFooter>
-    </Card>
+        <CardFooter className="flex justify-center border-t pt-6">
+          <BackButton label={backButtonLabel} href={backButtonHref} />
+        </CardFooter>
+      </Card>
+    </div>
   )
 }
