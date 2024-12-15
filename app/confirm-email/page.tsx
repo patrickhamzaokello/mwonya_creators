@@ -12,7 +12,8 @@ export default function SignupConfirmation() {
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
+    // const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
+    const userEmail = "Check your inbox and click to confirm"
     setEmail(userEmail);
   }, []);
 

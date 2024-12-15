@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { getUserByEmail } from "@/data-layer/user";
 
-import { getVerificationTokenByToken } from "@/data-layer/verification-token";
+import { getDeleteTokenbyID, getVerificationTokenByToken, updateUserEmailVerfied } from "@/data-layer/verification-token";
 
 export const newVerification = async (token:string) => {
 
@@ -14,8 +14,11 @@ export const newVerification = async (token:string) => {
     if(!exisitingToken) {
         return { error: "Token does not exisit 😣" };
     }
+
+    const normalizeToDate = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
     // if token has expired, display message
-    const hasExpired = new Date(exisitingToken.expires) < new Date();
+    const hasExpired = normalizeToDate(new Date(exisitingToken.expires)) < normalizeToDate(new Date());
 
     if (hasExpired) {
         return { error: "Token has expired 😣" };
@@ -26,18 +29,9 @@ export const newVerification = async (token:string) => {
     if (!existingUser) {
         return { error: "User does not exisit 😬" };
     }
-    // update email value when they verify
-    await prisma.user.update({
-        where: { id: existingUser.id },
-        data: {
-            emailVerified: new Date(),
-            email: exisitingToken.email
-        }
-    })
+    await updateUserEmailVerfied(existingUser.id, exisitingToken.email, new Date())
     // delete token
-    await prisma.verificationToken.delete({
-        where: { id: exisitingToken.id }
-    });
+    await getDeleteTokenbyID(exisitingToken.id);
 
     return { success: "Email verified 🎉. Go to login to continue"}
 }

@@ -1,7 +1,6 @@
-import { getVerificationTokenByEmail } from '@/data-layer/verification-token';
-import { prisma } from '@/lib/prisma';
+import { getDeleteTokenbyID, getVerificationTokenByEmail, CreateVerificationToken } from '@/data-layer/verification-token';
 import { v4 as uuidv4 } from 'uuid';
-import { getPasswordResetTokenByEmail } from '@/data-layer/password-reset-token';
+import { getDeletePasswordResetTokenbyID, getPasswordResetTokenByEmail, CreatePasswordResetToken } from '@/data-layer/password-reset-token';
 
 
 export const generateVerificationToken = async (email: string) => {
@@ -13,20 +12,10 @@ export const generateVerificationToken = async (email: string) => {
     const existingToken = await getVerificationTokenByEmail(email);
     // delete function
     if(existingToken) {
-        await prisma.verificationToken.delete({
-            where: {
-                id: existingToken.id
-            }
-        })
+        await getDeleteTokenbyID(existingToken.id)
     }
     // create new token 
-    const verificationToken = await prisma.verificationToken.create({
-        data: {
-            email,
-            token,
-            expires
-        }
-    });
+    const verificationToken = await CreateVerificationToken(email, token, expires);
     
     return verificationToken;
 
@@ -40,17 +29,10 @@ export const generatePasswordResetToken = async (email: string) => {
     const existingToken = await getPasswordResetTokenByEmail(email);
     // delete function
     if (existingToken) {
-        await prisma.passwordResetToken.delete({
-            where: { id: existingToken.id }
-        });
+        await getDeletePasswordResetTokenbyID(existingToken.id)
     }
     // create new token
-    const passwordResetToken = await prisma.passwordResetToken.create({
-        data: {
-            email,
-            token,
-            expires
-        }
-    });
+    const passwordResetToken = await CreatePasswordResetToken(email, token, expires)
+
     return passwordResetToken;
 }

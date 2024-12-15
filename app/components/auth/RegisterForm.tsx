@@ -33,6 +33,7 @@ const router = useRouter()
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: '',
+      phone_number: '',
       password: '',
       name: ''
     }
@@ -46,7 +47,7 @@ const router = useRouter()
         }
         if (data?.success) {
           toast.success(data.success)
-          form.reset({ email: '', password: '', name: '' })
+          form.reset({ email: '', phone_number: '', password: '', name: '' })
           router.push("/confirm-email")
         }
       })
@@ -69,13 +70,32 @@ const router = useRouter()
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Kasfa"
                       {...field}
                       disabled={isPending}
                       type="name"
+                      className=" border-baseContent/20 text-baseContent"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-red-500" />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone_number"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone Number</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="0787250196"
+                      {...field}
+                      disabled={isPending}
+                      type="phone_number"
                       className=" border-baseContent/20 text-baseContent"
                     />
                   </FormControl>

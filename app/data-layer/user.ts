@@ -1,12 +1,37 @@
 import { prisma } from "@/lib/prisma";
 import bcrypt from 'bcryptjs';
-
+import axiosInstance from "@/lib/axiosInstance";
 // Get Email
 export const getUserByEmail = async (email:string) => {
+   
     try {
-        const user = await prisma.user.findUnique({ where: { email }});
-        return user;
-    } catch {
+        const response = await axiosInstance.post('getMwonyaCreator.php', { email });
+
+        if (response.status === 200) {
+            const {status, data} = response.data
+            return data; 
+        }
+        return null;
+    } catch (error) {
+        console.error('Error fetching user by email:', error);
+        return null;
+    }
+}
+
+
+// name, email, phone_number, hashedPassword, 'artist'
+export const registerMwonyaCreator = async (name:string, email: string, phone_number: string, hashedPassword: string,  creator_role: string) => {
+   
+    try {
+        const response = await axiosInstance.post('registerMwonyaCreator.php', { username: name, email, phone_number, password: hashedPassword, creator_role });
+
+        if (response.status === 200) {
+            const {status, data} = response.data
+            return data; 
+        }
+        return null;
+    } catch (error) {
+        console.error('Error Saving user details:', error);
         return null;
     }
 }
@@ -24,12 +49,16 @@ export const comparePassword = async (password: string, hash: string) => {
 // Get User Id
 export const getUserById = async (id:string) => {
     try {
-        const user = await prisma.user.findUnique({ 
-            where: { id: id }
-        });
-        return user;
-    } catch {
-         return null;
+        const response = await axiosInstance.post('getMwonyaCreator.php', { user_id: id });
+
+        if (response.status === 200) {
+            const {status, data} = response.data
+            return data; 
+        }
+        return null;
+    } catch (error) {
+        console.error('Error fetching user by id:', error);
+        return null;
     }
 }
 

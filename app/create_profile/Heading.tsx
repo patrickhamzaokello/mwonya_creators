@@ -33,14 +33,7 @@ export default async function OnboardingHeading() {
                             <div className="flex flex-col">
                                 <span className="text-muted-foreground">{session.user.name}</span>
                             </div>
-                            {session.user.name && session.user.image && (
-                                <Image className="rounded-full"
-                                    src={session.user.image}
-                                    alt={session.user.name}
-                                    width={28}
-                                    height={28}
-                                />
-                            )}
+                            
 
                          <SignOutButton />                           
                         </>

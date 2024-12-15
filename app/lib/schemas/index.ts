@@ -22,6 +22,9 @@ export const LoginSchema = z.object({
 
 export const RegisterSchema = z.object({
   email: z.string().email(),
+  phone_number: z.string().min(10, {
+    message: 'Phone number is required'
+  }),
   password: z
     .string()
     .min(8, {
@@ -31,9 +34,11 @@ export const RegisterSchema = z.object({
       message: 'Password cannot contain spaces'
     }),
   name: z.string().min(1, {
-    message: 'Name is required'
+    message: 'User name is required'
   })
 })
+
+
 
 export const CreateRecordLableSchema = z.object({
   name: z.string().min(2, {

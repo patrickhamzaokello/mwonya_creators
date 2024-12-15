@@ -3,8 +3,7 @@
 import * as z from "zod";
 import { RegisterSchema } from "@/lib/schemas";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
-import { getUserByEmail } from "@/data-layer/user";
+import { getUserByEmail,  registerMwonyaCreator} from "@/data-layer/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 
@@ -19,7 +18,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     }
 
     // extract validated fields
-    const { email, password, name } = validatedFields.data;
+    const { email, password, phone_number, name } = validatedFields.data;
 
     // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,15 +31,11 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
         return { error: "Email already taken 😞"}
     }
     // succes code
-    await prisma.user.create({
-        data: {
-            name,
-            email, 
-            password: hashedPassword,
-        },
-    })
+    await registerMwonyaCreator(name, email, phone_number, hashedPassword, 'artist');
     // generate verification token
     const verificationToken = await generateVerificationToken(email);
+
+    console.log(verificationToken)
 
     await sendVerificationEmail(
         verificationToken.email,

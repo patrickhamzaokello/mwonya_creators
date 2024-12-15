@@ -8,10 +8,12 @@ import { FormError } from "@/components/FormError";
 import { FormSuccess } from "@/components/FormSuccess";
 import { CircularProgress } from "@mui/material"
 import { Suspense } from 'react'
+import { useRouter } from "next/navigation";
 
 const VerificationForm = () => {
     const [error, setError] = useState<string | undefined>();
     const [success, setSuccess] = useState<string | undefined>();
+    const router = useRouter(); // Add this line
 
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
@@ -24,15 +26,30 @@ const VerificationForm = () => {
             return;
         }
 
+        // Check if this token was already verified
+        const verified = localStorage.getItem(`verified_${token}`);
+        if (verified) {
+            router.push('/auth/login');
+            return;
+        }
+
         newVerification(token)
             .then((data) => {
-                setSuccess(data.success);
-                setError(data.error)
+
+                if (data.success) {
+                    setSuccess(data.success);
+
+                    setTimeout(() => {
+                        router.push('/auth/login');
+                    }, 2000); // Wait 2 seconds so user can see success message
+                } else {
+                    setError(data.error)
+                }
             })
             .catch(() => {
                 setError("Something went wrong");
             })
-    }, [token, success, error]);
+    }, [token, success, error, router]);
 
     useEffect(() => {
         onSubmit();
