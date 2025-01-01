@@ -11,7 +11,6 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import AppSidebar from "@/components/app-sidebar"
 
 
-
 export default async function DashboardLayout({
   children,
 }: Readonly<{
