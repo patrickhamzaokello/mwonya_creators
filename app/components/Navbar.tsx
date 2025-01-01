@@ -21,13 +21,12 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 const Navbar = ({ session, userRole }: any) => {
     const [artists, setArtists] = useState<TArtist[]>([]);
     const [selectedArtist, setSelectedArtist] = useArtist();
-    const [isOpen, setIsOpen] = useState(false);
     const router = useRouter()
     const { toast } = useToast()
 
 
     useEffect(() => {
-        
+
         const fetchArtists = async () => {
             try {
 
@@ -64,7 +63,7 @@ const Navbar = ({ session, userRole }: any) => {
 
 
 
-    
+
 
     const handleSelectArtist = (artistId: string) => {
         if (artistId === 'add-new') {
@@ -80,17 +79,20 @@ const Navbar = ({ session, userRole }: any) => {
 
 
     return (
-        <div className="flex items-center justify-between py-3 px-4 bg-background border-b sticky top-0 z-10">
+
+        <nav className="flex h-16 items-center justify-between bg-background px-4 shadow">
+            <div className="flex items-center">
+                <SidebarTrigger />
+                <div className="ml-4 text-xl font-semibold">Dashboard</div>
+            </div>
             
-            <div className="flex items-center space-x-4">
-                <SidebarTrigger /> 
+            <div className="flex items-center space-x-2">
 
                 <Select onValueChange={handleSelectArtist} value={selectedArtist?.id || undefined}>
-                    <SelectTrigger className="w-[250px] text-bold py-4 rounded-lg">
+                    <SelectTrigger className="w-[250px]">
                         <SelectValue placeholder="Select Artist" />
                     </SelectTrigger>
                     <SelectContent>
-                        <div className="max-h-[300px] overflow-y-auto">
                             {artists.map((artist) => (
                                 <SelectItem key={artist.id} value={artist.id}>
                                     <div className="flex items-center space-x-3">
@@ -102,7 +104,6 @@ const Navbar = ({ session, userRole }: any) => {
                                     </div>
                                 </SelectItem>
                             ))}
-                        </div>
                         <SelectItem value="add-new">
                             <Dialog>
                                 <DialogTrigger asChild>
@@ -126,46 +127,7 @@ const Navbar = ({ session, userRole }: any) => {
                     </SelectContent>
                 </Select>
             </div>
-
-            <div className="flex items-center space-x-4">
-              
-
-
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <div className="flex items-center space-x-3 cursor-pointer">
-                            <div className="flex flex-col items-end">
-                                <span className="text-sm font-semibold">{session?.user?.name || "User"}</span>
-                                <span className="text-xs text-muted-foreground">{userRole || "Role"}</span>
-                            </div>
-                            <Avatar>
-                                <AvatarImage src={session?.user?.image || "/avatar.png"} alt={session?.user?.name || "User"} />
-                                <AvatarFallback>{session?.user?.name?.charAt(0) || "U"}</AvatarFallback>
-                            </Avatar>
-                        </div>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56">
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <User className="mr-2 h-4 w-4" />
-                            <span>Profile</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Settings className="mr-2 h-4 w-4" />
-                            <span>Settings</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-
-                        <SignOutButton className='w-full'>
-                            <LogOut className="mr-2 h-4 w-4" />
-                            <span>Log out</span>
-                        </SignOutButton>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
-        </div>
+        </nav>
     )
 }
 

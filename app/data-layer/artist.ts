@@ -22,14 +22,39 @@ export const getArtistProfileByUserId = async (userId: string) => {
 export const fetchUserArtists = async (userId: string) => {
     try {
 
-        const response = await axiosInstance.post('artist/getUserArtist.php', { user_id: userId });
-
+        const response = await axiosInstance.post('/artist/getUserArtist.php', { user_id: userId });
         const { status, data } = response.data
+       
         return {
             status: "success",
             fetchedArtists: data,
         };
     } catch (error) {
+        console.log(error)
+        return {
+            status: "error",
+            message: "Fetch Error Has occured",
+        };
+    }
+
+};
+
+export const fetchArtistsDiscover = async (artist_id: string) => {
+    try {
+
+        console.log({ artist_id: artist_id })
+        const response = await axiosInstance.post('artist/getArtistDiscover.php', { artist_id: artist_id });
+
+        const { status, data } = response.data
+        console.log(data)
+
+        return {
+            status: "success",
+            artistDiscovery: data,
+        };
+    } catch (error) {
+        console.log(artist_id)
+        console.log(error)
         return {
             status: "error",
             message: "Fetch Error Has occured",

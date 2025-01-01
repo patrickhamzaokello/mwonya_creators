@@ -12,7 +12,6 @@ export const loginRoleChecks = async (userid: string) => {
     };
 
     const user = await getUserById(userid);
-    console.log(user)
     if (user?.role) {
         switch (user.role) {
             case UserRole.ARTIST:

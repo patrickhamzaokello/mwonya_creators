@@ -29,53 +29,61 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-const data = {
-  user: {
-    name: "pk",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Release",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "New",
-          url: "#",
-        },
-        {
-          title: "My Releases",
-          url: "Releases",
-        },
-        {
-          title: "Metrics",
-          url: "studio",
-        },
-      ],
+import { usePathname } from 'next/navigation'
+
+import Link from "next/link";
+import { Home, BarChart2, Users, Settings } from 'lucide-react'
+
+const AppSidebar = () => {
+  const pathname = usePathname()
+
+  const data = {
+    user: {
+      name: "pk",
+      email: "m@example.com",
+      avatar: "/avatars/shadcn.jpg",
     },
-    {
-      title: "Circles",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Members",
-          url: "#",
-        },
-        {
-          title: "Metric",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
+    navMain: [
+      {
+        title: "Release",
+        url: "#",
+        icon: SquareTerminal,
+        isActive: true,
+        items: [
+          {
+            title: "New",
+            url: "#",
+          },
+          {
+            title: "My Releases",
+            url: "Releases",
+          },
+          {
+            title: "Metrics",
+            url: "studio",
+          },
+        ],
+      },
+      {
+        title: "Circles",
+        url: "#",
+        icon: Bot,
+        items: [
+          {
+            title: "Members",
+            url: "#",
+          },
+          {
+            title: "Metric",
+            url: "#",
+          },
+          {
+            title: "Settings",
+            url: "#",
+          },
+        ],
+      },
+      {
         title: "Events",
         url: "#",
         icon: PartyPopper,
@@ -103,95 +111,99 @@ const data = {
             title: "Socials",
             url: "#",
           },
-          
+  
         ],
       },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    
-  ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "New Artist",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Data",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Tour",
-      url: "#",
-      icon: Map,
-    },
-  ],
-}
+      {
+        title: "Documentation",
+        url: "#",
+        icon: BookOpen,
+        items: [
+          {
+            title: "Introduction",
+            url: "#",
+          },
+          {
+            title: "Get Started",
+            url: "#",
+          },
+          {
+            title: "Tutorials",
+            url: "#",
+          },
+          {
+            title: "Changelog",
+            url: "#",
+          },
+        ],
+      },
+  
+    ],
+    navSecondary: [
+      {
+        title: "Support",
+        url: "#",
+        icon: LifeBuoy,
+      },
+      {
+        title: "Feedback",
+        url: "#",
+        icon: Send,
+      },
+    ],
+    projects: [
+      {
+        name: "New Artist",
+        url: "studio",
+        icon: Frame,
+      },
+      {
+        name: "Data",
+        url: "Releases",
+        icon: PieChart,
+      },
+      {
+        name: "Tour",
+        url: "Releases",
+        icon: Map,
+      },
+    ],
+  }
+  
 
-
-
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar variant="inset" {...props}>
+    <Sidebar variant="inset" className="bg-[#f9fafd] z-10 border-r-[1px] border-[#e7e7e7]">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link href="#">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Command className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">MWONYA </span>
+                  <span className="truncate font-semibold">MWONYA</span>
                   <span className="truncate text-xs">Creators</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
-        <NavMain items={data.navMain} />
+      <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
+
+        
       </SidebarContent>
+      
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
   )
 }
+
+export default AppSidebar

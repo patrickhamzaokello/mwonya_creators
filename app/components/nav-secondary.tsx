@@ -1,6 +1,6 @@
 import * as React from "react"
 import { type LucideIcon } from "lucide-react"
-
+import { SignOutButton } from './SignOutButton';
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -8,7 +8,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-
+import Link from "next/link";
+import { usePathname } from 'next/navigation'
 export function NavSecondary({
   items,
   ...props
@@ -19,20 +20,26 @@ export function NavSecondary({
     icon: LucideIcon
   }[]
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+
+  const pathname = usePathname()
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild size="sm">
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </a>
+              <SidebarMenuButton asChild size="sm" isActive={pathname === item.title}>
+              <Link href={item.url}>
+              <item.icon />
+              <span>{item.title}</span>
+              </Link>
+                
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
+          <SignOutButton className='w-full'>
+                            <span>Log out</span>
+                        </SignOutButton>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

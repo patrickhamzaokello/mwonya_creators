@@ -94,7 +94,6 @@ export default function CreateArtistPage() {
             formData.append("terms_conditions_pp", values.terms_conditions_pp ? "true" : "false");
             formData.append("content_upload_policy", values.content_upload_policy ? "true" : "false");
 
-            console.log({formData})
 
             registerArtist(formData).then((data: CreateAristFormState<undefined>) => {
                 if (data.status === "error") {

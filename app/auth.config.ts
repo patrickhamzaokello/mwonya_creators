@@ -19,7 +19,6 @@ export const authConfig = {
     },
     events: {
         async linkAccount({ user }) {
-            console.log(user)
             await prisma.user.update({
                 where: { id: user.id },
                 data: { emailVerified: new Date() }

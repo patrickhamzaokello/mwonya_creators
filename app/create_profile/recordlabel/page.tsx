@@ -68,7 +68,6 @@ export default function CreateNewRecordLabel() {
       formData.append("country", values.country || "");
 
       registerNewRecordLable(formData).then((data) => {
-        console.log(data)
         if (data?.error) {
           toast({
             title: "Warning",

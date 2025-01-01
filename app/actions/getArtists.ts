@@ -1,6 +1,32 @@
 "use server";
-import { fetchUserArtists } from "@/data-layer/artist";
+import { fetchUserArtists,fetchArtistsDiscover } from "@/data-layer/artist";
+
 import { auth } from '@/auth';
+
+
+export const getArtistDiscovery = async (artist_id: string) => {
+    try {
+        const userArtists = await fetchArtistsDiscover(artist_id);
+
+        console.log(userArtists)
+
+        if (userArtists.artistDiscovery) {
+
+            const artist_content = userArtists.artistDiscovery;
+           
+            
+            return { status: "success", message: "Retrived artist Successfully",artist_content};
+        } else {
+            return { status: "error", message: "Failed to get any artist details" };
+        }
+
+    } catch (error) {
+        return {
+            status: "error",
+            message: `Error getting artist profile: ${error}`,
+        };
+    }
+}
 
 export const getArtistsForUser = async () => {
     const session = await auth();
