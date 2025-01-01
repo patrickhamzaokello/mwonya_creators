@@ -8,7 +8,7 @@ import { auth, signOut } from '@/auth';
 import { ArtistProvider } from "@/contexts/ArtistContext";
 import { loginRoleChecks } from '@/actions/loginRoleCheck';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import AppSidebar from "@/components/app-sidebar"
+import AppSidebar from "@/components/Sidebar"
 
 
 export default async function DashboardLayout({
