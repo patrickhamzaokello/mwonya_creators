@@ -22,20 +22,12 @@ const Navbar = ({ session, userRole }: any) => {
     const [artists, setArtists] = useState<TArtist[]>([]);
     const [selectedArtist, setSelectedArtist] = useArtist();
     const [isOpen, setIsOpen] = useState(false);
-    const [role, setUserRole] = useState("");
     const router = useRouter()
     const { toast } = useToast()
 
 
     useEffect(() => {
-        const fetchUserRole = async () => {
-
-            if (userRole) {
-                setUserRole(userRole);
-            } else {
-                setUserRole("dinna");
-            }
-        };
+        
         const fetchArtists = async () => {
             try {
 
@@ -66,24 +58,23 @@ const Navbar = ({ session, userRole }: any) => {
             }
         };
 
-        fetchUserRole();
         fetchArtists();
     }, []);
 
 
 
 
+    
+
     const handleSelectArtist = (artistId: string) => {
+        if (artistId === 'add-new') {
+            router.push('/add-artist');
+            return;
+        }
         const artist = artists.find(a => a.id === artistId);
         if (artist) {
-            setSelectedArtist(artist); // Update the context with the selected artist object
-        }
-        setIsOpen(false);
-        if (artistId == 'add-new') {
-
-            router.push('/add-artist')
-        } else {
-            router.refresh
+            setSelectedArtist(artist);
+            router.refresh(); // Fix router.refresh call
         }
     };
 
@@ -146,7 +137,7 @@ const Navbar = ({ session, userRole }: any) => {
                         <div className="flex items-center space-x-3 cursor-pointer">
                             <div className="flex flex-col items-end">
                                 <span className="text-sm font-semibold">{session?.user?.name || "User"}</span>
-                                <span className="text-xs text-muted-foreground">{role || "Role"}</span>
+                                <span className="text-xs text-muted-foreground">{userRole || "Role"}</span>
                             </div>
                             <Avatar>
                                 <AvatarImage src={session?.user?.image || "/avatar.png"} alt={session?.user?.name || "User"} />

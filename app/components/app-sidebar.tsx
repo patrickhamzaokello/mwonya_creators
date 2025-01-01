@@ -48,11 +48,11 @@ const data = {
         },
         {
           title: "My Releases",
-          url: "#",
+          url: "Releases",
         },
         {
           title: "Metrics",
-          url: "#",
+          url: "studio",
         },
       ],
     },
