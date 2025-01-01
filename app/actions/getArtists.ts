@@ -11,7 +11,7 @@ export const getArtistsForUser = async () => {
         if (userArtists.fetchedArtists) {
 
             const artists = userArtists.fetchedArtists;
-            const formattedArtists:TArtist[] = artists.map(artist => ({
+            const formattedArtists:TArtist[] = artists.map((artist: { id: any; name: any; genre: { id: any; name: any; }; profileImage: { fileUrl: any; }; coverImage: { fileUrl: any; }; verified: any; biography: any; }) => ({
                 id: artist.id,
                 name: artist.name,
                 genreID: artist.genre?.id || '',

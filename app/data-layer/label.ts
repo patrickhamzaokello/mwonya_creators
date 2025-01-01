@@ -3,11 +3,22 @@ import { prisma } from "@/lib/prisma";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { MediaUploadType } from "@prisma/client";
-import axiosInstance from "@/lib/axiosInstance";
 
+// get artist for the label
+export const getArtistsForaLabelbyLabelID = async (recordlableID: string) => {
+    try {
+        const artists = await prisma.artist.findMany({
+            where: { labelId: recordlableID }
+        });
+
+        return artists;
+    } catch {
+        return null;
+    }
+}
 
 // return artist profile where userId is matching
-export const getArtistProfileByUserId = async (userId: string) => {
+export const getLabelProfileByUserId = async (userId: string) => {
     try {
         const artistProfile = await prisma.artist.findFirst({
             where: { userId: userId }
@@ -21,13 +32,40 @@ export const getArtistProfileByUserId = async (userId: string) => {
 
 export const fetchUserArtists = async (userId: string) => {
     try {
+        const artists = await prisma.artist.findMany({
+            where: {
+                userId: userId, // Assuming you have a userId field in your Artist model
+            },
+            select: {
+                id: true,
+                name: true,
+                biography: true,
+                verified: true,
+                genre: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+                profileImage: {
+                    select: {
+                        fileUrl: true,
+                    },
+                },
+                coverImage: {
+                    select: {
+                        fileUrl: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            }
+        });
 
-        const response = await axiosInstance.post('artist/getUserArtist.php', { user_id: userId });
-
-        const { status, data } = response.data
         return {
             status: "success",
-            fetchedArtists: data,
+            fetchedArtists: artists,
         };
     } catch (error) {
         return {
@@ -35,7 +73,6 @@ export const fetchUserArtists = async (userId: string) => {
             message: "Fetch Error Has occured",
         };
     }
-
 };
 
 // check if artist name exists
@@ -68,7 +105,7 @@ export const isAnyArtistIndependentByUserId = async (currentUserID: string | und
 }
 
 // create new artist
-export const CreateArtistProfile = async (name: string, genred: string, biography: string | undefined, isIndependent: boolean | undefined, labelId: string, artistAgreetoTermsConditions: boolean | undefined, artistAgreetoContentUploadPolicy: boolean | undefined, currentUserID: string) => {
+export const CreateArtistProfile = async (name: string, genred: string, biography: string | undefined, isIndependent: boolean | undefined, labelId: string, artistAgreetoTermsConditions: boolean | undefined, artistAgreetoContentUploadPolicy: boolean | undefined, currentUserID: string ) => {
     try {
         const artistProfile = await prisma.artist.create({
             data: {
@@ -77,12 +114,12 @@ export const CreateArtistProfile = async (name: string, genred: string, biograph
                 AgreeToContentPolicy: artistAgreetoContentUploadPolicy,
                 AgreeToTermsPolicy: artistAgreetoTermsConditions,
                 isIndependent,
-                genre: {
+                genre:{
                     connect: {
                         id: genred
                     }
                 },
-                user: {
+                user : {
                     connect: {
                         id: currentUserID,
                     }
@@ -94,7 +131,7 @@ export const CreateArtistProfile = async (name: string, genred: string, biograph
                         }
                     }
                 })
-
+                
             }
         });
 
@@ -108,8 +145,8 @@ export const CreateArtistProfile = async (name: string, genred: string, biograph
 // Update the artist table given artist id and profile id
 export const updateArtistProfileImage = async (artistId: string, mediaId: string, imageType: 'profile' | 'cover') => {
     try {
-        const dataToUpdate = imageType === 'profile'
-            ? { profileImage: { connect: { id: mediaId } } }
+        const dataToUpdate = imageType === 'profile' 
+            ? { profileImage: { connect: { id: mediaId } } } 
             : { coverImage: { connect: { id: mediaId } } };
 
         const updatedArtist = await prisma.artist.update({

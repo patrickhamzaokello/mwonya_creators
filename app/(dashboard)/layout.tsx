@@ -27,20 +27,19 @@ export default async function DashboardLayout({
   const userId = session.user.id ?? "null";
   console.log(userId)
   const roleCheckResult = await loginRoleChecks(userId);
+  console.log(roleCheckResult)
   if (roleCheckResult.profileStatus.needsProfileCreation) {
     redirect("/create_profile");
   }
 
-  const user = await getUserById(userId);
   return (
     <SidebarProvider>
       <ArtistProvider>
         <AppSidebar className="bg-[#f9fafd] z-10 border-r-[1px] border-[#e7e7e7]" />
         <main className="w-full">
-          <Navbar session={session} userRole={user?.role} />
+          <Navbar session={session} userRole={roleCheckResult?.user.role} />
           <div className="p-4 md:gap-8 md:p-4 bg-[#fff]" >
             {children}
-
           </div>
         </main>
       </ArtistProvider>
