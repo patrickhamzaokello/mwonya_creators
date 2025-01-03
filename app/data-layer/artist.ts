@@ -63,6 +63,27 @@ export const fetchArtistsDiscover = async (artist_id: string) => {
 
 };
 
+export const fetchContentDetails = async (content_id: string) => {
+    try {
+
+        const response = await axiosInstance.post('artist/getContentDetails.php', { content_id: content_id });
+
+        const { status, data } = response.data
+        console.log(data)
+
+        return {
+            status: "success",
+            content_details: data,
+        };
+    } catch (error) {
+        return {
+            status: "error",
+            message: "Fetch Error Has occured",
+        };
+    }
+
+};
+
 // check if artist name exists
 export const getArtistProfileByName = async (artist_name: string) => {
     try {

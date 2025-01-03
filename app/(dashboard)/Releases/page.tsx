@@ -6,24 +6,19 @@ import { ChevronRight } from "lucide-react";
 import { useArtist } from "@/contexts/ArtistContext";
 import { useState, useEffect } from "react";
 import { getArtistDiscovery } from "@/actions/getArtists";
-
-interface ContentItem {
-  title: string;
-  artist: string;
-  imageUrl: string;
-  category: string;
-}
-
-interface YearSection {
-  year: number;
-  items: ContentItem[];
-}
+import { useRouter } from "next/navigation"
 
 export default function ContentByYear() {
   const [selectedArtist, setSelectedArtist] = useArtist();
   const [contentByYear, setContentByYear] = useState<YearSection[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter()
+
+  const handleContentClick = (id: string) => {
+    router.push(`/Releases/${id}`)
+  }
 
   useEffect(() => {
     const fetchArtists = async () => {
@@ -48,6 +43,7 @@ export default function ContentByYear() {
             }
 
             yearSection.items.push({
+              content_id: item.id,
               title: item.title,
               artist: item.releaseDate, // Placeholder as no artist data exists
               imageUrl: item.artwork.fileUrl,
@@ -92,6 +88,7 @@ export default function ContentByYear() {
                   <div
                     key={index}
                     className="group relative flex items-center space-x-4 rounded-md border p-4 hover:bg-accent transition-colors"
+                    onClick={() => handleContentClick(item.content_id)}
                   >
                     <div className="relative h-24 w-24 flex-shrink-0">
                       <Image
@@ -114,6 +111,7 @@ export default function ContentByYear() {
                     </div>
                     <ChevronRight className="h-5 w-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
+                  
                 ))}
               </div>
             </section>

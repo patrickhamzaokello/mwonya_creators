@@ -51,16 +51,17 @@ const AppSidebar = () => {
         isActive: true,
         items: [
           {
-            title: "New",
-            url: "#",
+            title: "New Single",
+            url: "/new_single",
           },
+          
           {
             title: "My Releases",
-            url: "Releases",
+            url: "/Releases",
           },
           {
             title: "Metrics",
-            url: "studio",
+            url: "/studio",
           },
         ],
       },

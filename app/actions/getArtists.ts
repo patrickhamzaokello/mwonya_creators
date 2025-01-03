@@ -1,6 +1,5 @@
 "use server";
-import { fetchUserArtists,fetchArtistsDiscover } from "@/data-layer/artist";
-
+import { fetchUserArtists,fetchArtistsDiscover ,fetchContentDetails} from "@/data-layer/artist";
 import { auth } from '@/auth';
 
 
@@ -61,3 +60,28 @@ export const getArtistsForUser = async () => {
         };
     }
 }
+
+export async function getContentDetails(content_id: string) {
+
+    try {
+        console.log(content_id)
+        const data = await fetchContentDetails(content_id??"");
+        const content_info = data.content_details;
+        console.log(content_info)
+        if (content_info) {
+            return { status: "success", message: "Retrived artist Successfully", content_info};
+        } else {
+            return { status: "error", message: "Failed to get any artist details" };
+        }
+
+    } catch (error) {
+        return {
+            status: "error",
+            message: `Error getting artist profile: ${error}`,
+        };
+    }
+    
+    
+  }
+  
+  
