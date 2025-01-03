@@ -1,4 +1,4 @@
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, Suspense } from 'react'
+import { Suspense } from 'react'
 import Image from 'next/image'
 import { getContentDetails } from '@/actions/getArtists'
 import { MoreVertical, Pencil, Plus, GripVertical, ExternalLink, ChevronLeft, Settings } from 'lucide-react'
@@ -33,7 +33,7 @@ export default async function ContentPage({
   console.log(params.id)
   const response = await getContentDetails(params.id)
   console.log(response)
-  const content = response.content_info
+  const content:AlbumContent = response.content_info
 
   console.log(content)
 
@@ -121,7 +121,7 @@ export default async function ContentPage({
               </div>
 
               <div className="divide-y">
-                {content.tracks?.map((track: { title: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; duration: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined }, index: Key | null | undefined) => (
+                {content.tracks?.map((track, index) => (
                   <div
                     key={index}
                     className="group flex items-center gap-4 p-4 hover:bg-accent/50"
