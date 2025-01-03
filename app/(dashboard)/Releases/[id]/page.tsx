@@ -26,6 +26,26 @@ import {
 } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 
+interface Track {
+  title: string;
+  duration: string;
+  explicit?: boolean;
+}
+
+interface AlbumContent {
+  title: string;
+  artist: string;
+  imageUrl: string;
+  tracks?: Track[];
+}
+
+interface TrackRowProps {
+  track: Track;
+  index: number;
+  isPlaying: boolean;
+  onPlayToggle: (index: number) => void;
+}
+
 function ContentSkeleton() {
   return (
     <div className="grid h-full w-full place-items-center p-4">
@@ -48,7 +68,7 @@ function ContentSkeleton() {
   );
 }
 
-const TrackRow = ({ track, index, isPlaying, onPlayToggle }) => {
+const TrackRow: React.FC<TrackRowProps> = ({ track, index, isPlaying, onPlayToggle }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -121,13 +141,15 @@ const TrackRow = ({ track, index, isPlaying, onPlayToggle }) => {
   );
 };
 
-export default async function ContentPage({
-  params
-}: {
-  params: { id: string }
-}) {
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default async function ContentPage({ params }: PageProps) {
   const response = await getContentDetails(params.id);
-  const content = response.content_info;
+  const content: AlbumContent = response.content_info;
 
   return (
     <div className="min-h-screen bg-background">
@@ -252,7 +274,8 @@ export default async function ContentPage({
   );
 }
 
-function calculateTotalDuration(tracks) {
+function calculateTotalDuration(tracks: Track[] | undefined): string {
+  if (!tracks || tracks.length === 0) return "0 min";
   // Add actual duration calculation logic here
   return "1 hr 23 min";
 }
