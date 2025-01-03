@@ -90,7 +90,7 @@ export default function ContentByYear() {
                     className="group relative flex items-center space-x-4 rounded-md border p-4 hover:bg-accent transition-colors"
                     onClick={() => handleContentClick(item.content_id)}
                   >
-                    <div className="relative h-24 w-24 flex-shrink-0">
+                    <div className="relative h-44 w-44 flex-shrink-0">
                       <Image
                         src={item.imageUrl}
                         alt={item.title}
