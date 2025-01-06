@@ -61,7 +61,7 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
   const [genres, setGenres] = useState<{ id: string; name: string }[]>([])
   const [isFormComplete, setIsFormComplete] = useState(false);
   const { toast } = useToast()
-  const [TrackPreview, setTrackPreview] = useState<string | null>(null)
+  const [trackPreview, setTrackPreview] = useState<string | null>(null)
   const [coverArtPreview, setCoverArtPreview] = useState<string | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
