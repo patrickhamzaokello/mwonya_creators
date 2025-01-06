@@ -14,7 +14,7 @@ function generateAlbumId(): string {
 export async function createTrack(formData: FormData) {
   const albumId = formData.get('albumId') as string
   const title = formData.get('title') as string
-  const artist = formData.get('artist') as string
+  const artistId = formData.get('artistId') as string
   const albumTitle = formData.get('albumTitle') as string
   const genre = parseInt(formData.get('genre') as string)
   const duration = parseInt(formData.get('duration') as string)
@@ -29,6 +29,8 @@ export async function createTrack(formData: FormData) {
   const trackFile = formData.get('trackFile') as File
   const coverArtFile = formData.get('coverArtFile') as File
 
+  console.log(FormData)
+
   try {
     
     const newAlbumId = generateAlbumId();
@@ -37,7 +39,7 @@ export async function createTrack(formData: FormData) {
     const trackDetails: SingleTrackDetails = {
       album_id: newAlbumId,
       title: title,
-      artist: artist,
+      artist: artistId,
       album_title: title,
       artworkPath: "pending",
       genre: genre,
