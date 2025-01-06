@@ -43,6 +43,8 @@ export const uploadSingleTrack = async (trackDetails:SingleTrackDetails) => {
    
     try {
         const response = await axiosInstance.post('artist/uploadSingleTrack_Container.php', { trackDetails });
+        console.log('jim')
+        console.log(response)
 
         if (response.status === 200) {
             const {status, data} = response.data
