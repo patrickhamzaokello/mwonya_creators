@@ -223,7 +223,7 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
           form.handleSubmit(onSubmit)(e);
         }
       }} className="space-y-8">
-        <Card className="w-full max-w-2xl mx-auto">
+        <Card className="w-full">
           <CardHeader>
             <CardTitle>Upload New Track</CardTitle>
           </CardHeader>
