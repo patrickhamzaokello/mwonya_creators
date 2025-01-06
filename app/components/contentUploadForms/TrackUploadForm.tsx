@@ -25,8 +25,10 @@ import { CalendarIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Card, CardContent, CardHeader, CardTitle,CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { AlertCircle, Play, Pause } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -60,6 +62,12 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
   const [isFormComplete, setIsFormComplete] = useState(false);
   const { toast } = useToast()
 
+  const [coverArtPreview, setCoverArtPreview] = useState<string | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -89,6 +97,14 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
   }, [artistId, artistName, form])
 
   useEffect(() => {
+    return () => {
+      if (coverArtPreview) {
+        URL.revokeObjectURL(coverArtPreview)
+      }
+    }
+  }, [coverArtPreview])
+
+  useEffect(() => {
     if (trackType) {
       fetchGenres(trackType)
     }
@@ -114,6 +130,35 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
   useEffect(() => {
     form.setValue('genre', '')
   }, [trackType, form])
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`
+  }
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime)
+    }
+  }
+
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration)
+    }
+  }
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause()
+      } else {
+        audioRef.current.play()
+      }
+      setIsPlaying(!isPlaying)
+    }
+  }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setStatus('uploading')
@@ -157,8 +202,8 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
   const nextStep = async () => {
     const isStepValid = await form.trigger(
       step === 1 ? ['title', 'tag', 'genre'] :
-      step === 2 ? ['releaseDate', 'producer', 'songwriter', 'labels'] :
-      ['description', 'AESCode', 'exclusive', 'explicit']
+        step === 2 ? ['releaseDate', 'producer', 'songwriter', 'labels'] :
+          ['description', 'AESCode', 'exclusive', 'explicit']
     );
     if (isStepValid) {
       if (step === 3) {
@@ -230,7 +275,7 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Genre</FormLabel>
-                      <Select 
+                      <Select
                         onValueChange={field.onChange}
                         value={field.value}
                       >
@@ -410,49 +455,122 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
               </div>
             )}
             {step === 4 && (
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="trackFile"
-                  render={({ field: { onChange, value, ...rest } }) => (
-                    <FormItem>
-                      <FormLabel>Track File</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="file"
-                          accept="audio/*"
-                          onChange={(e) => onChange(e.target.files?.[0])}
-                          {...rest}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Upload your audio track file here.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="coverArtFile"
-                  render={({ field: { onChange, value, ...rest } }) => (
-                    <FormItem>
-                      <FormLabel>Cover Art</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => onChange(e.target.files?.[0])}
-                          {...rest}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Upload cover art for your track.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="trackFile"
+                    render={({ field: { onChange, value, ...rest } }) => (
+                      <FormItem>
+                        <FormLabel>Track File</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="file"
+                            accept="audio/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                onChange(file);
+                                if (audioRef.current) {
+                                  audioRef.current.src = URL.createObjectURL(file);
+                                  audioRef.current.load();
+                                }
+                              }
+                            }}
+                            {...rest}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Upload your audio track file here.
+                        </FormDescription>
+                        <FormMessage />
+                        {audioRef.current && (
+                          <div className="mt-4 space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                onClick={togglePlay}
+                                className="w-8 h-8 p-0 flex items-center justify-center"
+                              >
+                                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                              </Button>
+                              <div className="flex-1">
+                                <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                                  <div
+                                    className="h-full bg-primary transition-all"
+                                    style={{ width: `${(currentTime / duration) * 100}%` }}
+                                  />
+                                </div>
+                              </div>
+                              <span className="text-sm text-muted-foreground min-w-[60px] text-right">
+                                {formatTime(currentTime)} / {formatTime(duration)}
+                              </span>
+                            </div>
+                            <audio
+                              ref={audioRef}
+                              onTimeUpdate={handleTimeUpdate}
+                              onLoadedMetadata={handleLoadedMetadata}
+                              onEnded={() => setIsPlaying(false)}
+                              className="hidden"
+                            />
+                          </div>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="coverArtFile"
+                    render={({ field: { onChange, value, ...rest } }) => (
+                      <FormItem>
+                        <FormLabel>Cover Art</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                onChange(file);
+                                setCoverArtPreview(URL.createObjectURL(file));
+                              }
+                            }}
+                            {...rest}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Upload cover art for your track.
+                        </FormDescription>
+                        <FormMessage />
+                        {coverArtPreview && (
+                          <div className="mt-4">
+                            <div className="relative w-48 h-48 rounded-lg overflow-hidden border border-gray-200">
+                              <img
+                                src={coverArtPreview}
+                                alt="Cover Art Preview"
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <Alert className="mt-4">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    Supported formats:
+                    <ul className="mt-2 text-sm list-disc list-inside">
+                      <li>Audio: MP3, WAV, AAC (max 50MB)</li>
+                      <li>Images: JPG, PNG (min 1400x1400px, max 3000x3000px)</li>
+                    </ul>
+                  </AlertDescription>
+                </Alert>
               </div>
             )}
           </CardContent>
