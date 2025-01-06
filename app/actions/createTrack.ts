@@ -54,6 +54,7 @@ export async function createTrack(formData: FormData) {
   };
 
     const data = await uploadSingleTrack(trackDetails)
+    console.log(data)
 
     if(!data.success){
       return { success: false, trackId: newAlbumId}
