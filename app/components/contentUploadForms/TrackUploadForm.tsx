@@ -496,69 +496,7 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
                       </FormItem>
                     )}
                   />
-                  {/* <FormField
-                    control={form.control}
-                    name="trackFile"
-                    render={({ field: { onChange, value, ...rest } }) => (
-                      <FormItem>
-                        <FormLabel>Track File</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="file"
-                            accept="audio/*"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                onChange(file);
-                                if (audioRef.current) {
-                                  audioRef.current.src = URL.createObjectURL(file);
-                                  audioRef.current.load();
-                                }
-                              }
-                            }}
-                            {...rest}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Upload your audio track file here.
-                        </FormDescription>
-                        <FormMessage />
-                        {audioRef.current && (
-                          <div className="mt-4 space-y-2">
-                            <div className="flex items-center space-x-2">
-                              <Button
-                                type="button"
-                                size="sm"
-                                variant="outline"
-                                onClick={togglePlay}
-                                className="w-8 h-8 p-0 flex items-center justify-center"
-                              >
-                                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                              </Button>
-                              <div className="flex-1">
-                                <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                                  <div
-                                    className="h-full bg-primary transition-all"
-                                    style={{ width: `${(currentTime / duration) * 100}%` }}
-                                  />
-                                </div>
-                              </div>
-                              <span className="text-sm text-muted-foreground min-w-[60px] text-right">
-                                {formatTime(currentTime)} / {formatTime(duration)}
-                              </span>
-                            </div>
-                            <audio
-                              ref={audioRef}
-                              onTimeUpdate={handleTimeUpdate}
-                              onLoadedMetadata={handleLoadedMetadata}
-                              onEnded={() => setIsPlaying(false)}
-                              className="hidden"
-                            />
-                          </div>
-                        )}
-                      </FormItem>
-                    )}
-                  /> */}
+                  
 
                   <FormField
                     control={form.control}

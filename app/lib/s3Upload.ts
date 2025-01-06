@@ -1,12 +1,42 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+"use server"
+import { auth } from '@/auth';
 
-const s3Client = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-  },
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
+
+import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
+import { updateTrack_File_Album_cover } from '@/data-layer/artist';
+
+//using edge function to generate file names
+const generateFilename = (fileType: string, bytes = 32) => {
+    const array = new Uint8Array(bytes);
+    crypto.getRandomValues(array);
+    const randomString = Array.from(array).map(b => b.toString(16).padStart(2, "0")).join("");
+    const extension = fileType.split('/')[1];
+    return `${randomString}.${extension}`;
+}
+
+const s3 = new S3Client({
+    region: process.env.AWS_BUCKET_REGION!,
+    credentials: {
+        accessKeyId: process.env.AWS_BUCKET_ACCESS_KEY!,
+        secretAccessKey: process.env.AWS_BUCKET_SECRET_ACCESS_KEY!,
+    },
 })
+
+const acceptedFileTypes = ["image/jpeg", "image/JPG", "image/png", "image/webp", "image/gif", "video/mp4", "video/webm", "audio/mp3", "audio/wav", "audio/m4a", "audio/mpeg"]
+
+const maxFileSize = 10 * 1024 * 1024 // 10MB
+
+
+const computeSHA256 = async (file: File) => {
+  const arrayBuffer = await file.arrayBuffer()
+  const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("")
+  return hashHex
+}
 
 
 export async function uploadFileToS3(trackId: string, file: File, fileType: 'track' | 'coverArt') {
@@ -20,41 +50,50 @@ export async function uploadFileToS3(trackId: string, file: File, fileType: 'tra
       Body: Buffer.from(fileBuffer),
     }
 
-    await s3Client.send(new PutObjectCommand(uploadParams))
+    const checksum = await computeSHA256(file)
 
-    const awsUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${fileName}`
+    const session = await auth();
+    if (!session) {
+        return { failure: "Not authenticate" }
+    }
 
-    // // Update track in database
-    // if (fileType === 'track') {
-    //   await prisma.track.update({
-    //     where: { id: trackId },
-    //     data: {
-    //       awsUrl,
-    //       status: 'UPLOADED',
-    //     },
-    //   })
-    // } else if (fileType === 'coverArt') {
-    //   await prisma.track.update({
-    //     where: { id: trackId },
-    //     data: {
-    //       coverArtUrl: awsUrl,
-    //     },
-    //   })
-    // }
+    if (!acceptedFileTypes.includes(file.type)) {
+        return { failure: "Invalid file type" }
+    }
 
-    console.log(`${fileType} for track ${trackId} uploaded successfully`)
+    if (file.size > maxFileSize) {
+        return { failure: "File size too large" }
+    }
+
+    const putObjectCommand = new PutObjectCommand({
+        Bucket: process.env.AWS_BUCKET_NAME!,
+        Key: generateFilename(file.type),
+        ContentType: file.type,
+        ContentLength: file.size,
+        ChecksumSHA256: checksum,
+        Metadata: {
+            userId: session.user.id ?? "null",
+        }
+    })
+    const signedURL = await getSignedUrl(s3 as any, putObjectCommand as any, {
+        expiresIn: 300, // link available for only 5 mins 60 * 5
+    });
+
+
+    await fetch(signedURL, {
+        method: "PUT",
+        body: file,
+        headers: {
+            "Content-Type": file.type,
+        },
+    })
+
+    await updateTrack_File_Album_cover(trackId,fileType, signedURL.split("?")[0], "uploaded")
+
+
   } catch (error) {
-    console.error(`Error uploading ${fileType} for track ${trackId}:`, error)
 
-    // if (fileType === 'track') {
-    //   // Update track status to FAILED only if the track file upload fails
-    //   await prisma.track.update({
-    //     where: { id: trackId },
-    //     data: {
-    //       status: 'FAILED',
-    //     },
-    //   })
-    // }
+    await updateTrack_File_Album_cover(trackId,fileType, null, "failed")
   }
 }
 

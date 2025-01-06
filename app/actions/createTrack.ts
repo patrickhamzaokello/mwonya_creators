@@ -4,10 +4,12 @@ import { uploadFileToS3 } from '@/lib/s3Upload'
 import { uploadSingleTrack } from '@/data-layer/artist'
 import { v4 as uuidv4 } from 'uuid';
 
-function generateAlbumId(): string {
-    const prefix = "mw_alb";
-    const uniqueId = uuidv4(); // Generate a unique identifier
-    return `${prefix}${uniqueId}`;
+function generateContentId(contentType: string): string {
+  // Check content type and assign the appropriate prefix
+  const prefix = contentType === "track" ? "mw_trk" : "mw_alb";
+  
+  const uniqueId = uuidv4(); // Generate a unique identifier
+  return `${prefix}${uniqueId}`;
 }
 
 
@@ -33,20 +35,19 @@ export async function createTrack(formData: FormData) {
 
   try {
     
-    const newAlbumId = generateAlbumId();
-    console.log(rawReleaseDate)
+    const newAlbumId = generateContentId('container');
+    const newTrackReferenceID = generateContentId('track')
+
     const formattedReleaseDate = rawReleaseDate.toISOString().split('T')[0];
-    console.log(formattedReleaseDate);
 
     const trackDetails: SingleTrackDetails = {
       album_id: newAlbumId,
+      track_reference: newTrackReferenceID,
       title: title,
       artist: artistId,
       album_title: title,
-      artworkPath: "pending",
       genre: genre,
       duration: 210,
-      path: "pending",
       exclusive: 1,
       tag: tag,
       producer: producer,
@@ -64,9 +65,12 @@ export async function createTrack(formData: FormData) {
       return { success: false, trackId: newAlbumId}
     }
 
+    console.log(newTrackReferenceID)
+    console.log(newAlbumId)
+
     // Start asynchronous upload process for both track and cover art
     Promise.all([
-      uploadFileToS3(newAlbumId, trackFile, 'track'),
+      uploadFileToS3(newTrackReferenceID, trackFile, 'track'),
       uploadFileToS3(newAlbumId, coverArtFile, 'coverArt')
     ]).catch(console.error)
 

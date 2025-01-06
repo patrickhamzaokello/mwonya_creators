@@ -45,13 +45,12 @@ interface ContentItem {
 
 interface SingleTrackDetails {
     album_id: string;
+    track_reference: string,
     title: string;
     artist: string;
     album_title: string;
-    artworkPath: string;
     genre: number;
     duration: number;
-    path: string;
     exclusive: number;
     tag: string;
     producer: string;

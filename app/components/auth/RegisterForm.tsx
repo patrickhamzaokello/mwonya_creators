@@ -143,7 +143,7 @@ const router = useRouter()
             />
           </div>
 
-          <Button disabled={isPending} className="px-8 py-2 font-semibold  rounded-[5px] relative w-full bg-black text-white hover:bg-black/90 text-lg" type="submit">
+          <Button disabled={isPending} className="px-8 py-2 font-semibold  rounded-[5px] relative w-full text-lg" type="submit">
           Register
       </Button>
         </form>

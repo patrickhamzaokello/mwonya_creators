@@ -93,7 +93,7 @@ const MainLoginForm = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="pk@gmail.com"
+                      placeholder="Enter Email"
                       disabled={isPending}
                       type="email"
                       className=" border-baseContent/20 text-baseContent"
@@ -111,7 +111,7 @@ const MainLoginForm = () => {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="••••••••"
+                      placeholder="Enter your password"
                       {...field}
                       disabled={isPending}
                       type="password"
@@ -134,7 +134,7 @@ const MainLoginForm = () => {
 
           
 
-          <Button disabled={isPending} className="px-8 py-2 font-semibold  rounded-[5px] relative w-full bg-black text-white hover:bg-black/90 text-lg" type="submit">
+          <Button disabled={isPending} className="px-8 py-2 font-semibold  rounded-[5px] relative w-full text-lg" type="submit">
           Login
       </Button>
         </form>

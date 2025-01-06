@@ -57,6 +57,27 @@ export const uploadSingleTrack = async (trackDetails:SingleTrackDetails) => {
     }
 } 
 
+export const updateTrack_File_Album_cover = async (referenceId: string, fileType: string, awsUrl: any, upload_status: string) => {
+    try {
+
+        const response = await axiosInstance.post('artist/updateTrack_File_Album_cover.php', { referenceId, fileType, awsUrl,upload_status });
+
+        const { status, data } = response.data
+        console.log(data)
+
+        return {
+            status: "success",
+            upload_status: data,
+        };
+    } catch (error) {
+        return {
+            status: "error",
+            message: "Fetch Error Has occured",
+        };
+    }
+
+};
+
 export const fetchArtistsDiscover = async (artist_id: string) => {
     try {
 

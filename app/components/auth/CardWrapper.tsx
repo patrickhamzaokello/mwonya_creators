@@ -21,7 +21,7 @@ export const CardWrapper = ({
 }: CardWrapperProps) => {
   return (
     <div className="min-h-screen flex items-center justify-center  px-4 py-12">
-      <Card className="w-full max-w-xl bg-white shadow-lg rounded-xl border-0">
+      <Card className="w-full max-w-xl   shadow-lg rounded-xl border-0">
         <CardHeader className="space-y-3 pb-6">
           <Header title={headerTitle} />
         </CardHeader>
