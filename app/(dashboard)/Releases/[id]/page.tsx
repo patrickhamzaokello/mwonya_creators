@@ -30,6 +30,7 @@ import { Progress } from "@/components/ui/progress";
 interface Track {
   title: string;
   duration: string;
+  trackFilePath: string;
   explicit?: boolean;
 }
 
@@ -265,21 +266,6 @@ function Page({ params }: PageProps) {
           </div>
         </div>
       </main>
-
-      {/* Playback Bar */}
-      <div className="fixed bottom-0 left-0 right-0 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto p-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon">
-              <Play className="h-4 w-4" />
-            </Button>
-            <div className="flex-1">
-              <Progress value={33} className="h-1" />
-            </div>
-            <span className="text-sm text-muted-foreground">1:23 / 3:45</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

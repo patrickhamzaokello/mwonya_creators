@@ -64,7 +64,7 @@ const AudioUploadForm = () => {
 
 
   return (
-      <section className="w-full max-w-4xl mx-auto py-12 md:py-16 lg:py-20 bg-white">
+      <section className="w-full max-w-4xl mx-auto py-12 md:py-16 lg:py-20 min-h-screen bg-background">
         <div className="px-4 sm:px-6 md:px-8">
           <div className="space-y-6">
             <div className="space-y-2">
@@ -89,7 +89,7 @@ const AudioUploadForm = () => {
                     <Label htmlFor="tags">Tags</Label>
                     <div className="flex flex-wrap gap-2 mb-2">
                       {tags.map(tag => (
-                          <span key={tag} className="bg-gray-200 px-2 py-1 rounded-full text-sm flex items-center">
+                          <span key={tag} className="px-2 py-1 rounded-full text-sm flex items-center">
                         {tag}
                             <button
                                 type="button"
@@ -141,7 +141,7 @@ const AudioUploadForm = () => {
 
                   <div>
                     <Label htmlFor="audio-type">Audio Type</Label>
-                    <RadioGroup className="grid grid-cols-2 gap-4 bg-gray-100 p-4 rounded-sm" defaultValue="option-one">
+                    <RadioGroup className="grid grid-cols-2 gap-4  p-4 rounded-sm" defaultValue="option-one">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="option-one" id="option-one" />
                         <Label htmlFor="option-one">Music</Label>
@@ -162,7 +162,7 @@ const AudioUploadForm = () => {
                   </div>
 
 
-                  <div className="flex items-center space-x-2 bg-gray-100 p-4 rounded-sm">
+                  <div className="flex items-center space-x-2  p-4 rounded-sm">
                     <Checkbox id="exclusive" />
                     <Label htmlFor="exclusive" className="flex items-center">
                       Exclusive
@@ -171,7 +171,7 @@ const AudioUploadForm = () => {
                     </span>
                     </Label>
                   </div>
-                  <div className="flex items-center space-x-2 bg-gray-100 p-4 rounded-sm">
+                  <div className="flex items-center space-x-2  p-4 rounded-sm">
                     <Checkbox id="exclusive" />
                     <Label htmlFor="exclusive" className="flex items-center">
                       Explicit
@@ -207,7 +207,7 @@ const AudioUploadForm = () => {
               )}
 
               {file && (
-                  <div className="flex items-center justify-between p-4 bg-gray-100 rounded-lg">
+                  <div className="flex items-center justify-between p-4  rounded-lg">
                     <div className="flex items-center space-x-2">
                       <div className="text-sm font-medium text-gray-900">{file["name"]}</div>
                       <div className="text-sm text-gray-500">({(file["size"] / 1024 / 1024).toFixed(2)} MB)</div>
@@ -232,7 +232,7 @@ const AudioUploadForm = () => {
               <button
                   type="submit"
                   disabled={!file}
-                  className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2 text-white rounded-lg  disabled:cursor-not-allowed"
               >
                 Upload Audio
               </button>

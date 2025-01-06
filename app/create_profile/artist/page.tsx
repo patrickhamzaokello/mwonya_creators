@@ -19,7 +19,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { CreateArtistSchema } from '@/lib/schemas';
 import { useRef, useState, useEffect, useTransition } from 'react'
 import { registerArtist } from '@/actions/create_profile';
@@ -27,7 +27,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image';
 import Link from "next/link"
 import { Checkbox } from "@/components/ui/checkbox"
-import { retrieveAllGenres } from "@/actions/genre"
+import { retrieveAllGenres } from "@/actions/getGenres"
 
 export default function CreateArtistPage() {
     const [isPending, startTransition] = useTransition()
@@ -54,9 +54,9 @@ export default function CreateArtistPage() {
         // Fetch genres from the database
         async function fetchGenres() {
             try {
-                const result = await retrieveAllGenres();
-                if (result.status === "success" && Array.isArray(result.fetchedgenres)) {
-                    setGenres(result.fetchedgenres);
+                const result = await retrieveAllGenres("music");
+                if (result.status == "success" && Array.isArray(result.fetchedgenres)) {
+                    setGenres(result.fetchedgenres.genres);
                 } else {
                     toast({
                         title: "Error",

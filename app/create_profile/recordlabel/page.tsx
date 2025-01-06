@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { CreateRecordLableSchema } from '@/lib/schemas';
 import { useRef, useState, useTransition } from 'react'
 import { registerArtist, registerNewRecordLable } from '@/actions/create_profile';

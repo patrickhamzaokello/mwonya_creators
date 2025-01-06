@@ -86,7 +86,7 @@ export default function Menu() {
   const currentPath = usePathname();
 
   return (
-    <div className="dark flex flex-col mt-4 text-sm h-[90%] justify-between">
+    <div className="flex flex-col mt-4 text-sm h-[90%] justify-between">
       {menuItems.map((i) => (
         <div className="flex flex-col gap-2 text-bold" key={i.title}>
           <span className="hidden lg:block text-gray-400 font-light  my-4">{i.title}</span>

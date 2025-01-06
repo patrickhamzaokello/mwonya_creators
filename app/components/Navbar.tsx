@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useArtist } from "@/contexts/ArtistContext"
 import { useRouter } from 'next/navigation'
 import { getArtistsForUser } from '@/actions/getArtists';
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";

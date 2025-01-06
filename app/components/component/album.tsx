@@ -32,7 +32,7 @@ export function Album() {
   };
 
   return (
-    <section className="w-full max-w-4xl mx-auto py-12 md:py-16 lg:py-20 border-2 border-[#ffffff14] rounded-md dark bg-[#ffffff14]">
+    <section className="w-full max-w-4xl mx-auto py-12 md:py-16 lg:py-20 border-2 border-[#ffffff14] rounded-md bg-[#ffffff14]">
       <div className="px-4 sm:px-6 md:px-8">
         <div className="space-y-6">
           <div className="space-y-2">

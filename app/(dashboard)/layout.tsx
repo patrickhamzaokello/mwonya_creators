@@ -37,7 +37,7 @@ export default async function DashboardLayout({
         <AppSidebar  />
         <main className="w-full">
           <Navbar session={session} userRole={roleCheckResult?.user.role} />
-          <div className="p-4 md:gap-8 md:p-4 bg-[#fff]" >
+          <div className="p-4 md:gap-8 md:p-4" >
             {children}
           </div>
         </main>

@@ -173,7 +173,7 @@ const AppSidebar = () => {
   
 
   return (
-    <Sidebar variant="inset" className="bg-[#f9fafd] z-10 border-r-[1px] border-[#e7e7e7]">
+    <Sidebar variant="inset" className="z-10 border-r-[1px]">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
