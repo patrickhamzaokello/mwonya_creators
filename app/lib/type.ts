@@ -42,6 +42,27 @@ interface ContentItem {
     category: string;
 }
 
+
+interface SingleTrackDetails {
+    album_id: string;
+    title: string;
+    artist: string;
+    album_title: string;
+    artworkPath: string;
+    genre: number;
+    duration: number;
+    path: string;
+    exclusive: number;
+    tag: string;
+    producer: string;
+    songwriter: string;
+    labels: string;
+    description: string;
+    releaseDate: string;
+    AES_code: string;
+}
+
+
 interface YearSection {
     year: number
     items: ContentItem[]

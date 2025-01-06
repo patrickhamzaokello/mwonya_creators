@@ -1,6 +1,14 @@
 'use server'
 
 import { uploadFileToS3 } from '@/lib/s3Upload'
+import { uploadSingleTrack } from '@/data-layer/artist'
+import { v4 as uuidv4 } from 'uuid';
+
+function generateAlbumId(): string {
+    const prefix = "mw_alb";
+    const uniqueId = uuidv4(); // Generate a unique identifier
+    return `${prefix}${uniqueId}`;
+}
 
 
 export async function createTrack(formData: FormData) {
@@ -22,35 +30,43 @@ export async function createTrack(formData: FormData) {
   const coverArtFile = formData.get('coverArtFile') as File
 
   try {
-    // Create track in database with pending status
-    // const track = await prisma.track.create({
-    //   data: {
-    //     albumId,
-    //     title,
-    //     artist,
-    //     albumTitle,
-    //     genre,
-    //     duration,
-    //     exclusive,
-    //     tag,
-    //     producer,
-    //     songwriter,
-    //     labels,
-    //     description,
-    //     releaseDate,
-    //     AESCode,
-    //     status: 'PENDING',
-    //   },
-    // })
+    
+    const newAlbumId = generateAlbumId();
+    console.log(newAlbumId);
 
-    // // Start asynchronous upload process for both track and cover art
-    // Promise.all([
-    //   uploadFileToS3(track.id, trackFile, 'track'),
-    //   uploadFileToS3(track.id, coverArtFile, 'coverArt')
-    // ]).catch(console.error)
+    const trackDetails: SingleTrackDetails = {
+      album_id: newAlbumId,
+      title: title,
+      artist: artist,
+      album_title: title,
+      artworkPath: "pending",
+      genre: genre,
+      duration: 210,
+      path: "pending",
+      exclusive: 1,
+      tag: tag,
+      producer: producer,
+      songwriter: songwriter,
+      labels: labels,
+      description: description,
+      releaseDate: "2025-01-01",
+      AES_code: AESCode
+  };
 
-    // return { success: true, trackId: track.id }
-    return {success: true, trackId: 'john'}
+    const data = await uploadSingleTrack(trackDetails)
+
+    if(!data.success){
+      return { success: false, trackId: newAlbumId}
+    }
+
+    // Start asynchronous upload process for both track and cover art
+    Promise.all([
+      uploadFileToS3(newAlbumId, trackFile, 'track'),
+      uploadFileToS3(newAlbumId, coverArtFile, 'coverArt')
+    ]).catch(console.error)
+
+    return { success: true, trackId: newAlbumId}
+
   } catch (error) {
     console.error('Error creating track:', error)
     return { success: false, error: 'Failed to create track' }

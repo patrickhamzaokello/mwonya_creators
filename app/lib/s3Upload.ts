@@ -9,7 +9,7 @@ const s3Client = new S3Client({
 })
 
 
-export async function uploadFileToS3(trackId: number, file: File, fileType: 'track' | 'coverArt') {
+export async function uploadFileToS3(trackId: string, file: File, fileType: 'track' | 'coverArt') {
   const fileBuffer = await file.arrayBuffer()
   const fileName = `${trackId}-${fileType}-${file.name}`
 
@@ -24,37 +24,37 @@ export async function uploadFileToS3(trackId: number, file: File, fileType: 'tra
 
     const awsUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${fileName}`
 
-    // // Update track in database
-    // if (fileType === 'track') {
-    //   await prisma.track.update({
-    //     where: { id: trackId },
-    //     data: {
-    //       awsUrl,
-    //       status: 'UPLOADED',
-    //     },
-    //   })
-    // } else if (fileType === 'coverArt') {
-    //   await prisma.track.update({
-    //     where: { id: trackId },
-    //     data: {
-    //       coverArtUrl: awsUrl,
-    //     },
-    //   })
-    // }
+    // Update track in database
+    if (fileType === 'track') {
+      await prisma.track.update({
+        where: { id: trackId },
+        data: {
+          awsUrl,
+          status: 'UPLOADED',
+        },
+      })
+    } else if (fileType === 'coverArt') {
+      await prisma.track.update({
+        where: { id: trackId },
+        data: {
+          coverArtUrl: awsUrl,
+        },
+      })
+    }
 
     console.log(`${fileType} for track ${trackId} uploaded successfully`)
   } catch (error) {
     console.error(`Error uploading ${fileType} for track ${trackId}:`, error)
 
-    // if (fileType === 'track') {
-    //   // Update track status to FAILED only if the track file upload fails
-    //   await prisma.track.update({
-    //     where: { id: trackId },
-    //     data: {
-    //       status: 'FAILED',
-    //     },
-    //   })
-    // }
+    if (fileType === 'track') {
+      // Update track status to FAILED only if the track file upload fails
+      await prisma.track.update({
+        where: { id: trackId },
+        data: {
+          status: 'FAILED',
+        },
+      })
+    }
   }
 }
 
