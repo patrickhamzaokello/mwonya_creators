@@ -1,9 +1,7 @@
 'use server'
 
-import { PrismaClient } from '@prisma/client'
 import { uploadFileToS3 } from '@/lib/s3Upload'
 
-const prisma = new PrismaClient()
 
 export async function createTrack(formData: FormData) {
   const albumId = formData.get('albumId') as string
@@ -25,25 +23,25 @@ export async function createTrack(formData: FormData) {
 
   try {
     // Create track in database with pending status
-    const track = await prisma.track.create({
-      data: {
-        albumId,
-        title,
-        artist,
-        albumTitle,
-        genre,
-        duration,
-        exclusive,
-        tag,
-        producer,
-        songwriter,
-        labels,
-        description,
-        releaseDate,
-        AESCode,
-        status: 'PENDING',
-      },
-    })
+    // const track = await prisma.track.create({
+    //   data: {
+    //     albumId,
+    //     title,
+    //     artist,
+    //     albumTitle,
+    //     genre,
+    //     duration,
+    //     exclusive,
+    //     tag,
+    //     producer,
+    //     songwriter,
+    //     labels,
+    //     description,
+    //     releaseDate,
+    //     AESCode,
+    //     status: 'PENDING',
+    //   },
+    // })
 
     // Start asynchronous upload process for both track and cover art
     Promise.all([
