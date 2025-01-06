@@ -34,7 +34,7 @@ export async function createTrack(formData: FormData) {
   try {
     
     const newAlbumId = generateAlbumId();
-    console.log(newAlbumId);
+    console.log(releaseDate);
 
     const trackDetails: SingleTrackDetails = {
       album_id: newAlbumId,
@@ -51,7 +51,7 @@ export async function createTrack(formData: FormData) {
       songwriter: songwriter,
       labels: labels,
       description: description,
-      releaseDate: "2025-01-01",
+      releaseDate: releaseDate,
       AES_code: AESCode
   };
 
