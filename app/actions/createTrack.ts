@@ -24,7 +24,7 @@ export async function createTrack(formData: FormData) {
   const songwriter = formData.get('songwriter') as string
   const labels = formData.get('labels') as string
   const description = formData.get('description') as string
-  const releaseDate = new Date(formData.get('releaseDate') as string)
+  const releaseDateString = new Date(formData.get('releaseDate') as string)
   const AESCode = formData.get('AESCode') as string
   const trackFile = formData.get('trackFile') as File
   const coverArtFile = formData.get('coverArtFile') as File
@@ -34,7 +34,7 @@ export async function createTrack(formData: FormData) {
   try {
     
     const newAlbumId = generateAlbumId();
-    console.log(releaseDate);
+    console.log(releaseDateString);
 
     const trackDetails: SingleTrackDetails = {
       album_id: newAlbumId,
@@ -51,7 +51,7 @@ export async function createTrack(formData: FormData) {
       songwriter: songwriter,
       labels: labels,
       description: description,
-      releaseDate: releaseDate,
+      releaseDate: releaseDateString,
       AES_code: AESCode
   };
 
