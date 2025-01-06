@@ -43,13 +43,14 @@ export async function createTrack(formData: FormData) {
     //   },
     // })
 
-    // Start asynchronous upload process for both track and cover art
-    Promise.all([
-      uploadFileToS3(track.id, trackFile, 'track'),
-      uploadFileToS3(track.id, coverArtFile, 'coverArt')
-    ]).catch(console.error)
+    // // Start asynchronous upload process for both track and cover art
+    // Promise.all([
+    //   uploadFileToS3(track.id, trackFile, 'track'),
+    //   uploadFileToS3(track.id, coverArtFile, 'coverArt')
+    // ]).catch(console.error)
 
-    return { success: true, trackId: track.id }
+    // return { success: true, trackId: track.id }
+    return {success: true, trackId: 'john'}
   } catch (error) {
     console.error('Error creating track:', error)
     return { success: false, error: 'Failed to create track' }
