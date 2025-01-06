@@ -460,6 +460,45 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
                   <FormField
                     control={form.control}
                     name="trackFile"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Track File</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="file"
+                            accept="audio/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                if (file.size > 10 * 1024 * 1024) {
+                                  toast({
+                                    title: "Error",
+                                    description: "Track file must be less than 10MB.",
+                                    variant: "destructive",
+                                  });
+                                  return;
+                                }
+                                setTrackPreview(URL.createObjectURL(file)); // Create audio preview
+                                field.onChange(file); // Update form state
+                              }
+                            }}
+                          />
+                        </FormControl>
+                        {trackPreview && (
+                          <div className="mt-2">
+                            <audio controls>
+                              <source src={trackPreview} type={field.value?.type || "audio/mpeg"} />
+                              Your browser does not support the audio element.
+                            </audio>
+                          </div>
+                        )}
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {/* <FormField
+                    control={form.control}
+                    name="trackFile"
                     render={({ field: { onChange, value, ...rest } }) => (
                       <FormItem>
                         <FormLabel>Track File</FormLabel>
@@ -519,7 +558,7 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
                         )}
                       </FormItem>
                     )}
-                  />
+                  /> */}
 
                   <FormField
                     control={form.control}
