@@ -23,7 +23,7 @@ export default function UploadPage() {
 
   if (!selectedArtist) {
     return (
-      <section className="w-full max-w-4xl mx-auto py-10 md:py-16 lg:py-10 min-h-screen bg-background">
+      <section className="w-full max-w-4xl mx-auto py-10 md:py-16 lg:py-10  bg-background">
         <div className="px-4 sm:px-6 md:px-8 space-y-6">
           <h2 className="text-3xl font-bold tracking-tight">
             No Artist Selected
@@ -37,7 +37,7 @@ export default function UploadPage() {
   }
 
   return (
-    <section className="w-full max-w-4xl mx-auto py-10 md:py-16 lg:py-10 min-h-screen bg-background">
+    <section className="w-full max-w-4xl mx-auto py-10 md:py-16 lg:py-10  bg-background">
       <div className="px-4 sm:px-6 md:px-8 space-y-6">
         <div className="space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">
