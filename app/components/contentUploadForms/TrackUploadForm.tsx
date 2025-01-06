@@ -482,11 +482,16 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
                                 field.onChange(file); // Update form state
                               }
                             }}
+                            className="file-input" // Optional: Custom class for styling
                           />
                         </FormControl>
                         {trackPreview && (
-                          <div className="mt-2">
-                            <audio controls>
+                          <div className="mt-4 flex flex-col items-center">
+                            <audio
+                              controls
+                              className="audio-player w-full max-w-md" // Optional: Custom styling for the player
+                              key={trackPreview} // This forces the player to reload when the audio changes
+                            >
                               <source src={trackPreview} type={field.value?.type || "audio/mpeg"} />
                               Your browser does not support the audio element.
                             </audio>
@@ -496,7 +501,8 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
                       </FormItem>
                     )}
                   />
-                  
+
+
 
                   <FormField
                     control={form.control}
