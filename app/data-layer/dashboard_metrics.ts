@@ -141,58 +141,12 @@ export const fetchArtistTopSongs = async (artistID: string): Promise<Song[] | Me
 export const fetchmonthlyData = async (artistID: string): Promise<MonthlyData[] | MessageType> => {
     try {
 
-        await new Promise(resolve => setTimeout(resolve, 500))
-        const data = [
-            {
-                name: "Jan",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-            {
-                name: "Feb",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-            {
-                name: "Mar",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-            {
-                name: "Apr",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-            {
-                name: "May",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-            {
-                name: "Jun",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-            {
-                name: "Jul",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-            {
-                name: "Aug",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-            {
-                name: "Sep",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-            {
-                name: "Oct",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-            {
-                name: "Nov",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-            {
-                name: "Dec",
-                total: Math.floor(Math.random() * 5000) + 1000,
-            },
-        ]
+        const response = await axiosInstance.post('/artist/getTotalPlayTrend.php', { artistID: artistID, year: "2024" });
+        const { status, data } = response.data
 
+        if (status === "success") {
+            return data;
+        }
         return data;
     } catch (error) {
         return {
