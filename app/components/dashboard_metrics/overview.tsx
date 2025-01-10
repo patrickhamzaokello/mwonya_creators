@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, ReferenceLine } from "recharts"
+import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, ReferenceLine } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -16,26 +16,32 @@ export function Overview({ artistID }: ArtistID) {
   const [availableYears, setAvailableYears] = useState<string[]>([])
   const [valueRange, setValueRange] = useState({ min: 0, max: 0 })
 
+  // Process data to separate positive and negative values
+  const processChartData = (data: any[]) => {
+    return data.map(item => ({
+      ...item,
+      positive: item.total > 0 ? item.total : 0,
+      negative: item.total < 0 ? item.total : 0
+    }));
+  };
+
   useEffect(() => {
     if (!artistID) return;
     setIsLoading(true);
     getMonthlyStatsAction(artistID)
       .then((monthlyData) => {
         setMonthly(monthlyData);
-        if (Array.isArray(monthlyData)) {
-          const years = Array.from(
-            new Set(monthlyData.map((item: any) => new Date(item.date).getFullYear().toString()))
-          );
-          setAvailableYears(years);
-          setSelectedYear(years[years.length - 1]);
+        const years: string[] = Array.from(
+          new Set<string>(Array.isArray(monthlyData) ? monthlyData.map((item: any) => new Date(item.date).getFullYear().toString()) : [])
+        );
+        setAvailableYears(years);
+        setSelectedYear(years[years.length - 1]);
 
-          // Calculate overall min/max for better axis scaling
-          const values = monthlyData.map((item: any) => item.total);
-          setValueRange({
-            min: Math.min(...values),
-            max: Math.max(...values)
-          });
-        }
+        const values = Array.isArray(monthlyData) ? monthlyData.map((item: any) => item.total) : [];
+        setValueRange({
+          min: Math.min(...values),
+          max: Math.max(...values)
+        });
       })
       .catch(() => setError('Failed to load data'))
       .finally(() => setIsLoading(false));
@@ -43,16 +49,12 @@ export function Overview({ artistID }: ArtistID) {
 
   useEffect(() => {
     if (data) {
-      const filtered = data.filter((item: any) =>
+      const filtered = data.filter((item: any) => 
         new Date(item.date).getFullYear().toString() === selectedYear
       );
-      setFilteredData(filtered);
+      setFilteredData(processChartData(filtered));
     }
   }, [data, selectedYear]);
-
-  const getStrokeColor = (value: number) => {
-    return value >= 0 ? "#22c55e" : "#ef4444";
-  };
 
   if (isLoading) {
     return <OverViewSkeleton />
@@ -71,8 +73,8 @@ export function Overview({ artistID }: ArtistID) {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Total Plays Percentage Change</CardTitle>
-            <CardDescription>Monthly total percentage change breakdown with increase/decrease indication</CardDescription>
+            <CardTitle>Total Plays Overview</CardTitle>
+            <CardDescription>Monthly % Change in Total Track Plays showing increase (green) and decline (red) areas</CardDescription>
           </div>
           <Select value={selectedYear} onValueChange={setSelectedYear}>
             <SelectTrigger className="w-32">
@@ -90,7 +92,17 @@ export function Overview({ artistID }: ArtistID) {
       </CardHeader>
       <CardContent className="pl-2">
         <ResponsiveContainer width="100%" height={350}>
-          <LineChart data={filteredData}>
+          <AreaChart data={filteredData}>
+            <defs>
+              <linearGradient id="positiveGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgb(34, 197, 94)" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="rgb(34, 197, 94)" stopOpacity={0.1} />
+              </linearGradient>
+              <linearGradient id="negativeGradient" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stopColor="rgb(239, 68, 68)" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="rgb(239, 68, 68)" stopOpacity={0.1} />
+              </linearGradient>
+            </defs>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
             <XAxis
               dataKey="name"
@@ -110,7 +122,7 @@ export function Overview({ artistID }: ArtistID) {
             <Tooltip
               content={({ active, payload, label }) => {
                 if (active && payload && payload.length) {
-                  const value = payload[0].value;
+                  const value = payload[0].payload.total;
                   return (
                     <div className="rounded-lg border bg-background p-2 shadow-sm">
                       <div className="grid grid-cols-2 gap-2">
@@ -126,7 +138,7 @@ export function Overview({ artistID }: ArtistID) {
                           <span className="text-[0.70rem] uppercase text-muted-foreground">
                             % Change
                           </span>
-                          <span className={`font-bold ${typeof value === 'number' && value >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                          <span className={`font-bold ${value >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                             {value}
                           </span>
                         </div>
@@ -138,33 +150,31 @@ export function Overview({ artistID }: ArtistID) {
               }}
             />
             {/* Zero reference line */}
-            <ReferenceLine
-              y={0}
-              stroke="#888888"
+            <ReferenceLine 
+              y={0} 
+              stroke="#888888" 
               strokeWidth={1}
               strokeDasharray="3 3"
             />
-            <Line
+            {/* Positive Area */}
+            <Area
               type="monotone"
-              dataKey="total"
-              stroke="#888888"
+              dataKey="positive"
+              stroke="rgb(34, 197, 94)"
+              fillOpacity={1}
+              fill="url(#positiveGradient)"
               strokeWidth={2}
-              dot={(props) => {
-                const { cx, cy, payload } = props;
-                return (
-                  <circle
-                    cx={cx}
-                    cy={cy}
-                    r={4}
-                    fill={getStrokeColor(payload.total)}
-                    stroke="white"
-                    strokeWidth={2}
-                  />
-                );
-              }}
-              activeDot={{ r: 6, strokeWidth: 3 }}
             />
-          </LineChart>
+            {/* Negative Area */}
+            <Area
+              type="monotone"
+              dataKey="negative"
+              stroke="rgb(239, 68, 68)"
+              fillOpacity={1}
+              fill="url(#negativeGradient)"
+              strokeWidth={2}
+            />
+          </AreaChart>
         </ResponsiveContainer>
       </CardContent>
     </Card>
