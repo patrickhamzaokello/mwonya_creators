@@ -8,7 +8,7 @@ import { getArtistPaymentDate } from '@/actions/dashboard/getOverview-stats'
 
 
 export function UpcomingPayout({ artistID }: ArtistID) {
-  const [data, setData] = useState<PayoutData | MessageType | any>()
+  const [payments, setData] = useState<PayoutData | MessageType | any>()
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -30,23 +30,28 @@ export function UpcomingPayout({ artistID }: ArtistID) {
     return <div className="text-red-500">{error}</div>
   }
 
-  if (!data) {
+  if (!payments) {
     return null
   }
 
   return (
     <Card className="col-span-3">
       <CardHeader>
-        <CardTitle>Upcoming Payouts</CardTitle>
+        <CardTitle>Circle Earnings</CardTitle>
         <CardDescription>
-          Expected earnings for next month
+          Earners from Circle Subscriptions
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">${data.amount}</div>
-        <p className="text-sm text-muted-foreground">
-          Estimated payout on {data.date}
-        </p>
+        {payments.map((payment: PayoutData, index: any) => (
+          <div key={index}>
+
+            <div className="text-2xl font-bold">${payment.amount.toLocaleString()}</div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Estimated payout on {new Date(payment.date).toLocaleDateString()}
+            </p>
+          </div>
+        ))}
       </CardContent>
     </Card>
   )

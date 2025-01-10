@@ -31,11 +31,15 @@ export const fetchArtistPaymentDate = async (artistID: string): Promise<PayoutDa
         await new Promise(resolve => setTimeout(resolve, 500))
         const data = [
             {
-                amount: 2300,
+                amount: 2334,
                 date: "2025-07-01",
             },
             {
-                amount: 3400,
+                amount: 2340,
+                date: "2025-07-01",
+            },
+            {
+                amount: 2340,
                 date: "2025-07-01",
             },
         ]
