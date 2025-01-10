@@ -4,6 +4,8 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { MediaUploadType } from "@prisma/client";
 import axiosInstance from "@/lib/axiosInstance";
+import { NextResponse } from 'next/server';
+
 
 
 // return artist profile where userId is matching
@@ -24,7 +26,7 @@ export const fetchUserArtists = async (userId: string) => {
 
         const response = await axiosInstance.post('/artist/getUserArtist.php', { user_id: userId });
         const { status, data } = response.data
-       
+
         return {
             status: "success",
             fetchedArtists: data,
@@ -39,28 +41,28 @@ export const fetchUserArtists = async (userId: string) => {
 
 };
 
-export const uploadSingleTrack = async (trackDetails:SingleTrackDetails) => {
-   
+export const uploadSingleTrack = async (trackDetails: SingleTrackDetails) => {
+
     try {
         const response = await axiosInstance.post('artist/uploadSingleTrack_Container.php', { trackDetails });
         console.log('jim')
         console.log(response)
 
         if (response.status === 200) {
-            const {status, data} = response.data
-            return data; 
+            const { status, data } = response.data
+            return data;
         }
         return null;
     } catch (error) {
         console.error('Error Saving user details:', error);
         return null;
     }
-} 
+}
 
 export const updateTrack_File_Album_cover = async (referenceId: string, fileType: string, awsUrl: any, upload_status: string) => {
     try {
 
-        const response = await axiosInstance.post('artist/updateTrack_File_Album_cover.php', { referenceId, fileType, awsUrl,upload_status });
+        const response = await axiosInstance.post('artist/updateTrack_File_Album_cover.php', { referenceId, fileType, awsUrl, upload_status });
 
         const { status, data } = response.data
         console.log(data)
@@ -77,6 +79,7 @@ export const updateTrack_File_Album_cover = async (referenceId: string, fileType
     }
 
 };
+
 
 export const fetchArtistsDiscover = async (artist_id: string) => {
     try {

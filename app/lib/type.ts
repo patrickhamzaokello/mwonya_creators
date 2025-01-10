@@ -3,6 +3,7 @@ type MessageType = {
     message: string;
 };
 
+
 type CreateAristFormState<T> = {
     status: "success" | "error";
     errors?: TStringMap;
@@ -102,3 +103,43 @@ type AlbumContent = {
     duration: string; // Total duration in a readable format, e.g., "1h 12m"
     tracks: Track[]; // List of tracks in the album
 };
+
+
+interface OverviewData {
+    totalStreams: number
+    streamsLastmonth: string
+    totalEarnings: number
+    totalEarningsLastmonth: string
+    activeListeners: number
+    activeListenersLastmonth: string
+    newReleases: number
+    newReleasesLastmonth: string
+}
+
+interface ArtistID {
+    artistID: string
+}
+
+
+interface MonthlyData {
+    name: string
+    total: number
+}
+
+interface Song {
+    name: string
+    streams: string
+    image: string
+}
+
+interface Activity {
+    type: string
+    title: string
+    description: string
+    avatar: string
+}
+
+interface PayoutData {
+    amount: number
+    date: string
+}
