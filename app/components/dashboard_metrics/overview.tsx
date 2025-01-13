@@ -29,13 +29,19 @@ export function Overview({ artistID }: ArtistID) {
     setIsLoading(true);
     getMonthlyStatsAction(artistID, '2024')
       .then((monthlyData) => {
-        setMonthly(monthlyData);
+        if (Array.isArray(monthlyData) && monthlyData.length > 0) {
+          setMonthly(monthlyData);
+          setError(null);
 
-        const values = Array.isArray(monthlyData) ? monthlyData.map((item: any) => item.total) : [];
-        setValueRange({
-          min: Math.min(...values),
-          max: Math.max(...values)
-        });
+          const values = monthlyData.map((item: any) => item.total);
+          setValueRange({
+            min: Math.min(...values),
+            max: Math.max(...values)
+          });
+        } else {
+          setFilteredData([]);
+          setError('No records available for the selected year.');
+        }
       })
       .catch(() => setError('Failed to load data'))
       .finally(() => setIsLoading(false));
@@ -43,12 +49,9 @@ export function Overview({ artistID }: ArtistID) {
 
   useEffect(() => {
     if (data) {
-      const filtered = data.filter((item: any) => 
-        new Date(item.date).getFullYear().toString() === selectedYear
-      );
-      setFilteredData(processChartData(filtered));
+      setFilteredData(processChartData(data));
     }
-  }, [data, selectedYear]);
+  }, [data]);
 
   useEffect(() => {
     if (!artistID) return;
@@ -57,6 +60,7 @@ export function Overview({ artistID }: ArtistID) {
       .then((monthlyData) => {
         if (Array.isArray(monthlyData) && monthlyData.length > 0) {
           setMonthly(monthlyData);
+          setError(null);
 
           const values = monthlyData.map((item: any) => item.total);
           setValueRange({
@@ -97,7 +101,7 @@ export function Overview({ artistID }: ArtistID) {
               <SelectValue placeholder="Select year" />
             </SelectTrigger>
             <SelectContent>
-              {['2021', '2022', '2023', '2024' , '2025'].map((year) => (
+              {['2021', '2022', '2023', '2024', '2025'].map((year) => (
                 <SelectItem key={year} value={year}>
                   {year}
                 </SelectItem>
