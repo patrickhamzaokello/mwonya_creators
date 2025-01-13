@@ -31,15 +31,15 @@ export function Overview({ artistID }: ArtistID) {
     setIsLoading(true);
     try {
       const monthlyData = await getMonthlyStatsAction(artistID, year);
-      setMonthly(monthlyData.data);
+      setMonthly(monthlyData);
 
-      if (Array.isArray(monthlyData.data) && monthlyData.data.length > 0) {
-        const values = monthlyData.data.map((item: any) => item.total);
+      if (Array.isArray(monthlyData) && monthlyData.length > 0) {
+        const values = monthlyData.map((item: any) => item.total);
         setValueRange({
           min: Math.min(...values),
           max: Math.max(...values)
         });
-        setFilteredData(processChartData(monthlyData.data));
+        setFilteredData(processChartData(monthlyData));
       } else {
         setFilteredData([]);
       }
