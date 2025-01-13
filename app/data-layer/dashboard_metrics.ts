@@ -138,10 +138,10 @@ export const fetchArtistTopSongs = async (artistID: string): Promise<Song[] | Me
 }
 
 
-export const fetchmonthlyData = async (artistID: string): Promise<MonthlyData[] | MessageType> => {
+export const fetchmonthlyData = async (artistID: string, year: string): Promise<MonthlyData[] | MessageType> => {
     try {
 
-        const response = await axiosInstance.post('/artist/getTotalPlayTrend.php', { artistID: artistID, year: "2024" });
+        const response = await axiosInstance.post('/artist/getTotalPlayTrend.php', { artistID: artistID, year: year });
         const { status, data } = response.data
 
         if (status === "success") {

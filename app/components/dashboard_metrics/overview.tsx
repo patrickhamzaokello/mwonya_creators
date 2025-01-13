@@ -10,10 +10,9 @@ import { getMonthlyStatsAction } from '@/actions/dashboard/getOverview-stats'
 export function Overview({ artistID }: ArtistID) {
   const [data, setMonthly] = useState<MonthlyData[] | MessageType | any>()
   const [filteredData, setFilteredData] = useState<any[]>([])
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
+  const [selectedYear, setSelectedYear] = useState('2024')
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [availableYears, setAvailableYears] = useState<string[]>([])
   const [valueRange, setValueRange] = useState({ min: 0, max: 0 })
 
   // Process data to separate positive and negative values
@@ -28,14 +27,9 @@ export function Overview({ artistID }: ArtistID) {
   useEffect(() => {
     if (!artistID) return;
     setIsLoading(true);
-    getMonthlyStatsAction(artistID)
+    getMonthlyStatsAction(artistID, '2024')
       .then((monthlyData) => {
         setMonthly(monthlyData);
-        const years: string[] = Array.from(
-          new Set<string>(Array.isArray(monthlyData) ? monthlyData.map((item: any) => new Date(item.date).getFullYear().toString()) : [])
-        );
-        setAvailableYears(years);
-        setSelectedYear(years[years.length - 1]);
 
         const values = Array.isArray(monthlyData) ? monthlyData.map((item: any) => item.total) : [];
         setValueRange({
@@ -55,6 +49,28 @@ export function Overview({ artistID }: ArtistID) {
       setFilteredData(processChartData(filtered));
     }
   }, [data, selectedYear]);
+
+  useEffect(() => {
+    if (!artistID) return;
+    setIsLoading(true);
+    getMonthlyStatsAction(artistID, selectedYear)
+      .then((monthlyData) => {
+        if (Array.isArray(monthlyData) && monthlyData.length > 0) {
+          setMonthly(monthlyData);
+
+          const values = monthlyData.map((item: any) => item.total);
+          setValueRange({
+            min: Math.min(...values),
+            max: Math.max(...values)
+          });
+        } else {
+          setFilteredData([]);
+          setError('No records available for the selected year.');
+        }
+      })
+      .catch(() => setError('Failed to load data'))
+      .finally(() => setIsLoading(false));
+  }, [artistID, selectedYear]);
 
   if (isLoading) {
     return <OverViewSkeleton />
@@ -81,7 +97,7 @@ export function Overview({ artistID }: ArtistID) {
               <SelectValue placeholder="Select year" />
             </SelectTrigger>
             <SelectContent>
-              {availableYears.map((year) => (
+              {['2021', '2022', '2023', '2024' , '2025'].map((year) => (
                 <SelectItem key={year} value={year}>
                   {year}
                 </SelectItem>

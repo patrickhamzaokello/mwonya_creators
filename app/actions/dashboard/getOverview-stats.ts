@@ -13,16 +13,16 @@ export async function getStatsMetric(artist_id: string): Promise<OverviewData | 
   }
 }
 
-
-export async function getMonthlyStatsAction(artist_id: string): Promise<MonthlyData[] | MessageType> {
-    try {
-      const data = await fetchmonthlyData(artist_id)
+export async function getMonthlyStatsAction(artist_id: string, year: string): Promise<MonthlyData[] | MessageType> {
+  try {
+      const data = await fetchmonthlyData(artist_id, year);
       return data;
-    } catch (error) {
+  } catch (error) {
       console.error('Error fetching stats metric:', error);
       throw error;
-    }
   }
+}
+
 
   export async function getArtistTopSongs(artist_id: string): Promise<Song[] | MessageType> {
     try {
