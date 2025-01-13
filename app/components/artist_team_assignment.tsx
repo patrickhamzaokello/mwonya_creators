@@ -6,12 +6,29 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Search, Save } from 'lucide-react'
-import { users, teams } from './mockData'
 
 export default function ArtistTeamAssignment() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [assignments, setAssignments] = useState(users)
 
+
+
+  const users = [
+    { id: 1, name: 'John Doe', email: 'john@example.com', team: null },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', team: 'Rock Band' },
+    { id: 3, name: 'Bob Johnson', email: 'bob@example.com', team: null },
+    { id: 4, name: 'Alice Williams', email: 'alice@example.com', team: 'Pop Group' },
+    { id: 5, name: 'Charlie Brown', email: 'charlie@example.com', team: null },
+  ];
+
+  const teams = [
+    'Rock Band',
+    'Pop Group',
+    'Jazz Ensemble',
+    'Classical Orchestra',
+    'Electronic Music Producers',
+  ];
+  
+  const [assignments, setAssignments] = useState(users)
   const filteredUsers = assignments.filter(user => 
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
