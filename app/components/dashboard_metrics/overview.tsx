@@ -26,11 +26,13 @@ export function Overview({ artistID }: ArtistID) {
     }));
   };
 
+  
+
   const fetchData = async (year: string) => {
     if (!artistID) return;
     setIsLoading(true);
     try {
-      const monthlyData = await getMonthlyStatsAction(artistID, year);
+      const monthlyData: MonthlyData[] = await getMonthlyStatsAction(artistID, year);
       setMonthly(monthlyData);
 
       if (Array.isArray(monthlyData) && monthlyData.length > 0) {
