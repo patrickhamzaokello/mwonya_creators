@@ -7,74 +7,67 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { getMonthlyStatsAction } from '@/actions/dashboard/getOverview-stats'
 
-export function Overview({ artistID }: ArtistID) {
-  const [data, setMonthly] = useState<MonthlyData[] | MessageType | any>()
-  const [filteredData, setFilteredData] = useState<any[]>([])
-  const [selectedYear, setSelectedYear] = useState('2024')
+type MonthlyData = {
+  name: string
+  total: number
+  positive: number
+  negative: number
+}
+
+interface OverviewProps {
+  artistID: string
+}
+
+export function Overview({ artistID }: OverviewProps) {
+  const [chartData, setChartData] = useState<MonthlyData[]>([])
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [valueRange, setValueRange] = useState({ min: 0, max: 0 })
 
   // Process data to separate positive and negative values
-  const processChartData = (data: any[]) => {
-    return data.map(item => ({
-      ...item,
+  const processChartData = (rawData: any[]): MonthlyData[] => {
+    return rawData.map(item => ({
+      name: item.name,
+      total: item.total,
       positive: item.total > 0 ? item.total : 0,
       negative: item.total < 0 ? item.total : 0
-    }));
-  };
+    }))
+  }
 
-  useEffect(() => {
-    if (!artistID) return;
-    setIsLoading(true);
-    getMonthlyStatsAction(artistID, '2024')
-      .then((monthlyData) => {
-        if (Array.isArray(monthlyData) && monthlyData.length > 0) {
-          setMonthly(monthlyData);
-          setError(null);
-
-          const values = monthlyData.map((item: any) => item.total);
-          setValueRange({
-            min: Math.min(...values),
-            max: Math.max(...values)
-          });
-        } else {
-          setFilteredData([]);
-          setError('No records available for the selected year.');
-        }
-      })
-      .catch(() => setError('Failed to load data'))
-      .finally(() => setIsLoading(false));
-  }, [artistID]);
-
-  useEffect(() => {
-    if (data) {
-      setFilteredData(processChartData(data));
+  const fetchYearData = async (year: string) => {
+    if (!artistID) return
+    
+    setIsLoading(true)
+    setError(null)
+    
+    try {
+      const monthlyData = await getMonthlyStatsAction(artistID, year)
+      
+      if (Array.isArray(monthlyData) && monthlyData.length > 0) {
+        const processedData = processChartData(monthlyData)
+        setChartData(processedData)
+        
+        const values = monthlyData.map(item => item.total)
+        setValueRange({
+          min: Math.min(...values),
+          max: Math.max(...values)
+        })
+      } else {
+        setChartData([])
+        setError('No records available for the selected year.')
+      }
+    } catch (err) {
+      setError('Failed to load data')
+      setChartData([])
+    } finally {
+      setIsLoading(false)
     }
-  }, [data]);
+  }
 
   useEffect(() => {
-    if (!artistID) return;
-    setIsLoading(true);
-    getMonthlyStatsAction(artistID, selectedYear)
-      .then((monthlyData) => {
-        if (Array.isArray(monthlyData) && monthlyData.length > 0) {
-          setMonthly(monthlyData);
-          setError(null);
-
-          const values = monthlyData.map((item: any) => item.total);
-          setValueRange({
-            min: Math.min(...values),
-            max: Math.max(...values)
-          });
-        } else {
-          setFilteredData([]);
-          setError('No records available for the selected year.');
-        }
-      })
-      .catch(() => setError('Failed to load data'))
-      .finally(() => setIsLoading(false));
-  }, [artistID, selectedYear]);
+    fetchYearData(selectedYear)
+  }, [artistID, selectedYear])
 
   if (isLoading) {
     return <OverViewSkeleton />
@@ -85,8 +78,10 @@ export function Overview({ artistID }: ArtistID) {
   }
 
   // Calculate padding for Y-axis based on data range
-  const absMax = Math.max(Math.abs(valueRange.min), Math.abs(valueRange.max));
-  const yAxisDomain = [-absMax, absMax];
+  const absMax = Math.max(Math.abs(valueRange.min), Math.abs(valueRange.max))
+  const yAxisDomain = [-absMax, absMax]
+
+  const availableYears = ['2021', '2022', '2023', '2024', '2025']
 
   return (
     <Card className="col-span-4">
@@ -96,12 +91,17 @@ export function Overview({ artistID }: ArtistID) {
             <CardTitle>Total Plays Overview</CardTitle>
             <CardDescription>Monthly % Change in Total Track Plays showing increase (green) and decline (red) areas</CardDescription>
           </div>
-          <Select value={selectedYear} onValueChange={setSelectedYear}>
+          <Select
+            value={selectedYear}
+            onValueChange={(year) => {
+              setSelectedYear(year)
+            }}
+          >
             <SelectTrigger className="w-32">
               <SelectValue placeholder="Select year" />
             </SelectTrigger>
             <SelectContent>
-              {['2021', '2022', '2023', '2024', '2025'].map((year) => (
+              {availableYears.map((year) => (
                 <SelectItem key={year} value={year}>
                   {year}
                 </SelectItem>
@@ -112,7 +112,7 @@ export function Overview({ artistID }: ArtistID) {
       </CardHeader>
       <CardContent className="pl-2">
         <ResponsiveContainer width="100%" height={350}>
-          <AreaChart data={filteredData}>
+          <AreaChart data={chartData}>
             <defs>
               <linearGradient id="positiveGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="rgb(34, 197, 94)" stopOpacity={0.3} />
@@ -142,7 +142,7 @@ export function Overview({ artistID }: ArtistID) {
             <Tooltip
               content={({ active, payload, label }) => {
                 if (active && payload && payload.length) {
-                  const value = payload[0].payload.total;
+                  const value = payload[0].payload.total
                   return (
                     <div className="rounded-lg border bg-background p-2 shadow-sm">
                       <div className="grid grid-cols-2 gap-2">
@@ -169,14 +169,7 @@ export function Overview({ artistID }: ArtistID) {
                 return null
               }}
             />
-            {/* Zero reference line */}
-            <ReferenceLine 
-              y={0} 
-              stroke="#888888" 
-              strokeWidth={1}
-              strokeDasharray="3 3"
-            />
-            {/* Positive Area */}
+            <ReferenceLine y={0} stroke="#888888" strokeWidth={1} strokeDasharray="3 3" />
             <Area
               type="monotone"
               dataKey="positive"
@@ -185,7 +178,6 @@ export function Overview({ artistID }: ArtistID) {
               fill="url(#positiveGradient)"
               strokeWidth={2}
             />
-            {/* Negative Area */}
             <Area
               type="monotone"
               dataKey="negative"
@@ -220,4 +212,4 @@ function OverViewSkeleton() {
   )
 }
 
-export default Overview;
+export default Overview
