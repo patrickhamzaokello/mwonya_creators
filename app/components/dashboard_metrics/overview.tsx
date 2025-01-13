@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { getMonthlyStatsAction } from '@/actions/dashboard/getOverview-stats'
 
 export function Overview({ artistID }: ArtistID) {
-  const [data, setMonthly] = useState<MonthlyData[] | null>(null)
+  const [data, setMonthly] = useState<MonthlyData[] | any>([])
   const [filteredData, setFilteredData] = useState<any[]>([])
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
   const [isLoading, setIsLoading] = useState(true)
@@ -32,7 +32,7 @@ export function Overview({ artistID }: ArtistID) {
     if (!artistID) return;
     setIsLoading(true);
     try {
-      const monthlyData: MonthlyData[] = await getMonthlyStatsAction(artistID, year);
+      const monthlyData = await getMonthlyStatsAction(artistID, year);
       setMonthly(monthlyData);
 
       if (Array.isArray(monthlyData) && monthlyData.length > 0) {
