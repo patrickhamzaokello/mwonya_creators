@@ -1,5 +1,7 @@
+'use client'
+
 import Image from "next/image"
-import { CheckCircle } from 'lucide-react'
+import { Edit3, Users, Music, Share2 } from 'lucide-react'
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -8,8 +10,9 @@ import {
     Card,
     CardContent,
 } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 
-interface ArtistProfileHeroProps {
+interface ArtistProfileProps {
     name: string
     coverArt: string
     profileImage: string
@@ -25,59 +28,84 @@ export function ArtistProfile({
     followers,
     monthlyListeners,
     isVerified,
-}: ArtistProfileHeroProps) {
+}: ArtistProfileProps) {
     return (
         <Card className="w-full overflow-hidden">
-            <div className="relative h-40">
-                <Image
-                    src={coverArt}
-                    alt={name}
-                    layout="fill"
-                    objectFit="cover"
-                    className="object-center"
-                />
-            </div>
-            <CardContent className="p-6">
-                <div className="flex items-center space-x-4">
-                    <div className="relative h-20 w-20 rounded-full overflow-hidden">
+            <CardContent className="p-0">
+                <div className="flex flex-col md:flex-row">
+                    <div className="relative w-full md:w-1/3 h-64 md:h-auto">
                         <Image
-                            src={profileImage}
-                            alt={name}
+                            src={coverArt || "/placeholder.svg"}
+                            alt={`${name}'s cover art`}
                             layout="fill"
                             objectFit="cover"
+                            className="object-center"
                         />
                     </div>
-                    <div>
-                        <h2 className="text-2xl font-bold flex items-center">
-                            {name}
-                            {isVerified && (
-                                <TooltipProvider>
-                                    <Tooltip>
-                                        <TooltipTrigger>
-
-
-                                            {isVerified && (
-                                                <div
-
-                                                    className="mr-2 ml-2"
-                                                >
-                                                    <Image src="/verified_white.svg" alt="omsdf" width={18} height={18} />
-
-                                                </div>
-                                            )}
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            <p>Verified Artist</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                            )}
-                        </h2>
-                        <p className="text-sm text-muted-foreground">{monthlyListeners} Listeners</p>
+                    <div className="flex-1 p-6">
+                        <div className="flex items-start justify-between mb-6">
+                            <div className="flex items-center space-x-4">
+                                <div className="relative h-24 w-24 rounded-full overflow-hidden ring-2 ring-primary/20">
+                                    <Image
+                                        src={profileImage || "/placeholder.svg"}
+                                        alt={name}
+                                        layout="fill"
+                                        objectFit="cover"
+                                    />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold flex items-center">
+                                        {name}
+                                        {isVerified && (
+                                            <TooltipProvider>
+                                                <Tooltip>
+                                                    <TooltipTrigger>
+                                                        <div className="ml-2">
+                                                            <Image src="/verified_white.svg" alt="Verified Artist" width={20} height={20} />
+                                                        </div>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        <p>Verified Artist</p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
+                                        )}
+                                    </h2>
+                                    <p className="text-sm text-muted-foreground mt-1">Artist</p>
+                                </div>
+                            </div>
+                            <div className="flex space-x-2">
+                                <Button variant="outline" size="sm">
+                                    <Share2 className="w-4 h-4 mr-2" />
+                                    Share
+                                </Button>
+                                <Button variant="default" size="sm">
+                                    <Edit3 className="w-4 h-4 mr-2" />
+                                    Edit Profile
+                                </Button>
+                            </div>
+                        </div>
+                        <Separator className="my-6" />
+                        <div className="flex justify-between items-center">
+                            <div className="flex space-x-6">
+                                <div className="flex flex-col items-center">
+                                    <p className="text-2xl font-semibold">{followers}</p>
+                                    <p className="text-sm text-muted-foreground">Followers</p>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                    <p className="text-2xl font-semibold">{monthlyListeners}</p>
+                                    <p className="text-sm text-muted-foreground">Monthly Listeners</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                                <Users className="w-4 h-4" />
+                                <span>Last updated 2 days ago</span>
+                            </div>
+                        </div>
                     </div>
-                    <Button className="ml-auto">Edit Profile</Button>
                 </div>
             </CardContent>
         </Card>
     )
 }
+

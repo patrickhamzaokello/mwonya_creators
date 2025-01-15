@@ -1,21 +1,15 @@
 import axiosInstance from "@/lib/axiosInstance";
-export const getArtistMetrisx = async (referenceId: string): Promise<OverviewData | MessageType> => {
+export const getArtistMetrisx = async (referenceId: string, keyMetrics:string[]): Promise<OverviewData[] | MessageType> => {
     try {
+        // should pass the list of metrics i want
+        const response = await axiosInstance.post('/artist/getArtistMetrics.php', { artistID: referenceId, keyMetrics: keyMetrics });
+        const { status, data } = response.data
 
-        await new Promise(resolve => setTimeout(resolve, 500))
-        const metrics = {
-            totalStreams: 1324789,
-            streamsLastmonth: "+20.1% from last month",
-            totalEarnings: 15231.89,
-            totalEarningsLastmonth: "+18.7% from last month",
-            activeListeners: 573281,
-            activeListenersLastmonth: "+10.5% from last month",
-            newReleases: 3,
-            newReleasesLastmonth: "In the last 30 days"
+        if (status === "success") {
+            return data;
         }
-
-
-        return metrics;
+        return data;
+        
     } catch (error) {
         return {
             status: "error",

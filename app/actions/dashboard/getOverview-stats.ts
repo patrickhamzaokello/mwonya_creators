@@ -3,9 +3,9 @@
 import { fetchmonthlyData, fetchArtistTopSongs, getArtistMetrisx,fetchArtistActivities, fetchArtistPaymentDate } from '@/data-layer/dashboard_metrics';
 
 
-export async function getStatsMetric(artist_id: string): Promise<OverviewData | MessageType> {
+export async function getStatsMetric(artist_id: string, keyMetrics:string[]): Promise<OverviewData[] | MessageType> {
   try {
-    const data = await getArtistMetrisx(artist_id)
+    const data = await getArtistMetrisx(artist_id,keyMetrics)
     return data;
   } catch (error) {
     console.error('Error fetching stats metric:', error);

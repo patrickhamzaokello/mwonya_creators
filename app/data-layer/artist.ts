@@ -21,10 +21,10 @@ export const getArtistProfileByUserId = async (userId: string) => {
     }
 }
 
-export const fetchUserArtists = async (userId: string) => {
+export const fetchUserArtists = async (userId: string, userRole: string) => {
     try {
 
-        const response = await axiosInstance.post('/artist/getUserArtist.php', { user_id: userId });
+        const response = await axiosInstance.post('/artist/getUserArtist.php', { user_id: userId, userRole: userRole });
         const { status, data } = response.data
 
         return {

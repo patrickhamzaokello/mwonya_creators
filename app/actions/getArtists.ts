@@ -30,8 +30,9 @@ export const getArtistDiscovery = async (artist_id: string) => {
 export const getArtistsForUser = async () => {
     const session = await auth();
     const session_userID = session?.user.id;
+    const role = session?.user.role;
     try {
-        const userArtists = await fetchUserArtists(session_userID??"");
+        const userArtists = await fetchUserArtists(session_userID??"", role??"");
 
         if (userArtists.fetchedArtists) {
 

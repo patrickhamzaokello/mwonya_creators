@@ -14,10 +14,10 @@ import { Search } from "@/components/dashboard_metrics/search"
 import { TopSongs } from "@/components/dashboard_metrics/top-songs"
 import { UserNav } from "@/components/dashboard_metrics/user-nav"
 import { ArtistProfile } from "@/components/dashboard_metrics/artist-profile"
-import { OverviewStats } from "@/components/dashboard_metrics/overview-stats";
 import { UpcomingPayout } from "@/components/dashboard_metrics/upcoming-payment";
 import { DashboardSkeleton } from "@/components/dashboard_metrics/dashboard-skeleton";
 import { useEffect, useState } from 'react'
+import { DashboardMetrics } from "@/components/dashboard_metrics/metrics";
 
 export default function DashboardPage() {
 
@@ -43,55 +43,66 @@ export default function DashboardPage() {
 
     return (
         <>
-            
+
             <div className="flex-col md:flex">
-               
-                    
-                    <Tabs defaultValue="overview" className="space-y-4">
-                        <TabsList>
-                            <TabsTrigger value="overview">Overview</TabsTrigger>
-                            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                            <TabsTrigger value="reports">Reports</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="analytics" className="space-y-4">
-                            <p>Check back detail Analytics</p>
-                        </TabsContent>
-                        <TabsContent value="reports" className="space-y-4">
-                            <p>Check back soon for Reports</p>
-                        </TabsContent>
-                        <TabsContent value="overview" className="space-y-4">
-
-                            {selectedArtist ? (
-                                <>
-                                    <ArtistProfile name={selectedArtist.name}
-                                        coverArt={selectedArtist.coverImage}
-                                        profileImage={selectedArtist.profileImage}
-                                        followers={selectedArtist.followers}
-                                        monthlyListeners={selectedArtist.followers}
-                                        isVerified={selectedArtist.verified} />
-
-                                    <OverviewStats artistID={selectedArtist.id} />
-
-                                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                                        <Overview artistID={selectedArtist.id} />
-                                        <TopSongs artistID={selectedArtist.id} />
-                                    </div>
-
-                                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                                        <RecentActivity artistID={selectedArtist.id} />
-                                        <UpcomingPayout artistID={selectedArtist.id} />
-                                    </div>
-
-                                </>
-
-                            ) : (
-                                // no artist
-                                <p> Select Artist to Begin</p>
-                            )}
 
 
-                        </TabsContent>
-                    </Tabs>
+                <Tabs defaultValue="overview" className="space-y-4">
+                    <TabsList>
+                        <TabsTrigger value="overview">Overview</TabsTrigger>
+                        <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                        <TabsTrigger value="reports">Reports</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="analytics" className="space-y-4">
+                        {selectedArtist ? (
+                            <>
+                                <DashboardMetrics artistID={selectedArtist.id} keyMetrics={[]} />
+                                <Overview artistID={selectedArtist.id} />
+                            </>
+
+                        ) : (
+                            // no artist
+                            <p> Select Artist to Begin</p>
+                        )}
+                    </TabsContent>
+                    <TabsContent value="reports" className="space-y-4">
+                        <p>Check back soon for Reports</p>
+                    </TabsContent>
+                    <TabsContent value="overview" className="space-y-4">
+
+                        {selectedArtist ? (
+                            <>
+                                <ArtistProfile name={selectedArtist.name}
+                                    coverArt={selectedArtist.coverImage}
+                                    profileImage={selectedArtist.profileImage}
+                                    followers={selectedArtist.followers}
+                                    monthlyListeners={selectedArtist.followers}
+                                    isVerified={selectedArtist.verified}
+                                  
+                                    />
+
+                                <DashboardMetrics artistID={selectedArtist.id} keyMetrics={["total_plays", "song_variety", "unique_listeners", "engagement_score", "current_play_count"]} />
+
+                                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                                    <Overview artistID={selectedArtist.id} />
+                                    <TopSongs artistID={selectedArtist.id} />
+                                </div>
+
+                                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                                    <RecentActivity artistID={selectedArtist.id} />
+                                    <UpcomingPayout artistID={selectedArtist.id} />
+                                </div>
+
+                            </>
+
+                        ) : (
+                            // no artist
+                            <p> Select Artist to Begin</p>
+                        )}
+
+
+                    </TabsContent>
+                </Tabs>
             </div>
         </>
     )

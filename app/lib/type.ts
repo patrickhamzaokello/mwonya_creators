@@ -105,16 +105,15 @@ type AlbumContent = {
 };
 
 
+
 interface OverviewData {
-    totalStreams: number
-    streamsLastmonth: string
-    totalEarnings: number
-    totalEarningsLastmonth: string
-    activeListeners: number
-    activeListenersLastmonth: string
-    newReleases: number
-    newReleasesLastmonth: string
+    title: string
+    value: string
+    change: { amount: string, percentage: string}
+    lastUpdated: string
+    trend: string
 }
+
 
 interface ArtistID {
     artistID: string
