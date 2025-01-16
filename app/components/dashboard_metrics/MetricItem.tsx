@@ -1,7 +1,7 @@
 import { MetricItemProps } from "@/types/artist";
 
 export const MetricItem = ({ value, label, prefix }: MetricItemProps) => (
-    <div className="bg-card hover:bg-accent rounded-xl p-4 transition-all duration-300 group border border-border">
+    <div className="backdrop-blur-xl hover:bg-accent rounded-xl p-4 transition-all duration-300 group">
       <div className="flex items-center space-x-3">
     
         <div>

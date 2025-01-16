@@ -1,4 +1,14 @@
-import { Share2, Edit3 } from 'lucide-react';
+import { 
+  AlertCircle, 
+  Music, 
+  Users, 
+  PlayCircle, 
+  Share2,
+  Edit3,
+  TrendingUp,
+  Globe,
+  CheckCircle2 
+} from 'lucide-react';
 
 interface ProfileHeaderProps {
   name: string;
@@ -8,12 +18,18 @@ interface ProfileHeaderProps {
 
 export const ProfileHeader = ({ name, isVerified, profileImage }: ProfileHeaderProps) => (
   <div className="flex flex-col md:flex-row items-start md:items-end space-y-6 md:space-y-0 md:space-x-6 mb-8">
-    <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden ring-2 ring-primary/30 shadow-xl">
-      <img
-        src={profileImage || "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=200"}
-        alt={name}
-        className="w-full h-full object-cover"
-      />
+    <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden ring-2 ring-white/30 shadow-xl">
+    {profileImage ? (
+                    <img
+                      src={profileImage}
+                      alt={name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center">
+                      <Music className="w-12 h-12 text-white/80" />
+                    </div>
+                  )}
       <div className="absolute inset-0 ring-1 ring-inset ring-black/10" />
     </div>
 
