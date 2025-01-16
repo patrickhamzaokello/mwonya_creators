@@ -19,6 +19,28 @@ export const getArtistMetrisx = async (referenceId: string, keyMetrics:string[])
 
 };
 
+
+export const fetchArtistTopSongs = async (artistID: string): Promise<Song[] | MessageType> => {
+    try {
+
+         // should pass the list of metrics i want
+         const response = await axiosInstance.post('/artist/getArtistTopTracks.php', { artistID: artistID });
+         const { status, data } = response.data
+ 
+         if (status === "success") {
+             return data;
+         }
+
+         return data;
+
+    } catch (error) {
+        return {
+            status: "error",
+            message: "Fetch Error Has occured",
+        };
+    }
+}
+
 export const fetchArtistPaymentDate = async (artistID: string): Promise<PayoutData[] | MessageType> => {
     try {
 
@@ -95,41 +117,7 @@ export const fetchArtistActivities = async (artistID: string): Promise<Activity[
 }
 
 
-export const fetchArtistTopSongs = async (artistID: string): Promise<Song[] | MessageType> => {
-    try {
 
-        await new Promise(resolve => setTimeout(resolve, 500))
-        const data = [
-            {
-                name: "Jan",
-                streams: "234",
-                image: "/exmaple.omng"
-            },
-            {
-                name: "Jan",
-                streams: "234",
-                image: "/exmaple.omng"
-            },
-            {
-                name: "Jan",
-                streams: "234",
-                image: "/exmaple.omng"
-            },
-            {
-                name: "Jan",
-                streams: "234",
-                image: "/exmaple.omng"
-            }
-        ]
-
-        return data;
-    } catch (error) {
-        return {
-            status: "error",
-            message: "Fetch Error Has occured",
-        };
-    }
-}
 
 
 export const fetchmonthlyData = async (artistID: string, year: string): Promise<MonthlyData[] | MessageType> => {

@@ -109,7 +109,7 @@ type AlbumContent = {
 interface OverviewData {
     title: string
     value: string
-    change: { amount: string, percentage: string}
+    change: { amount: string, percentage: string }
     lastUpdated: string
     trend: string
 }
@@ -126,9 +126,13 @@ interface MonthlyData {
 }
 
 interface Song {
-    name: string
-    streams: string
-    image: string
+    song_id: number,
+    song_title: string
+    album_name: string
+    album_cover: string
+    genre_name: string
+    artist_name: string
+    total_plays: string
 }
 
 interface Activity {
