@@ -117,7 +117,23 @@ export const fetchArtistActivities = async (artistID: string): Promise<Activity[
 }
 
 
+export const fetchArtistSummaryData = async (artistID: string, isVerified: boolean): Promise<MetricItemProps[] | MessageType> => {
+    try {
 
+        const response = await axiosInstance.post('/artist/getArtistLivedata.php', { artistID: artistID, isVerified: isVerified });
+        const { status, data } = response.data
+
+        if (status === "success") {
+            return data;
+        }
+        return data;
+    } catch (error) {
+        return {
+            status: "error",
+            message: "Fetch Error Has occured",
+        };
+    }
+}
 
 
 export const fetchmonthlyData = async (artistID: string, year: string): Promise<MonthlyData[] | MessageType> => {

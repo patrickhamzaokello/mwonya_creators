@@ -1,13 +1,11 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import React from 'react';
 import { Music, DollarSign, Users, Disc, Music2 } from 'lucide-react';
+import { getArtistSummaryData } from '@/actions/dashboard/getOverview-stats';
 
-interface MetricItemProps {
-  value: string;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-  prefix?: string;
-  color: string;
-}
+
 
 const MetricItem: React.FC<MetricItemProps> = ({ value, label, icon: Icon, prefix, color }) => (
     <div className="group relative px-8">
@@ -50,46 +48,36 @@ interface ArtistSummaryMetricsProps {
 }
 
 const ArtistSummaryMetrics: React.FC<ArtistSummaryMetricsProps> = ({ isVerified, artistID }) => {
-  const metrics = [
-    {
-        value: '200000',
-        label: 'Total Streams',
-        icon: Music,
-        color: 'bg-purple-500'
-      },
-      {
-        value: '200000',
-        label: 'Stream Revenue',
-        icon: DollarSign,
-        prefix: 'Ugx',
-        color: 'bg-blue-500'
-      },
-      {
-        value: '200000',
-        label: 'Artist Circle',
-        icon: Users,
-        prefix: 'Ugx',
-        color: 'bg-pink-500'
-      },
-      {
-        value: '10',
-        label: 'Releases',
-        icon: Disc,
-        color: 'bg-orange-500'
-      },
-      {
-        value: '32',
-        label: 'Tracks',
-        icon: Music2,
-        color: 'bg-green-500'
+
+    const [metrics, setMetrics] = useState<Song[] | MessageType | any>([])
+      const [isLoading, setIsLoading] = useState(true)
+      const [error, setError] = useState<string | null>(null)
+    
+      useEffect(() => {
+        if (!artistID) return; // Ensure id is available before calling the server action
+        setIsLoading(true);
+    
+        getArtistSummaryData(artistID,isVerified)
+          .then(setMetrics)
+          .catch(() => setError('Failed to load  data'))
+          .finally(() => setIsLoading(false));
+      }, [artistID]);
+    
+      if (isLoading) {
+        return <>Loading</>
       }
-  ];
+    
+      if (error) {
+        return <div className="text-red-500">{error}</div>
+      }
+    
+ 
 
   return (
     <div className="w-full rounded-xl shadow-sm">
       <div className="flex justify-between items-center">
         <div className="flex divide-x divide overflow-x-auto">
-          {metrics.map((metric, index) => (
+          {metrics.map((metric: MetricItemProps, index: number) => (
             <MetricItem
               key={index}
               value={metric.value}

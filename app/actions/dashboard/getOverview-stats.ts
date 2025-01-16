@@ -1,6 +1,6 @@
 // app/actions.js
 'use server';
-import { fetchmonthlyData, fetchArtistTopSongs, getArtistMetrisx,fetchArtistActivities, fetchArtistPaymentDate } from '@/data-layer/dashboard_metrics';
+import { fetchmonthlyData, fetchArtistTopSongs, getArtistMetrisx,fetchArtistActivities, fetchArtistPaymentDate, fetchArtistSummaryData } from '@/data-layer/dashboard_metrics';
 
 
 export async function getStatsMetric(artist_id: string, keyMetrics:string[]): Promise<OverviewData[] | MessageType> {
@@ -20,6 +20,16 @@ export async function getMonthlyStatsAction(artist_id: string, year: string): Pr
   } catch (error) {
       console.error('Error fetching stats metric:', error);
       throw error;
+  }
+}
+
+export async function getArtistSummaryData(artist_id: string, isVerified: boolean): Promise<MetricItemProps[] | MessageType> {
+  try {
+    const data = await fetchArtistSummaryData(artist_id, isVerified)
+    return data;
+  } catch (error) {
+    console.error('Error fetching stats metric:', error);
+    throw error;
   }
 }
 

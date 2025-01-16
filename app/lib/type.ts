@@ -135,6 +135,14 @@ interface Song {
     total_plays: string
 }
 
+interface MetricItemProps {
+  value: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  prefix?: string;
+  color: string;
+}
+
 interface Activity {
     type: string
     title: string
