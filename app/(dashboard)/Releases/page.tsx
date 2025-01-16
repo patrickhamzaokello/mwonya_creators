@@ -31,23 +31,23 @@ export default function ContentByYear() {
         const response = await getArtistDiscovery(selectedArtist.id);
 
         if (response.status === "success") {
+
           const artistsData = response.artist_content || [];
 
           // Grouping content by year
           const groupedContent = artistsData.reduce((acc: YearSection[], item: any) => {
             let yearSection = acc.find((section) => section.year === item.releaseYear);
-
             if (!yearSection) {
               yearSection = { year: item.releaseYear, items: [] };
               acc.push(yearSection);
             }
 
             yearSection.items.push({
-              content_id: item.id,
-              title: item.title,
-              artist: item.releaseDate, // Placeholder as no artist data exists
-              imageUrl: item.artwork.fileUrl,
-              category: item.genre,
+              content_id: item.id ?? "",
+              title: item.title ?? "",
+              artist: item.releaseDate ?? "",
+              imageUrl: item.artwork?.fileUrl ?? "",
+              category: item.genre ?? "",
             });
 
             return acc;
@@ -58,7 +58,8 @@ export default function ContentByYear() {
           setError('Failed to Fetch Artist Content');
         }
       } catch (err) {
-        setError("An error occurred while fetching artists.");
+        console.log(err);
+        setError("An error occurred while fetching artists." + err);
       } finally {
         setLoading(false);
       }

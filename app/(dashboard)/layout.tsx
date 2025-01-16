@@ -24,9 +24,7 @@ export default async function DashboardLayout({
     redirect("/auth/login");
   }
   const userId = session.user.id ?? "null";
-  console.log(userId)
   const roleCheckResult = await loginRoleChecks(userId);
-  console.log(roleCheckResult)
   if (roleCheckResult.profileStatus.needsProfileCreation) {
     redirect("/create_profile");
   }

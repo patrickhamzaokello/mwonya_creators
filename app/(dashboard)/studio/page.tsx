@@ -36,6 +36,9 @@ export default function DashboardPage() {
         return <DashboardSkeleton />
     }
 
+    console.log(selectedArtist)
+
+
     if (error) {
         return <div className="text-red-500">{error}</div>
     }
@@ -70,15 +73,17 @@ export default function DashboardPage() {
                     </TabsContent>
                     <TabsContent value="overview" className="space-y-4">
 
+
                         {selectedArtist ? (
+                            
                             <>
+                            
                                 <ArtistProfile name={selectedArtist.name}
                                     coverArt={selectedArtist.coverImage}
                                     profileImage={selectedArtist.profileImage}
                                     followers={selectedArtist.followers}
                                     monthlyListeners={selectedArtist.followers}
                                     isVerified={selectedArtist.verified}
-                                  
                                     />
 
                                 <DashboardMetrics artistID={selectedArtist.id} keyMetrics={["total_plays", "song_variety", "unique_listeners", "engagement_score", "current_play_count"]} />

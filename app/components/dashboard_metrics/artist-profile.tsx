@@ -11,6 +11,7 @@ import {
     CardContent,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import ArtistSummaryMetrics from "./artist-profile-sub"
 
 interface ArtistProfileProps {
     name: string
@@ -85,22 +86,8 @@ export function ArtistProfile({
                                 </Button>
                             </div>
                         </div>
-                        <Separator className="my-6" />
                         <div className="flex justify-between items-center">
-                            <div className="flex space-x-6">
-                                <div className="flex flex-col items-center">
-                                    <p className="text-2xl font-semibold">{followers}</p>
-                                    <p className="text-sm text-muted-foreground">Followers</p>
-                                </div>
-                                <div className="flex flex-col items-center">
-                                    <p className="text-2xl font-semibold">{monthlyListeners}</p>
-                                    <p className="text-sm text-muted-foreground">Monthly Listeners</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                                <Users className="w-4 h-4" />
-                                <span>Last updated 2 days ago</span>
-                            </div>
+                            <ArtistSummaryMetrics />                          
                         </div>
                     </div>
                 </div>

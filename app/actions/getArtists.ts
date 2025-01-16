@@ -7,14 +7,13 @@ export const getArtistDiscovery = async (artist_id: string) => {
     try {
         const userArtists = await fetchArtistsDiscover(artist_id);
 
-        console.log(userArtists)
 
         if (userArtists.artistDiscovery) {
 
             const artist_content = userArtists.artistDiscovery;
+
            
-            
-            return { status: "success", message: "Retrived artist Successfully",artist_content};
+            return { status: "success", message: "Retrived discovery Successfully",artist_content};
         } else {
             return { status: "error", message: "Failed to get any artist details" };
         }
@@ -37,14 +36,14 @@ export const getArtistsForUser = async () => {
         if (userArtists.fetchedArtists) {
 
             const artists = userArtists.fetchedArtists;
-            const formattedArtists:TArtist[] = artists.map((artist: { id: any; name: any; genre: { id: any; name: any; }; profileImage: { fileUrl: any; }; coverImage: { fileUrl: any; }; verified: any; biography: any; }) => ({
+            const formattedArtists:TArtist[] = artists.map((artist: { id: any; name: any; followers: any; genre: { id: any; name: any; }; profileImage: { fileUrl: any; }; coverImage: { fileUrl: any; }; verified: any; biography: any; }) => ({
                 id: artist.id,
                 name: artist.name,
                 genreID: artist.genre?.id || '',
                 genreName: artist.genre?.name || '', 
                 profileImage: artist.profileImage?.fileUrl || '', 
                 coverImage: artist.coverImage?.fileUrl || '',
-                followers: "12k",
+                followers: artist.followers || '0',
                 verified: artist.verified || false,
                 shortbio: artist.biography|| ''
             }));
