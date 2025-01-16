@@ -6,50 +6,83 @@ interface MetricItemProps {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   prefix?: string;
+  color: string;
 }
 
-const MetricItem: React.FC<MetricItemProps> = ({ value, label, icon: Icon, prefix }) => (
-  <div className="group flex flex-col items-center relative px-6 py-3 hover:bg-gray-50 transition-all duration-300">
-    <div className="flex items-center space-x-2 mb-1">
-      <Icon className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
-      {prefix && <span className="text-sm text-gray-500">{prefix}</span>}
-      <p className="text-2xl font-semibold tracking-tight">{value}</p>
+const MetricItem: React.FC<MetricItemProps> = ({ value, label, icon: Icon, prefix, color }) => (
+    <div className="group relative px-8">
+    {/* Background highlight on hover */}
+    <div className="absolute inset-0 opacity-0 ">
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl" />
+      <div className={`absolute inset-0 bg-zinc-100 opacity-5 rounded-xl`} />
     </div>
-    <p className="text-sm text-muted-foreground group-hover:text-gray-700 transition-colors">{label}</p>
     
-    <div className="absolute -z-10 inset-0 bg-gradient-to-b from-transparent to-gray-50/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg" />
+    {/* Content */}
+    <div className="relative flex flex-col items-center space-y-3">
+      {/* Icon */}
+      <div className={`p-2 rounded-lg bg-zinc-100 bg-opacity-10 group-hover:scale-105 transition-transform`}>
+        <Icon className={`w-5 h-5`} />
+      </div>
+      
+      {/* Value */}
+      <div className="flex items-baseline space-x-1">
+        {prefix && (
+          <span className="text-sm font-medium text-gray-500 transition-colors">
+            {prefix}
+          </span>
+        )}
+        <span className="text-2xl font-bold tracking-tight">
+          {value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </span>
+      </div>
+      
+      {/* Label */}
+      <p className="text-sm font-medium text-gray-500">
+        {label}
+      </p>
+    </div>
   </div>
 );
 
-const ArtistSummaryMetrics = () => {
+interface ArtistSummaryMetricsProps {
+  isVerified: boolean;
+  artistID: string;
+}
+
+const ArtistSummaryMetrics: React.FC<ArtistSummaryMetricsProps> = ({ isVerified, artistID }) => {
   const metrics = [
     {
-      value: '200,000',
-      label: 'Total Streams',
-      icon: Music,
-    },
-    {
-      value: '200,000',
-      label: 'Stream Revenue',
-      icon: DollarSign,
-      prefix: 'Ugx'
-    },
-    {
-      value: '200,000',
-      label: 'Artist Circle',
-      icon: Users,
-      prefix: 'Ugx'
-    },
-    {
-      value: '10',
-      label: 'Releases',
-      icon: Disc,
-    },
-    {
-      value: '32',
-      label: 'Tracks',
-      icon: Music2,
-    }
+        value: '200000',
+        label: 'Total Streams',
+        icon: Music,
+        color: 'bg-purple-500'
+      },
+      {
+        value: '200000',
+        label: 'Stream Revenue',
+        icon: DollarSign,
+        prefix: 'Ugx',
+        color: 'bg-blue-500'
+      },
+      {
+        value: '200000',
+        label: 'Artist Circle',
+        icon: Users,
+        prefix: 'Ugx',
+        color: 'bg-pink-500'
+      },
+      {
+        value: '10',
+        label: 'Releases',
+        icon: Disc,
+        color: 'bg-orange-500'
+      },
+      {
+        value: '32',
+        label: 'Tracks',
+        icon: Music2,
+        color: 'bg-green-500'
+      }
   ];
 
   return (
@@ -63,6 +96,7 @@ const ArtistSummaryMetrics = () => {
               label={metric.label}
               icon={metric.icon}
               prefix={metric.prefix}
+              color={metric.color}
             />
           ))}
         </div>

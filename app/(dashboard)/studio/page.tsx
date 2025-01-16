@@ -78,11 +78,11 @@ export default function DashboardPage() {
                             
                             <>
                             
-                                <ArtistProfile name={selectedArtist.name}
+                                <ArtistProfile 
+                                    artistID={selectedArtist.id}
+                                    name={selectedArtist.name}
                                     coverArt={selectedArtist.coverImage}
                                     profileImage={selectedArtist.profileImage}
-                                    followers={selectedArtist.followers}
-                                    monthlyListeners={selectedArtist.followers}
                                     isVerified={selectedArtist.verified}
                                     />
 

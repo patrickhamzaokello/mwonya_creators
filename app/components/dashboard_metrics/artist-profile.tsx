@@ -14,20 +14,18 @@ import { Separator } from "@/components/ui/separator"
 import ArtistSummaryMetrics from "./artist-profile-sub"
 
 interface ArtistProfileProps {
+    artistID: string,
     name: string
     coverArt: string
     profileImage: string
-    followers: string
-    monthlyListeners: string
     isVerified: boolean
 }
 
 export function ArtistProfile({
+    artistID,
     name,
     coverArt,
     profileImage,
-    followers,
-    monthlyListeners,
     isVerified,
 }: ArtistProfileProps) {
     return (
@@ -86,8 +84,9 @@ export function ArtistProfile({
                                 </Button>
                             </div>
                         </div>
+                        <Separator className="my-6" />
                         <div className="flex justify-between items-center">
-                            <ArtistSummaryMetrics />                          
+                            <ArtistSummaryMetrics isVerified={isVerified} artistID={artistID} />                          
                         </div>
                     </div>
                 </div>
