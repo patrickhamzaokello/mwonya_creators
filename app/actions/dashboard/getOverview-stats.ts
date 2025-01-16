@@ -1,6 +1,7 @@
 // app/actions.js
 'use server';
 import { fetchmonthlyData, fetchArtistTopSongs, getArtistMetrisx,fetchArtistActivities, fetchArtistPaymentDate, fetchArtistSummaryData } from '@/data-layer/dashboard_metrics';
+import { MetricItemProps } from '@/types/artist';
 
 
 export async function getStatsMetric(artist_id: string, keyMetrics:string[]): Promise<OverviewData[] | MessageType> {

@@ -1,97 +1,61 @@
-'use client'
+import { useEffect, useState } from 'react';
+import { type MetricItemProps, type ArtistProfileProps } from '@/types/artist';
+import { getArtistSummaryData } from '@/actions/dashboard/getOverview-stats';
+import { MetricsGrid } from '@/components/dashboard_metrics/MetricsGrid';
+import { ProfileHeader } from '@/components/dashboard_metrics/ProfileHeader';
 
-import Image from "next/image"
-import { Edit3, Users, Music, Share2 } from 'lucide-react'
+const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: ArtistProfileProps) => {
+  const [metrics, setMetrics] = useState<MetricItemProps[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import {
-    Card,
-    CardContent,
-} from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import ArtistSummaryMetrics from "./artist-profile-sub"
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      if (!artistID) return;
+      
+      try {
+        setIsLoading(true);
+        const data = await getArtistSummaryData(artistID, isVerified) as MetricItemProps[];
+        setMetrics(data);
+      } catch (err) {
+        setError('Failed to load data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-interface ArtistProfileProps {
-    artistID: string,
-    name: string
-    coverArt: string
-    profileImage: string
-    isVerified: boolean
-}
+    fetchMetrics();
+  }, [artistID, isVerified]);
 
-export function ArtistProfile({
-    artistID,
-    name,
-    coverArt,
-    profileImage,
-    isVerified,
-}: ArtistProfileProps) {
-    return (
-        <Card className="w-full overflow-hidden">
-            <CardContent className="p-0">
-                <div className="flex flex-col md:flex-row">
-                    <div className="relative w-full md:w-1/3 h-64 md:h-auto">
-                        <Image
-                            src={coverArt || "/placeholder.svg"}
-                            alt={`${name}'s cover art`}
-                            layout="fill"
-                            objectFit="cover"
-                            className="object-center"
-                        />
-                    </div>
-                    <div className="flex-1 p-6">
-                        <div className="flex items-start justify-between mb-6">
-                            <div className="flex items-center space-x-4">
-                                <div className="relative h-24 w-24 rounded-full overflow-hidden ring-2 ring-primary/20">
-                                    <Image
-                                        src={profileImage || "/placeholder.svg"}
-                                        alt={name}
-                                        layout="fill"
-                                        objectFit="cover"
-                                    />
-                                </div>
-                                <div>
-                                    <h2 className="text-2xl font-bold flex items-center">
-                                        {name}
-                                        {isVerified && (
-                                            <TooltipProvider>
-                                                <Tooltip>
-                                                    <TooltipTrigger>
-                                                        <div className="ml-2">
-                                                            <Image src="/verified_white.svg" alt="Verified Artist" width={20} height={20} />
-                                                        </div>
-                                                    </TooltipTrigger>
-                                                    <TooltipContent>
-                                                        <p>Verified Artist</p>
-                                                    </TooltipContent>
-                                                </Tooltip>
-                                            </TooltipProvider>
-                                        )}
-                                    </h2>
-                                    <p className="text-sm text-muted-foreground mt-1">Artist</p>
-                                </div>
-                            </div>
-                            <div className="flex space-x-2">
-                                <Button variant="outline" size="sm">
-                                    <Share2 className="w-4 h-4 mr-2" />
-                                    Share
-                                </Button>
-                                <Button variant="default" size="sm">
-                                    <Edit3 className="w-4 h-4 mr-2" />
-                                    Edit Profile
-                                </Button>
-                            </div>
-                        </div>
-                        <Separator className="my-6" />
-                        <div className="flex justify-between items-center">
-                            <ArtistSummaryMetrics isVerified={isVerified} artistID={artistID} />                          
-                        </div>
-                    </div>
-                </div>
-            </CardContent>
-        </Card>
-    )
-}
+  return (
+    <div className="w-full min-h-[24rem] bg-gradient-to-b  text-white relative overflow-hidden">
+      {/* Cover Art Background */}
+      <div className="absolute inset-0 opacity-20">
+        <img
+          src={coverArt || "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=2000"}
+          alt="Cover Background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/95 to-background/80" />
+      </div>
 
+      {/* Content Container */}
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="space-y-8">
+          <ProfileHeader
+            name={name}
+            isVerified={isVerified}
+            profileImage={profileImage}
+          />
+          <MetricsGrid
+            metrics={metrics}
+            isLoading={isLoading}
+            error={error}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ArtistProfile;

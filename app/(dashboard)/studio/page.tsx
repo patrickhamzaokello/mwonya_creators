@@ -13,11 +13,11 @@ import { RecentActivity } from "@/components/dashboard_metrics/recent-activity"
 import { Search } from "@/components/dashboard_metrics/search"
 import { TopSongs } from "@/components/dashboard_metrics/top-songs"
 import { UserNav } from "@/components/dashboard_metrics/user-nav"
-import { ArtistProfile } from "@/components/dashboard_metrics/artist-profile"
 import { UpcomingPayout } from "@/components/dashboard_metrics/upcoming-payment";
 import { DashboardSkeleton } from "@/components/dashboard_metrics/dashboard-skeleton";
 import { useEffect, useState } from 'react'
 import { DashboardMetrics } from "@/components/dashboard_metrics/metrics";
+import ArtistProfile from "@/components/dashboard_metrics/artist-profile";
 
 export default function DashboardPage() {
 

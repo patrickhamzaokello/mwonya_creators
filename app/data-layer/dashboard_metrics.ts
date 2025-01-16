@@ -1,4 +1,5 @@
 import axiosInstance from "@/lib/axiosInstance";
+import { MetricItemProps } from "@/types/artist";
 export const getArtistMetrisx = async (referenceId: string, keyMetrics:string[]): Promise<OverviewData[] | MessageType> => {
     try {
         // should pass the list of metrics i want
