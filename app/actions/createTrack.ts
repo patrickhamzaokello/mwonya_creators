@@ -25,7 +25,6 @@ export async function createNewRelease(formData: FormData) {
   const AESCode = formData.get('aesCode') as string
   const cover_artwork = formData.get('artwork') as File
 
-  console.log(formData)
 
   try {
 
@@ -46,6 +45,8 @@ export async function createNewRelease(formData: FormData) {
       aesCode: AESCode
     };
     const data = await saveNewRelease(releaseDetails)
+
+    console.log(data)
 
     if (!data.success) {
       return { success: false, releaseID: releaseID }
