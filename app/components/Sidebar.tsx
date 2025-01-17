@@ -60,7 +60,7 @@ const AppSidebar = () => {
           },
           {
             title: "My Releases",
-            url: "/Releases",
+            url: "/releases",
           },
           {
             title: "Metrics",

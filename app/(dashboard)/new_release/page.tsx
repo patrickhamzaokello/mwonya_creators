@@ -36,6 +36,8 @@ import { Progress } from "@/components/ui/progress"
 import { retrieveAllGenres } from '@/actions/getGenres'
 import { useArtist } from "@/contexts/ArtistContext";
 import { createNewRelease } from '@/actions/createTrack'
+import { useRouter } from 'next/navigation'
+
 
 const formSchema = z.object({
     title: z.string().min(2, {
@@ -76,7 +78,7 @@ export default function NewReleasePage() {
     const [selectedArtist, setSelectedArtist] = useArtist();
     const [artistName, setArtistName] = useState<string | undefined>();
     const [artistID, setArtistID] = useState<string | undefined>();
-
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -97,14 +99,6 @@ export default function NewReleasePage() {
     const watchedValues = watch()
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        // toast({
-        //     title: "You submitted the following values:",
-        //     description: (
-        //         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-        //             <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        //         </pre>
-        //     ),
-        // })
 
         setStatus('uploading')
 
@@ -131,6 +125,10 @@ export default function NewReleasePage() {
                     title: "Success",
                     description: "Track and cover art uploaded successfully!",
                 })
+
+                // Route to release/releaseID
+                router.push(`/releases/${result.releaseID}`);
+
             } else {
                 throw new Error(result.error || "Unknown error occurred")
             }
@@ -475,9 +473,9 @@ export default function NewReleasePage() {
                                 />
                                 <div className="flex justify-between">
                                     <Button type="button" variant="outline">Cancel</Button>
-                                     <Button type="submit" disabled={status === 'uploading'}>
-                                                      {status === 'uploading' ? 'Uploading...' : 'Create Release'}
-                                                    </Button>
+                                    <Button type="submit" disabled={status === 'uploading'}>
+                                        {status === 'uploading' ? 'Uploading...' : 'Create Release'}
+                                    </Button>
                                 </div>
                             </form>
                         </Form>

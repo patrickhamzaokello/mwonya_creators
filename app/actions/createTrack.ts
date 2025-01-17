@@ -52,10 +52,11 @@ export async function createNewRelease(formData: FormData) {
       return { success: false, releaseID: releaseID }
     }
 
-    // Start asynchronous upload process for both track and cover art
-    Promise.all([
-      uploadFileToS3(releaseID, cover_artwork, 'coverArt')
-    ]).catch(console.error)
+    // Promise.all([
+    //   uploadFileToS3(releaseID, cover_artwork, 'coverArt')
+    // ]).catch(console.error)
+
+    await uploadFileToS3(releaseID, cover_artwork, 'coverArt')
 
     return { success: true, releaseID: releaseID }
 
