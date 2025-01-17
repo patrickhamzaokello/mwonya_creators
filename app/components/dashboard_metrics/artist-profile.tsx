@@ -28,7 +28,7 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
   }, [artistID, isVerified]);
 
   return (
-    <div className="w-full min-h-[24rem] text-white relative bg-gradient-to-b from-background via-background/95 to-background">
+    <div className="w-full min-h-[24rem] text-white relative bg-gradient-to-b from-background via-background/95 to-background rounded-md">
       {/* Cover Art Background */}
       <div className="absolute inset-0">
       {coverArt ? (
@@ -44,7 +44,7 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
       </div>
 
       {/* Content Container */}
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 rounded-md">
         <div className="space-y-8">
           <ProfileHeader
             name={name}

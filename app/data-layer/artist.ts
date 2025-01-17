@@ -41,6 +41,22 @@ export const fetchUserArtists = async (userId: string, userRole: string) => {
 
 };
 
+export const saveNewRelease = async (trackDetails: NewReleaseDetails) => {
+
+    try {
+        const response = await axiosInstance.post('artist/uploadSingleTrack_Container.php', { trackDetails });
+
+        if (response.status === 200) {
+            const { status, data } = response.data
+            return data;
+        }
+        return null;
+    } catch (error) {
+        console.error('Error Saving user details:', error);
+        return null;
+    }
+}
+
 export const uploadSingleTrack = async (trackDetails: SingleTrackDetails) => {
 
     try {

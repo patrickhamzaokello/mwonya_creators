@@ -13,10 +13,13 @@ export const retrieveAllGenres = async (trackType: string) => {
 
             console.log(trackType)
 
-            // Filter genres if trackType is 'episode'
-            if (trackType === 'episode') {
-                console.log('Filtering genres for episode track type');
+            // Filter genres if trackType is 'episode' or 'podcast'
+            if (trackType === 'episode' || trackType === 'podcast') {
+                console.log('Filtering genres for episode or podcast track type');
                 filteredGenres = result.genres.filter(genre => genre.tag === 'other');
+            } else {
+                // Exclude genres tagged as 'other' for default trackType 'music'
+                filteredGenres = result.genres.filter(genre => genre.tag !== 'other');
             }
 
             const formattedGenres = filteredGenres.map(genre => ({
@@ -24,16 +27,16 @@ export const retrieveAllGenres = async (trackType: string) => {
                 name: genre.name
             }));
 
-            return { 
-                status: "success", 
+            return {
+                status: "success",
                 message: "Retrieved genres successfully",
                 fetchedgenres: {
                     genres: formattedGenres
                 }
             };
         } else {
-            return { 
-                status: "error", 
+            return {
+                status: "error",
                 message: "Failed to get genre details: Unexpected data structure",
                 fetchedgenres: {
                     genres: []

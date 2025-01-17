@@ -44,6 +44,20 @@ interface ContentItem {
 }
 
 
+interface NewReleaseDetails {
+    releaseID: string;
+    artist: string;
+    release_title: string;
+    genre: number;
+    releaseType: string;
+    exclusive: number;
+    tags: string;
+    description: string;
+    releaseDate: string;
+    aesCode: string;
+}
+
+
 interface SingleTrackDetails {
     album_id: string;
     track_reference: string,

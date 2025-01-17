@@ -54,7 +54,10 @@ const AppSidebar = () => {
             title: "New Single",
             url: "/new_single",
           },
-          
+          {
+            title: "New Release",
+            url: "/new_release",
+          },
           {
             title: "My Releases",
             url: "/Releases",
