@@ -21,55 +21,89 @@ export function TrackList({ id }: { id: string }) {
     const [progress, setProgress] = useState(0)
     const [currentTime, setCurrentTime] = useState('0:00')
     const howlRef = useRef<Howl | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
 
-    useEffect(() => {
+
+
+    const cleanup = () => {
+        if (howlRef.current) {
+          howlRef.current.stop()
+          howlRef.current.unload()
+          howlRef.current = null
+        }
+        setIsPlaying(false)
+        setCurrentTrack(null)
+        setProgress(0)
+        setCurrentTime('0:00')
+        setIsLoading(false)
+      }
+
+      useEffect(() => {
+        return () => cleanup()
+      }, [id])
+
+
+      useEffect(() => {
         const fetchContent = async () => {
+            cleanup() // Cleanup before fetching new album
             const response = await getContentDetails(id)
             setTracks(response.content_info.tracks || [])
         }
         fetchContent()
     }, [id])
 
-    useEffect(() => {
-        if (currentTrack !== null) {
-            if (howlRef.current) {
-                howlRef.current.stop()
-                howlRef.current.unload()
-            }
-
-            howlRef.current = new Howl({
-                src: [tracks[currentTrack].trackFilePath],
-                html5: true,
-                onplay: () => setIsPlaying(true),
-                onpause: () => setIsPlaying(false),
-                onstop: () => {
-                    setIsPlaying(false)
-                    setProgress(0)
-                    setCurrentTime('0:00')
-                },
-                onend: () => {
-                    setIsPlaying(false)
-                    setProgress(0)
-                    setCurrentTime('0:00')
-                },
-                onseek: () => {
-                    if (howlRef.current) {
-                        const seek = howlRef.current.seek() as number
-                        const duration = howlRef.current.duration()
-                        setProgress((seek / duration) * 100)
-                        setCurrentTime(formatTime(seek))
-                    }
-                },
-            })
+    const initializeHowl = (index: number) => {
+        if (howlRef.current) {
+            howlRef.current.stop()
+            howlRef.current.unload()
         }
-        return () => {
-            if (howlRef.current) {
-                howlRef.current.stop()
-                howlRef.current.unload()
-            }
-        }
-    }, [currentTrack, tracks]) // Only depend on currentTrack and tracks
 
+        setIsLoading(true)
+
+        howlRef.current = new Howl({
+            src: [tracks[index].trackFilePath],
+            html5: true,
+            onload: () => {
+                setIsLoading(false)
+                howlRef.current?.play()
+            },
+            onplay: () => setIsPlaying(true),
+            onpause: () => setIsPlaying(false),
+            onstop: () => {
+                setIsPlaying(false)
+                setProgress(0)
+                setCurrentTime('0:00')
+            },
+            onend: () => {
+                setIsPlaying(false)
+                setProgress(0)
+                setCurrentTime('0:00')
+            },
+            onseek: () => {
+                if (howlRef.current) {
+                    const seek = howlRef.current.seek() as number
+                    const duration = howlRef.current.duration()
+                    setProgress((seek / duration) * 100)
+                    setCurrentTime(formatTime(seek))
+                }
+            },
+        })
+    }
+
+    const handlePlayToggle = (index: number) => {
+        if (currentTrack === index) {
+            if (isPlaying) {
+                howlRef.current?.pause()
+            } else {
+                howlRef.current?.play()
+            }
+        } else {
+            setCurrentTrack(index)
+            initializeHowl(index)
+        }
+    }
+
+    // Handle progress updates
     useEffect(() => {
         let progressInterval: NodeJS.Timeout | null = null
 
@@ -89,25 +123,7 @@ export function TrackList({ id }: { id: string }) {
                 clearInterval(progressInterval)
             }
         }
-    }, [isPlaying]) // Only depend on isPlaying
-
-
-    const handlePlayToggle = (index: number) => {
-        if (currentTrack === index) {
-            // For currently playing track, just toggle play/pause
-            if (isPlaying) {
-                howlRef.current?.pause()
-            } else {
-                howlRef.current?.play()
-            }
-        } else {
-            // For new track selection
-            setCurrentTrack(index)
-            if (howlRef.current) {
-              howlRef.current.stop()
-            }
-        }
-    }
+    }, [isPlaying])
 
     const formatTime = (time: number) => {
         const minutes = Math.floor(time / 60)
@@ -154,6 +170,7 @@ export function TrackList({ id }: { id: string }) {
                             progress={currentTrack === index ? progress : 0}
                             currentTime={currentTrack === index ? currentTime : '0:00'}
                             onSeek={(percent) => handleSeek(index, percent)}
+                            isLoading={currentTrack === index && isLoading}
                         />
                     ))}
                 </div>
