@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import { TrackRow } from './track-row'
 import { getContentDetails } from '@/actions/getArtists'
+import { AddTrackDialog } from './multiple_track_upload_dialog'
 
 interface Track {
     title: string
@@ -24,26 +25,36 @@ export function TrackList({ id }: { id: string }) {
     const [isLoading, setIsLoading] = useState(false)
 
 
+    const handleUploadSuccess = () => {
+        // Refetch tracks after successful upload
+        const fetchContent = async () => {
+            const response = await getContentDetails(id)
+            setTracks(response.content_info.tracks || [])
+        }
+        fetchContent()
+    }
+
+
 
     const cleanup = () => {
         if (howlRef.current) {
-          howlRef.current.stop()
-          howlRef.current.unload()
-          howlRef.current = null
+            howlRef.current.stop()
+            howlRef.current.unload()
+            howlRef.current = null
         }
         setIsPlaying(false)
         setCurrentTrack(null)
         setProgress(0)
         setCurrentTime('0:00')
         setIsLoading(false)
-      }
+    }
 
-      useEffect(() => {
+    useEffect(() => {
         return () => cleanup()
-      }, [id])
+    }, [id])
 
 
-      useEffect(() => {
+    useEffect(() => {
         const fetchContent = async () => {
             cleanup() // Cleanup before fetching new album
             const response = await getContentDetails(id)
@@ -153,10 +164,8 @@ export function TrackList({ id }: { id: string }) {
                             {tracks.length} songs, {calculateTotalDuration(tracks)}
                         </p>
                     </div>
-                    <Button>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add Track
-                    </Button>
+                 
+                    <AddTrackDialog onUploadSuccess={handleUploadSuccess} />
                 </div>
 
                 <div className="divide-y">

@@ -40,15 +40,8 @@ const computeSHA256 = async (file: File) => {
 
 
 export async function uploadFileToS3(trackId: string, file: File, fileType: 'track' | 'coverArt') {
-  const fileBuffer = await file.arrayBuffer()
-  const fileName = `${trackId}-${fileType}-${file.name}`
 
   try {
-    const uploadParams = {
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: fileName,
-      Body: Buffer.from(fileBuffer),
-    }
 
     const checksum = await computeSHA256(file)
 
