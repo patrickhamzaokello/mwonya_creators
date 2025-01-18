@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -13,38 +13,17 @@ interface Track {
 }
 
 interface TrackRowProps {
-  track: Track
-  index: number
-  isPlaying: boolean
-  onPlayToggle: (index: number) => void
-  audioRef: React.RefObject<HTMLAudioElement>
+  track: Track;
+  index: number;
+  isPlaying: boolean;
+  onPlayToggle: (index: number) => void;
+  progress: number;
+  currentTime: string;
+  onSeek: (percent: number) => void;
 }
 
-export function TrackRow({ track, index, isPlaying, onPlayToggle, audioRef }: TrackRowProps) {
+export function TrackRow({ track, index, isPlaying, onPlayToggle, progress, currentTime, onSeek }: TrackRowProps) {
   const [isHovered, setIsHovered] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [currentTime, setCurrentTime] = useState('0:00')
-
-  useEffect(() => {
-    const audio = audioRef.current
-    if (!audio) return
-
-    const updateProgress = () => {
-      const duration = audio.duration
-      const currentTime = audio.currentTime
-      setProgress((currentTime / duration) * 100)
-      setCurrentTime(formatTime(currentTime))
-    }
-
-    audio.addEventListener('timeupdate', updateProgress)
-    return () => audio.removeEventListener('timeupdate', updateProgress)
-  }, [audioRef])
-
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60)
-    const seconds = Math.floor(time % 60)
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`
-  }
 
   return (
     <div
@@ -117,10 +96,28 @@ export function TrackRow({ track, index, isPlaying, onPlayToggle, audioRef }: Tr
           </DropdownMenu>
         </div>
       </div>
-      {isPlaying && (
-        <div className="flex items-center gap-2 pl-8">
-          <Progress value={progress} className="flex-1" />
-          <span className="text-xs text-muted-foreground">{currentTime}</span>
+      {(isPlaying || isHovered) && (
+        <div className="flex items-center gap-2 pl-8 mt-2">
+          <div
+            className="relative flex-1 h-1 bg-secondary cursor-pointer group"
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const percent = ((e.clientX - rect.left) / rect.width) * 100;
+              onSeek(percent);
+            }}
+          >
+            <div
+              className="absolute left-0 top-0 h-full bg-primary transition-all duration-300 ease-in-out"
+              style={{ width: `${progress}%` }}
+            />
+            <div
+              className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
+              style={{ left: `${progress}%` }}
+            />
+          </div>
+          <span className="text-xs text-muted-foreground min-w-[40px] text-right">
+            {currentTime}
+          </span>
         </div>
       )}
     </div>
