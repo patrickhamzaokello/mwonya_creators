@@ -127,7 +127,7 @@ export default function NewReleasePage() {
                 })
 
                 // Route to release/releaseID
-                router.push(`/releases/${result.releaseID}`);
+                router.push(`/mwonya_release/${result.releaseID}`);
 
             } else {
                 throw new Error(result.error || "Unknown error occurred")

@@ -24,7 +24,7 @@ export function MainNav({
         Analytics
       </Link>
       <Link
-        href="/dashboard/releases"
+        href="/dashboard/mwonya_release"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Releases
