@@ -17,7 +17,7 @@ export default function ContentByYear() {
   const router = useRouter()
 
   const handleContentClick = (id: string) => {
-    router.push(`/Releases/${id}`)
+    router.push(`/releases/${id}`)
   }
 
   useEffect(() => {

@@ -67,7 +67,6 @@ export async function getContentDetails(content_id: string) {
         console.log(content_id)
         const data = await fetchContentDetails(content_id??"");
         const content_info = data.content_details;
-        console.log(content_info)
         if (content_info) {
             return { status: "success", message: "Retrived artist Successfully", content_info};
         } else {
