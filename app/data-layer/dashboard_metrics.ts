@@ -137,10 +137,10 @@ export const fetchArtistSummaryData = async (artistID: string, isVerified: boole
 }
 
 
-export const fetchmonthlyData = async (artistID: string, year: string): Promise<MonthlyData[] | MessageType> => {
+export const fetchmonthlyData = async (artistID: string, months_number: number): Promise<MonthlyData[] | MessageType> => {
     try {
 
-        const response = await axiosInstance.post('/artist/getTotalPlayTrend.php', { artistID: artistID, year: year });
+        const response = await axiosInstance.post('/artist/getTotalPlayTrend.php', { artistID: artistID, months: months_number });
         const { status, data } = response.data
 
         if (status === "success") {

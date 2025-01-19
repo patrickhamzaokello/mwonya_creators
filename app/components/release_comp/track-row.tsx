@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { MoreVertical, Pencil, Play, Pause, Heart, Download, Share2 } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
+import { formatAudioDuration } from '@/utils/audioutils'
 
 interface Track {
     title: string
@@ -25,6 +26,8 @@ interface TrackRowProps {
 
 export function TrackRow({ track, index, isPlaying, onPlayToggle, progress, currentTime, onSeek, isLoading }: TrackRowProps) {
     const [isHovered, setIsHovered] = useState(false)
+
+    const track_duration = formatAudioDuration(track.duration);
 
     return (
         <div
@@ -60,7 +63,7 @@ export function TrackRow({ track, index, isPlaying, onPlayToggle, progress, curr
                 <div className="flex-1 min-w-0">
                     <p className="truncate font-medium">{track.title}</p>
                     <p className="text-sm text-muted-foreground flex items-center gap-2">
-                        <span>{track.duration}</span>
+                        <span>{track_duration}</span>
                         {track.explicit && (
                             <Badge variant="outline" className="text-xs">
                                 Explicit

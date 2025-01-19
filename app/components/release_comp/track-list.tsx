@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import { TrackRow } from './track-row'
 import { getContentDetails } from '@/actions/getArtists'
-import { AddTrackDialog } from './multiple_track_upload_dialog'
+import { AddTrackDialog } from './add-Track-Dialog'
 
 interface Track {
     title: string
@@ -17,6 +17,11 @@ interface Track {
 
 export function TrackList({ id }: { id: string }) {
     const [tracks, setTracks] = useState<Track[]>([])
+    const [artistId, setArtistId] = useState('');
+    const [albumId, setAlbumId] = useState('');
+    const [genreId, setGenreId] = useState<number>(0);
+    const [albumTag, setAlbumTag] = useState('');
+    const [albumReleaseDate, setAlbumReleaseDate] = useState('');
     const [currentTrack, setCurrentTrack] = useState<number | null>(null)
     const [isPlaying, setIsPlaying] = useState(false)
     const [progress, setProgress] = useState(0)
@@ -59,6 +64,11 @@ export function TrackList({ id }: { id: string }) {
             cleanup() // Cleanup before fetching new album
             const response = await getContentDetails(id)
             setTracks(response.content_info.tracks || [])
+            setArtistId(response.content_info.artist_id || '');
+            setAlbumId(response.content_info.content_id || '');
+            setGenreId(response.content_info.genre_id || 0);
+            setAlbumTag(response.content_info.releasetype || '');
+            setAlbumReleaseDate(response.content_info.releaseDate || '');
         }
         fetchContent()
     }, [id])
@@ -165,7 +175,14 @@ export function TrackList({ id }: { id: string }) {
                         </p>
                     </div>
                  
-                    <AddTrackDialog onUploadSuccess={handleUploadSuccess} />
+                    <AddTrackDialog 
+                        onUploadSuccess={handleUploadSuccess}                         
+                        artist_id={artistId}
+                        album_id={albumId}
+                        genre_id={genreId}
+                        album_tag={albumTag}
+                        album_release_date={albumReleaseDate}
+                    />
                 </div>
 
                 <div className="divide-y">

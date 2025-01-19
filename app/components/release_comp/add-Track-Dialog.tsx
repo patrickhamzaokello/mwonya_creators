@@ -13,7 +13,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Plus, Upload, X } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
-import { getTrackSignedURL } from '@/actions/aws/release_track_upload'
+import { createTrackDetails, getTrackSignedURL } from '@/actions/aws/release_track_upload'
+import { getAudioMetadata, generateContentId } from '@/utils/audioutils';
+import { AudioMetadata } from '@/types/audioMetadata'
+import { useToast } from "@/components/ui/use-toast"
 
 interface UploadingFile {
     file: File
@@ -24,6 +27,11 @@ interface UploadingFile {
 
 interface AddTrackDialogProps {
     onUploadSuccess: () => void
+    artist_id: string;
+    album_id: string;
+    genre_id: number;
+    album_tag: string;
+    album_release_date: string; // ISO date string
 }
 
 const computeSHA256 = async (file: File) => {
@@ -35,11 +43,11 @@ const computeSHA256 = async (file: File) => {
 }
 
 
-export function AddTrackDialog({ onUploadSuccess }: AddTrackDialogProps) {
+export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id, album_tag, album_release_date }: AddTrackDialogProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([])
     const [isUploading, setIsUploading] = useState(false)
-
+    const { toast } = useToast()
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(event.target.files || [])
         const validFiles = files.filter(file => file.type.startsWith('audio/'))
@@ -63,13 +71,13 @@ export function AddTrackDialog({ onUploadSuccess }: AddTrackDialogProps) {
         try {
 
             const checksum = await computeSHA256(file.file)
-            const signedURLResult = await getTrackSignedURL(file.file.type, file.file.size, checksum)
+            const signedURLResult = await getTrackSignedURL(file.file.type, file.file.size, checksum, 'track')
 
             if (signedURLResult.failure !== undefined) {
                 throw new Error(signedURLResult.failure)
             }
 
-            const { signedURL, mediaId } = signedURLResult.success
+            const { signedURL, upload_id } = signedURLResult.success
 
             const xhr = new XMLHttpRequest()
 
@@ -85,36 +93,73 @@ export function AddTrackDialog({ onUploadSuccess }: AddTrackDialogProps) {
             await new Promise((resolve, reject) => {
                 xhr.open('PUT', signedURL)
 
-                xhr.onload = () => {
+                xhr.onload = async () => {
                     if (xhr.status === 200) {
+
+                        // upload completed successfully
                         setUploadingFiles(prev => prev.map((f, i) =>
                             i === index ? { ...f, progress: 100, status: 'completed' } : f
                         ))
 
-                        // Save data to the database
-                        // try {
-                        //     const saveResponse = await fetch('/api/save-track-data', {
-                        //         method: 'POST',
-                        //         headers: {
-                        //             'Content-Type': 'application/json',
-                        //         },
-                        //         body: JSON.stringify({
-                        //             trackId: file.trackId, // Assuming you have trackId in the file object
-                        //             fileType: file.file.type,
-                        //             fileUrl: signedURL.split("?")[0],
-                        //         }),
-                        //     });
+                        // get metadata and save audio to database
+                        let metadata: AudioMetadata;
+                        try {
+                            metadata = await getAudioMetadata(file.file)
+                        } catch (error) {
+                            console.error('Error getting metadata:', error)
+                            metadata = {
+                                title: file.file.name,
+                                artist: '',
+                                album: '',
+                                genre: [],
+                                duration: 0,
+                                bitrate: 0,
+                                sampleRate: 0,
+                                lossless: false,
+                                codec: '',
+                                year: '',
+                                track: { no: 0, of: 0 },
+                                disk: { no: 0, of: 0 },
+                                picture: [],
+                                native: {},
+                                quality: {},
+                            };
+                        }
 
-                        //     const saveResult = await saveResponse.json();
-                        //     if (saveResult.status !== "success") {
-                        //         throw new Error(saveResult.message || "Failed to save data");
-                        //     }
-                        // } catch (saveError) {
-                        //     console.error('Error saving data:', saveError);
-                        //     setUploadingFiles(prev => prev.map((f, i) =>
-                        //         i === index ? { ...f, status: 'error' } : f
-                        //     ));
-                        // }
+                        const reference_id = await generateContentId('track');
+
+                        try {
+                            const createTrackResponse = await createTrackDetails({
+                                reference_id,
+                                title: metadata.title,
+                                artist: artist_id,
+                                album: album_id,
+                                genre: genre_id,
+                                upload_id,
+                                duration: metadata.duration,
+                                tag: album_tag,
+                                metadata: JSON.stringify(metadata),
+                                releasedate: album_release_date
+                            });
+
+                            if (createTrackResponse.failure !== undefined) {
+                                throw new Error(createTrackResponse.failure)
+                            }
+
+                            const { track_reference_id, message } = createTrackResponse.success
+
+
+                        } catch (saveError) {
+                            console.log('Error saving data:', saveError);
+                            toast({
+                                title: "Error",
+                                description: String(saveError),
+                                variant: "destructive",
+                              })
+                            setUploadingFiles(prev => prev.map((f, i) =>
+                                i === index ? { ...f, status: 'error' } : f
+                            ));
+                        }
 
                         resolve(xhr.response)
                     } else {

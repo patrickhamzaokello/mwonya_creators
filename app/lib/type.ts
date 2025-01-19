@@ -44,6 +44,33 @@ interface ContentItem {
 }
 
 
+interface UploadTrackDetails {
+    reference_id: string;
+    title: string;
+    artist: string;
+    album: string;
+    genre: number;
+    upload_id: number;
+    duration: number;
+    tag: string;
+    metadata: string; // JSON string
+    releasedate: string; // ISO date string
+}
+
+
+interface MediaUploadDetails {
+    user_id: string;
+    upload_type: string;
+    file_path: string;
+    file_name: string;
+    file_hash: string;
+    file_size: number;
+    file_format: string;
+    metadata: string; // JSON string
+    is_active: number;
+}
+
+
 interface NewReleaseDetails {
     releaseID: string;
     artist: string;

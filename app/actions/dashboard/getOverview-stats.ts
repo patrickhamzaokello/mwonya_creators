@@ -14,9 +14,9 @@ export async function getStatsMetric(artist_id: string, keyMetrics:string[]): Pr
   }
 }
 
-export async function getMonthlyStatsAction(artist_id: string, year: string): Promise<MonthlyData[] | MessageType> {
+export async function getMonthlyStatsAction(artist_id: string, months_number: number): Promise<MonthlyData[] | MessageType> {
   try {
-      const data = await fetchmonthlyData(artist_id, year);
+      const data = await fetchmonthlyData(artist_id, months_number);
       return data;
   } catch (error) {
       console.error('Error fetching stats metric:', error);

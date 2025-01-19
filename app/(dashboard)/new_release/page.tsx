@@ -55,7 +55,7 @@ const formSchema = z.object({
     description: z.string().min(10, {
         message: "Description must be at least 10 characters.",
     }),
-    aesCode: z.enum(["single", "ep", "album", "mixtape"], {
+    aesCode: z.enum(["single", "ep", "album", "mixtape", "episode", "live"], {
         message: "You must select a valid release type",
     }),
     exclusive: z.boolean().default(false),
@@ -294,34 +294,34 @@ export default function NewReleasePage() {
                                         </FormItem>
                                     )}
                                 />
-                                {watchedValues.releaseType === "music" && (
-                                    <FormField
-                                        control={form.control}
-                                        name="aesCode"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Release Format</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select release format" />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value="single">Single</SelectItem>
-                                                        <SelectItem value="ep">EP</SelectItem>
-                                                        <SelectItem value="album">Album</SelectItem>
-                                                        <SelectItem value="mixtape">Mixtape</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormDescription>
-                                                    Select the format of your music release.
-                                                </FormDescription>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                )}
+                                <FormField
+                                    control={form.control}
+                                    name="aesCode"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Release Format</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select release format" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="single">Single</SelectItem>
+                                                    <SelectItem value="ep">EP</SelectItem>
+                                                    <SelectItem value="album">Album</SelectItem>
+                                                    <SelectItem value="mixtape">Mixtape</SelectItem>
+                                                    <SelectItem value="episode">Episode</SelectItem>
+                                                    <SelectItem value="live">Live</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormDescription>
+                                                Select the format of your  {watchedValues.releaseType === "music" ? "music" : "podcast"} release.
+                                            </FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                                 <FormField
                                     control={form.control}
                                     name="releaseDate"

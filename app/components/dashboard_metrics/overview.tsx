@@ -10,12 +10,18 @@ import { getMonthlyStatsAction } from '@/actions/dashboard/getOverview-stats'
 export function Overview({ artistID }: ArtistID) {
   const [data, setMonthly] = useState<MonthlyData[] | any>([])
   const [filteredData, setFilteredData] = useState<any[]>([])
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
+  const [selectedMonthsNumber, setselectedMonthsNumber] = useState(12)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [valueRange, setValueRange] = useState({ min: 0, max: 0 })
 
-  const availableYears = ['2021', '2022', '2023', '2024', '2025']
+  const availablePeriods = [
+    { label: 'Last 3 months', value: 3 },
+    { label: 'Last 6 months', value: 6 },
+    { label: 'Last 12 months', value: 12 },
+    { label: 'Last 24 months', value: 24 },
+    { label: 'Last 36 months', value: 36 },
+  ];
 
   // Process data to separate positive and negative values
   const processChartData = (data: any[]) => {
@@ -26,13 +32,13 @@ export function Overview({ artistID }: ArtistID) {
     }));
   };
 
-  
 
-  const fetchData = async (year: string) => {
+
+  const fetchData = async (months_number: number) => {
     if (!artistID) return;
     setIsLoading(true);
     try {
-      const monthlyData = await getMonthlyStatsAction(artistID, year);
+      const monthlyData = await getMonthlyStatsAction(artistID, months_number);
       setMonthly(monthlyData);
 
       if (Array.isArray(monthlyData) && monthlyData.length > 0) {
@@ -53,8 +59,8 @@ export function Overview({ artistID }: ArtistID) {
   };
 
   useEffect(() => {
-    fetchData(selectedYear);
-  }, [artistID, selectedYear]);
+    fetchData(selectedMonthsNumber);
+  }, [artistID, selectedMonthsNumber]);
 
   if (isLoading) {
     return <OverViewSkeleton />
@@ -76,19 +82,21 @@ export function Overview({ artistID }: ArtistID) {
             <CardTitle>Total Plays Overview</CardTitle>
             <CardDescription>Monthly % Change in Total Track Plays showing increase (green) and decline (red) areas</CardDescription>
           </div>
-          <Select value={selectedYear} onValueChange={(year) => {
-            setSelectedYear(year);
-            fetchData(year);
+          <Select value={selectedMonthsNumber.toString()} onValueChange={(value) => {
+            const periodValue = parseInt(value, 10);
+            setselectedMonthsNumber(periodValue);
+            fetchData(periodValue);
           }}>
             <SelectTrigger className="w-32">
               <SelectValue placeholder="Select year" />
             </SelectTrigger>
             <SelectContent>
-              {availableYears.map((year) => (
-                <SelectItem key={year} value={year}>
-                  {year}
+              {availablePeriods.map((period) => (
+                <SelectItem key={period.value} value={period.value.toString()}>
+                  {period.label}
                 </SelectItem>
               ))}
+
             </SelectContent>
           </Select>
         </div>
@@ -153,9 +161,9 @@ export function Overview({ artistID }: ArtistID) {
                   return null
                 }}
               />
-              <ReferenceLine 
-                y={0} 
-                stroke="#888888" 
+              <ReferenceLine
+                y={0}
+                stroke="#888888"
                 strokeWidth={1}
                 strokeDasharray="3 3"
               />

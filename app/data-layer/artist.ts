@@ -41,6 +41,36 @@ export const fetchUserArtists = async (userId: string, userRole: string) => {
 
 };
 
+
+export const saveTrackDetails = async (trackDetails: UploadTrackDetails) => {
+    try {
+        const response = await axiosInstance.post('artist/saveTrackDetails.php', { trackDetails: trackDetails });
+        if (response.status === 200) {
+            const { status, data } = response.data
+            return data;
+        }
+        return null;
+    } catch (error) {
+        console.log('Error Saving user details:', error);
+        return null;
+    }
+}
+
+
+export const saveUploadDetails = async (mediaUpload_details: MediaUploadDetails) => {
+    try {
+        const response = await axiosInstance.post('artist/saveMediaUpload.php', { mediaUploadDetails: mediaUpload_details });
+        if (response.status === 200) {
+            const { status, data } = response.data
+            return data;
+        }
+        return null;
+    } catch (error) {
+        console.log('Error Saving user details:', error);
+        return null;
+    }
+}
+
 export const saveNewRelease = async (releaseDetails: NewReleaseDetails) => {
     try {
         const response = await axiosInstance.post('artist/createNewRelease.php', { releaseDetails: releaseDetails });

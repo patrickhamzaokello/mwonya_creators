@@ -1,5 +1,6 @@
 "use server"
 import { auth } from '@/auth';
+import { saveUploadDetails, saveTrackDetails } from '@/data-layer/artist';
 
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
@@ -17,7 +18,7 @@ const s3 = new S3Client({
 
 const acceptedFileTypes = [
     "image/jpeg", "image/JPG", "image/png", "image/webp", "image/gif",
-    "video/mp4", "video/webm", "audio/mp3", "audio/aac","audio/vnd.dlna.adts", "audio/x-m4a", "audio/wav", "audio/m4a", "audio/mpeg"
+    "video/mp4", "video/webm", "audio/mp3", "audio/aac", "audio/vnd.dlna.adts", "audio/x-m4a", "audio/wav", "audio/m4a", "audio/mpeg"
 ];
 
 const maxFileSize = 10 * 1024 * 1024; // 10MB
@@ -30,7 +31,7 @@ const generateFilename = (fileType: string, bytes = 32) => {
     return `${randomString}.${extension}`;
 };
 
-export async function getTrackSignedURL(fileType: string, fileSize: number, checksum: string) {
+export async function getTrackSignedURL(fileType: string, fileSize: number, checksum: string, mw_upload_type: string) {
     const session = await auth();
     if (!session) {
         return { failure: "Not authenticate" }
@@ -44,9 +45,11 @@ export async function getTrackSignedURL(fileType: string, fileSize: number, chec
         return { failure: "File size too large" }
     }
 
+    const file_genName = generateFilename(fileType);
+
     const putObjectCommand = new PutObjectCommand({
         Bucket: process.env.AWS_BUCKET_NAME!,
-        Key: generateFilename(fileType),
+        Key: file_genName,
         ContentType: fileType,
         ContentLength: fileSize,
         ChecksumSHA256: checksum,
@@ -58,55 +61,63 @@ export async function getTrackSignedURL(fileType: string, fileSize: number, chec
         expiresIn: 300, // link available for only 5 mins 60 * 5
     });
 
-    // const mediaResult = await prisma.mediaUpload.create({
-    //     data: {
-    //         fileUrl: signedURL.split("?")[0],
-    //         type: fileType.startsWith("image") ? "image" : fileType.startsWith("video") ? "video" : "audio",
-    //         userId: session.user.id ?? "null",
-    //     }
-    // })
+    const media_details: MediaUploadDetails = {
+        user_id: session.user.id ?? "null",
+        upload_type: mw_upload_type,
+        file_path: url.split("?")[0],
+        file_name: file_genName,
+        file_hash: checksum,
+        file_size: fileSize,
+        file_format: fileType,
+        metadata: JSON.stringify({ file_genName, fileSize, mw_upload_type }),
+        is_active: 0
+    }
 
-    // return { success: { url: signedURL, mediaId: mediaResult.id } }
+    const mediaResult = await saveUploadDetails(media_details);
 
-    return { success: { signedURL: url, mediaId: 2 } }
+    if (!mediaResult) {
+        return { failure: "Failed to save upload details" }
+    }
+
+    if (!mediaResult.success) {
+        return { failure: "Failed to Save upload Details" }
+    }
+
+    return { success: { signedURL: url, upload_id: mediaResult.upload_id } }
 
 }
 
 
-export async function createTrackDetails({ content, mediaId }: TMediaUploadDescription) {
+export async function createTrackDetails({ reference_id, title, artist, album, genre, upload_id, duration, tag, metadata, releasedate }: UploadTrackDetails) {
     const session = await auth();
     if (!session) {
         return { failure: "Not authenticate" }
     }
 
-    // // make sure mediaId exist and is created by current user
-    // const mediaItem = await prisma.mediaUpload.findUnique({
-    //     where: {
-    //         id: mediaId,
-    //         userId: session.user.id,
-    //     }
-    // })
+    const trackDetails: UploadTrackDetails = {
+        reference_id,
+        title,
+        artist,
+        album,
+        genre,
+        upload_id,
+        duration,
+        tag,
+        metadata,
+        releasedate
+    }
 
-    // if (!mediaItem) {
-    //     return { failure: "Media item not found" }
-    // }
-    // // create a media description
-    // const mediaDescription = await prisma.mediaDescription.create({
-    //     data: {
-    //         content,
-    //         mediaId: mediaItem.id,
-    //     }
-    // })
-    // // link uploaded media to the media description
-    // await prisma.mediaUpload.update({
-    //     where: {
-    //         id: mediaItem.id,
-    //     },
-    //     data: {
-    //         mediaDescriptions: {
-    //             connect: { id: mediaDescription.id },
-    //         },
-    //     },
-    // });
+
+    const track_results = await saveTrackDetails(trackDetails);
+
+    if (!track_results) {
+        return { failure: "Failed to save track details" }
+    }
+
+    if (!track_results.success) {
+        return { failure: "Server failure, Check Track Details" }
+    }
+
+    return { success: { track_reference_id: track_results.reference_id, message: track_results.message } }
 
 }
