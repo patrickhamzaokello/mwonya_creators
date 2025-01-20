@@ -191,11 +191,11 @@ export default function LandingPage() {
                                 {features.slice(0, 4).map((feature, index) => (
                                     <Card
                                         key={index}
-                                        className="group p-6 hover:shadow-lg transition-all duration-300 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm"
+                                        className="group p-6 hover:shadow-lg transition-all duration-300 dark:bg-zinc-900/50 backdrop-blur-sm"
                                     >
-                                        <feature.icon className="h-8 w-8 text-zinc-700 dark:text-zinc-300 mb-4 group-hover:scale-110 transition-transform" />
-                                        <h3 className="font-semibold text-lg mb-2 text-zinc-900 dark:text-zinc-100">{feature.title}</h3>
-                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">{feature.description}</p>
+                                        <feature.icon className="h-8 w-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                                        <h3 className="font-semibold text-lg mb-2 ">{feature.title}</h3>
+                                        <p className="text-sm text-white/50">{feature.description}</p>
                                     </Card>
                                 ))}
                             </div>
@@ -205,11 +205,11 @@ export default function LandingPage() {
             </section>
 
             {/* Features Grid */}
-            <section className="py-16 md:py-24">
+            <section className="py-16 md:py-24 bg-background">
                 <div className="container mx-auto px-4 md:px-6">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold mb-4 text-zinc-900 dark:text-zinc-50">Everything You Need to Succeed</h2>
-                        <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+                        <h2 className="text-3xl font-bold mb-4">Everything You Need to Succeed</h2>
+                        <p className="text-white/50 max-w-2xl mx-auto">
                             Comprehensive tools and resources to help you navigate the music industry and grow your career.
                         </p>
                     </div>
@@ -218,7 +218,7 @@ export default function LandingPage() {
                         {features.map((feature, index) => (
                             <Card
                                 key={index}
-                                className="group p-6 hover:shadow-lg transition-all duration-300 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm"
+                                className="group p-6 hover:shadow-lg transition-all duration-300 bg-white backdrop-blur-sm"
                             >
                                 <feature.icon className="h-12 w-12 text-zinc-700 dark:text-zinc-300 mb-4 group-hover:scale-110 transition-transform" />
                                 <h3 className="text-xl font-semibold mb-2 text-zinc-900 dark:text-zinc-100">{feature.title}</h3>
