@@ -1,23 +1,17 @@
-import { prisma } from "@/lib/prisma";
-
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
-import { MediaUploadType } from "@prisma/client";
 import axiosInstance from "@/lib/axiosInstance";
-import { NextResponse } from 'next/server';
-
-
+import { prisma } from "@/lib/prisma";
+import { MediaUploadType } from "@prisma/client";
 
 // return artist profile where userId is matching
 export const getArtistProfileByUserId = async (userId: string) => {
     try {
-        const artistProfile = await prisma.artist.findFirst({
-            where: { userId: userId }
-        });
-
-        return artistProfile;
-    } catch {
-        return null;
+        const response = await axiosInstance.post('/artist/creator_artist_exist.php', { creator_id: userId });
+        return response.data;
+    } catch (error) {
+        return {
+            status: "error",
+            message: "Fetch Error Has occured",
+        };
     }
 }
 
@@ -168,34 +162,8 @@ export const fetchContentDetails = async (content_id: string) => {
 
 };
 
-// check if artist name exists
-export const getArtistProfileByName = async (artist_name: string) => {
-    try {
-        const artistProfile = await prisma.artist.findFirst({
-            where: { name: artist_name }
-        });
 
-        return artistProfile;
-    } catch {
-        return null;
-    }
-}
 
-// Check if any artist associated with the given user ID is independent
-export const isAnyArtistIndependentByUserId = async (currentUserID: string | undefined | null) => {
-    try {
-        const independentArtists = await prisma.artist.findMany({
-            where: {
-                userId: currentUserID,
-                isIndependent: true
-            }
-        });
-
-        return independentArtists.length > 0;
-    } catch {
-        return false;
-    }
-}
 
 // create new artist
 export const CreateArtistProfile = async (name: string, genred: string, biography: string | undefined, isIndependent: boolean | undefined, labelId: string, artistAgreetoTermsConditions: boolean | undefined, artistAgreetoContentUploadPolicy: boolean | undefined, currentUserID: string) => {

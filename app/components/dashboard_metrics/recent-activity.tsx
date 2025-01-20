@@ -63,17 +63,17 @@ function RecentActivitySkeleton() {
   return (
     <Card className="col-span-4">
       <CardHeader>
-        <Skeleton className="h-6 w-1/4" />
-        <Skeleton className="h-4 w-1/2 mt-2" />
+        <Skeleton className="h-6 w-1/4 bg-accent" />
+        <Skeleton className="h-4 w-1/2 mt-2 bg-accent" />
       </CardHeader>
       <CardContent>
         <div className="space-y-8">
           {Array(3).fill(0).map((_, i) => (
             <div key={i} className="flex items-center">
-              <Skeleton className="h-9 w-9 rounded-full" />
+              <Skeleton className="h-9 w-9 rounded-full bg-accent" />
               <div className="ml-4 space-y-1">
-                <Skeleton className="h-4 w-[150px]" />
-                <Skeleton className="h-4 w-[100px]" />
+                <Skeleton className="h-4 w-[150px] bg-accent" />
+                <Skeleton className="h-4 w-[100px] bg-accent" />
               </div>
             </div>
           ))}

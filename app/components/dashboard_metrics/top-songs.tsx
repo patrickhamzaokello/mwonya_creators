@@ -47,19 +47,19 @@ function TopSongsSkeleton() {
   return (
     <Card className="col-span-3">
       <CardHeader>
-        <Skeleton className="h-6 w-1/4" />
-        <Skeleton className="h-4 w-1/2 mt-2" />
+        <Skeleton className="h-6 w-1/4 bg-accent" />
+        <Skeleton className="h-4 w-1/2 mt-2 bg-accent" />
       </CardHeader>
       <CardContent>
         <div className="space-y-8">
           {Array(5).fill(0).map((_, i) => (
             <div key={i} className="flex items-center">
-              <Skeleton className="h-9 w-9 rounded-full" />
+              <Skeleton className="h-9 w-9 rounded-full bg-accent" />
               <div className="ml-4 space-y-1">
-                <Skeleton className="h-4 w-[100px]" />
-                <Skeleton className="h-4 w-[60px]" />
+                <Skeleton className="h-4 w-[100px] bg-accent" />
+                <Skeleton className="h-4 w-[60px] bg-accent" />
               </div>
-              <Skeleton className="h-4 w-[20px] ml-auto" />
+              <Skeleton className="h-4 w-[20px] ml-auto bg-accent" />
             </div>
           ))}
         </div>

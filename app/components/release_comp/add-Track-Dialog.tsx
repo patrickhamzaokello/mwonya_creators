@@ -73,7 +73,13 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
             const checksum = await computeSHA256(file.file)
             const signedURLResult = await getTrackSignedURL(file.file.type, file.file.size, checksum, 'track')
 
+
             if (signedURLResult.failure !== undefined) {
+                toast({
+                    title: "Error",
+                    description: signedURLResult.message,
+                    variant: "destructive",
+                  })
                 throw new Error(signedURLResult.failure)
             }
 
@@ -142,11 +148,22 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
                                 releasedate: album_release_date
                             });
 
-                            if (createTrackResponse.failure !== undefined) {
+                            if (!createTrackResponse.success) {
+                                toast({
+                                    title: "Success",
+                                    description: "Failed to save track details",
+                                    variant: "destructive",
+                                  })
                                 throw new Error(createTrackResponse.failure)
                             }
 
                             const { track_reference_id, message } = createTrackResponse.success
+
+                            toast({
+                                title: "Success",
+                                description: message,
+                                variant: "default",
+                              })
 
 
                         } catch (saveError) {
@@ -178,7 +195,6 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
             })
 
         } catch (error) {
-            console.error('Error uploading file:', error)
             setUploadingFiles(prev => prev.map((f, i) =>
                 i === index ? { ...f, status: 'error' } : f
             ))

@@ -10,8 +10,8 @@
     --card-foreground: 0 0% 90%;
     --popover: 0 0% 10%;
     --popover-foreground: 0 0% 90%;
-    --primary: 47.9 95.8% 53.1%;
-    --primary-foreground: 26 83.3% 14.1%;
+    --primary: 270 95.8% 53.1%;
+    --primary-foreground: 270 83.3% 98%;
     --secondary: 60 4.8% 95.9%;
     --secondary-foreground: 24 9.8% 10%;
     --muted: 0 0% 15%;
@@ -46,8 +46,8 @@
     --card-foreground: 0 0% 10%;
     --popover: 0 0% 95%;
     --popover-foreground: 0 0% 10%;
-    --primary: 47.9 95.8% 53.1%;
-    --primary-foreground: 26 83.3% 14.1%;
+    --primary: 270 95.8% 53.1%;
+    --primary-foreground: 270 83.3% 98%;
     --secondary: 12 6.5% 15.1%;
     --secondary-foreground: 60 9.1% 97.8%;
     --muted: 0 0% 90%;
@@ -146,3 +146,22 @@
   animation: gradient-x 15s ease infinite;
 }
 
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+.animate-blob {
+  animation: blob 10s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}

@@ -1,30 +1,20 @@
-import localFont from 'next/font/local'
-import { cn } from '@/lib/utils'
-import "@/globals.css"
-import OnboardingHeading from './Heading'
+import { cn } from "@/lib/utils"
+import OnboardingHeading from "./Heading"
 
-
-
-
-export default async function CreateProfile({
+export default function CreateProfile({
     children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
-
-
+  }: Readonly<{
+    children: React.ReactNode
+  }>) {
     return (
-        <div>
-           <div className='bg-white'><OnboardingHeading/></div>
-         <div className='container mx-auto px-4 max-w-7xl'>
-         {children}
-         </div>
-        </div>
-
-    );
-
-
-}
-
-
-
+      <div className="min-h-screen flex flex-col bg-background text-foreground">
+        <OnboardingHeading />
+        <main className="flex-grow">{children}</main>
+        <footer className="py-6 text-center text-muted-foreground bg-muted">
+          <p>&copy; 2025 MWONYA CREATORS. All rights reserved.</p>
+        </footer>
+      </div>
+    )
+  }
+  
+  

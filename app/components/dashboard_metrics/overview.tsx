@@ -201,14 +201,14 @@ function OverViewSkeleton() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <Skeleton className="h-6 w-32" />
-            <Skeleton className="h-4 w-48 mt-2" />
+            <Skeleton className="h-6 w-32 bg-accent" />
+            <Skeleton className="h-4 w-48 mt-2 bg-accent" />
           </div>
-          <Skeleton className="h-10 w-32" />
+          <Skeleton className="h-10 w-32 bg-accent" />
         </div>
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-[350px] w-full" />
+        <Skeleton className="h-[350px] w-full bg-accent" />
       </CardContent>
     </Card>
   )

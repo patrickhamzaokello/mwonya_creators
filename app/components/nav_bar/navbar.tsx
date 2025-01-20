@@ -14,8 +14,9 @@ import { Bell, FileUp, LogOut, Plus, Search, Settings, User } from 'lucide-react
 import { SignOutButton } from './sign-out-button'
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { ArtistSelector } from './artist-selector'
+import { Session } from "next-auth";
 
-const DashboardNavbar = ({ session, userRole }: { session: any, userRole: string }) => {
+const DashboardNavbar = ({ session }: { session: Session }) => {
     const [artists, setArtists] = useState<TArtist[]>([])
     const [selectedArtist, setSelectedArtist] = useArtist()
     const [searchQuery, setSearchQuery] = useState('')
@@ -100,7 +101,7 @@ const DashboardNavbar = ({ session, userRole }: { session: any, userRole: string
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                                 <Avatar className="h-8 w-8">
-                                    <AvatarImage src={session?.user?.image} alt={session?.user?.name} />
+                                    <AvatarImage src={session?.user?.image ?? undefined} alt={session?.user?.name ?? undefined} />
                                     <AvatarFallback>{session?.user?.name?.[0]}</AvatarFallback>
                                 </Avatar>
                             </Button>

@@ -34,22 +34,22 @@ const generateFilename = (fileType: string, bytes = 32) => {
 export async function getTrackSignedURL(fileType: string, fileSize: number, checksum: string, mw_upload_type: string) {
     const session = await auth();
     if (!session) {
-        return { failure: "Not authenticate" }
+        return { failure: "Not authenticate",message: "Invalid User Details" }
     }
 
     if (!acceptedFileTypes.includes(fileType)) {
-        return { failure: "Invalid file type" }
+        return { failure: "Invalid file type",message: "Invalid File Type, only Audio files allowed" }
     }
 
     if (fileSize > maxFileSize) {
-        return { failure: "File size too large" }
+        return { failure: "File size too large", message: "The File is too large - allowed max. size is 10Mb" }
     }
 
     const file_genName = generateFilename(fileType);
 
     const putObjectCommand = new PutObjectCommand({
         Bucket: process.env.AWS_BUCKET_NAME!,
-        Key: file_genName,
+        Key: `${mw_upload_type}s/${file_genName}`,
         ContentType: fileType,
         ContentLength: fileSize,
         ChecksumSHA256: checksum,
@@ -75,12 +75,13 @@ export async function getTrackSignedURL(fileType: string, fileSize: number, chec
 
     const mediaResult = await saveUploadDetails(media_details);
 
+
     if (!mediaResult) {
-        return { failure: "Failed to save upload details" }
+        return { failure: "Failed to save upload details", message: "Invalid response" }
     }
 
     if (!mediaResult.success) {
-        return { failure: "Failed to Save upload Details" }
+        return { failure: "Failed to Save upload Details", message: mediaResult.message }
     }
 
     return { success: { signedURL: url, upload_id: mediaResult.upload_id } }

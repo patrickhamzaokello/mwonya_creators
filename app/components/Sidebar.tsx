@@ -7,7 +7,7 @@ import {
   Command,
   Frame,
   LifeBuoy,
-  Map,
+  ReceiptPoundSterling,
   PieChart,
   Send,
   Settings2,
@@ -30,26 +30,30 @@ import {
 } from "@/components/ui/sidebar"
 
 import { usePathname } from 'next/navigation'
-
 import Link from "next/link";
 import { Home, BarChart2, Users, Settings } from 'lucide-react'
+import { Session } from "next-auth";
 
-const AppSidebar = () => {
+const AppSidebar = ({ session }: { session: Session }) => {
   const pathname = usePathname()
 
   const data = {
     user: {
-      name: "pk",
-      email: "m@example.com",
+      name: session?.user?.name || "Guest",
+      email: session?.user?.email || "guest@example.com",
       avatar: "/avatars/shadcn.jpg",
     },
     navMain: [
       {
-        title: "Release",
+        title: "Home",
         url: "#",
         icon: SquareTerminal,
         isActive: true,
         items: [
+          {
+            title: "Dasboard",
+            url: "/studio",
+          },
           {
             title: "New Single",
             url: "/new_single",
@@ -59,30 +63,27 @@ const AppSidebar = () => {
             url: "/new_release",
           },
           {
-            title: "My Releases",
+            title: "Releases",
             url: "/mwonya_release",
           },
-          {
-            title: "Metrics",
-            url: "/studio",
-          },
+          
         ],
       },
       {
-        title: "Circles",
+        title: "Earnings",
         url: "#",
         icon: Bot,
         items: [
           {
-            title: "Members",
+            title: "All",
             url: "#",
           },
           {
-            title: "Metric",
+            title: "Streams",
             url: "#",
           },
           {
-            title: "Settings",
+            title: "Circle",
             url: "#",
           },
         ],
@@ -100,6 +101,21 @@ const AppSidebar = () => {
             title: "All Events",
             url: "#",
           }
+        ],
+      },
+      {
+        title: "Manage",
+        url: "#",
+        icon: Frame,
+        items: [
+          {
+            title: "New Artist",
+            url: "#",
+          },
+          {
+            title: "Manage Artists",
+            url: "#",
+          },
         ],
       },
       {
@@ -145,34 +161,37 @@ const AppSidebar = () => {
     ],
     navSecondary: [
       {
-        title: "Support",
+        title: "contact",
         url: "#",
         icon: LifeBuoy,
       },
       {
-        title: "Feedback",
+        title: "Mail",
         url: "#",
         icon: Send,
       },
     ],
-    projects: [
-      {
-        name: "New Artist",
-        url: "studio",
-        icon: Frame,
-      },
-      {
-        name: "Data",
-        url: "Releases",
-        icon: PieChart,
-      },
-      {
-        name: "Tour",
-        url: "Releases",
-        icon: Map,
-      },
-    ],
+    
   }
+
+
+  // Filter navMain items based on user role
+  const filteredNavMain = data.navMain.filter(item => {
+    if (session?.user?.role === 'admin') {
+      return true; // Admins see all items
+    }
+    if (session?.user?.role === 'artist' && ['Home', 'Earnings', 'Settings'].includes(item.title)) {
+      return true; // Artists see all items except 'Circles'
+    }
+    if (session?.user?.role === 'label' && ['Home', 'Earnings', 'Settings', 'Manage'].includes(item.title)) {
+      return true; // Labels see all items except 'Events'
+    }
+    if (session?.user?.role === 'user' && item.title === 'Home') {
+      return true; // Users only see 'Home'
+    }
+    return false; // Default to hiding the item
+  });
+
   
 
   return (
@@ -187,7 +206,7 @@ const AppSidebar = () => {
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">MWONYA</span>
-                  <span className="truncate text-xs">Creators</span>
+                  <span className="truncate text-xs">{session.user.role}</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -196,11 +215,8 @@ const AppSidebar = () => {
       </SidebarHeader>
 
       <SidebarContent>
-      <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+      <NavMain items={filteredNavMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
-
-        
       </SidebarContent>
       
       <SidebarFooter>

@@ -23,20 +23,19 @@ export default async function DashboardLayout({
   if (!session?.user.id) {
     redirect("/auth/login");
   }
-  const userId = session.user.id ?? "null";
-  const roleCheckResult = await loginRoleChecks(userId);
-  if (roleCheckResult.profileStatus.needsProfileCreation) {
+
+  const roleCheckResult = await loginRoleChecks(session);
+
+  if (roleCheckResult.needsProfileCreation) {
     redirect("/create_profile");
   }
 
   return (
     <ArtistProvider>
       <SidebarProvider>
-        <AppSidebar  />
+        <AppSidebar session={session} />
         <main className="w-full">
-         
-           <DashboardNavbar session={session} userRole={roleCheckResult?.user.role} />
-          
+          <DashboardNavbar session={session} />
           <div className="p-4 md:gap-8 md:p-4" >
             {children}
           </div>

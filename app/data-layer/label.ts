@@ -75,34 +75,7 @@ export const fetchUserArtists = async (userId: string) => {
     }
 };
 
-// check if artist name exists
-export const getArtistProfileByName = async (artist_name: string) => {
-    try {
-        const artistProfile = await prisma.artist.findFirst({
-            where: { name: artist_name }
-        });
 
-        return artistProfile;
-    } catch {
-        return null;
-    }
-}
-
-// Check if any artist associated with the given user ID is independent
-export const isAnyArtistIndependentByUserId = async (currentUserID: string | undefined | null) => {
-    try {
-        const independentArtists = await prisma.artist.findMany({
-            where: {
-                userId: currentUserID,
-                isIndependent: true
-            }
-        });
-
-        return independentArtists.length > 0;
-    } catch {
-        return false;
-    }
-}
 
 // create new artist
 export const CreateArtistProfile = async (name: string, genred: string, biography: string | undefined, isIndependent: boolean | undefined, labelId: string, artistAgreetoTermsConditions: boolean | undefined, artistAgreetoContentUploadPolicy: boolean | undefined, currentUserID: string ) => {

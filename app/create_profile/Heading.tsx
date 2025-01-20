@@ -1,52 +1,53 @@
 import Link from "next/link"
-import React from "react"
-import { auth} from "@/auth"
-import Image from "next/image";
-import { SignInButton } from "@/components/SignInButtton";
-import { SignOutButton } from "@/components/SignOutButton";
+import { auth } from "@/auth"
+import { SignInButton } from "@/components/SignInButtton"
+import { SignOutButton } from "@/components/SignOutButton"
+import { Button } from "@/components/ui/button"
+import { MusicIcon, BuildingIcon, HelpCircleIcon } from "lucide-react"
 
 export default async function OnboardingHeading() {
-    const session = await auth();
-
+    const session = await auth()
+  
     return (
-        <header className="w-full py-4 block mx-auto container max-w-7xl" >
-            <div className="container flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <Link href="/create_profile/" className="text-lg font-bold" prefetch={false}>
-                        MWONYA CREATORS
-                    </Link>
-                    <Link href="/create_profile/artist" className="text-active-foreground hover:underline" prefetch={false}>
-                        Indie Artist
-                    </Link>
-                    <Link href="/create_profile/recordlabel" className="text-active-foreground hover:underline" prefetch={false}>
-                        Record Label
-                    </Link>
-                   
-                    
-                </div>
-                <div className="flex items-center gap-4">
-                <Link href="#" className="text-muted-foreground hover:underline" prefetch={false}>
-                        Help
-                    </Link>
-                    {session?.user ? (
-                        <>
-                            <div className="flex flex-col">
-                                <span className="text-muted-foreground">{session.user.name}</span>
-                            </div>
-                            
-
-                         <SignOutButton />                           
-                        </>
-                    ) : (
-                        <>
-                            
-                            <SignInButton/>
-                        </>
-
-                    )}
-
-                </div>
-            </div>
-        </header>
+      <header className="w-full py-4 bg-background/80 backdrop-blur-md border-b border-border">
+        <div className="container mx-auto px-4 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <Link href="/create_profile/" className="text-2xl font-bold text-foreground" prefetch={false}>
+              MWONYA CREATORS
+            </Link>
+            <nav className="hidden md:flex space-x-4">
+              <Link href="/create_profile/artist" prefetch={false}>
+                <Button variant="ghost" className="text-foreground hover:text-foreground hover:bg-accent">
+                  <MusicIcon className="mr-2 h-4 w-4" />
+                  Indie Artist
+                </Button>
+              </Link>
+              <Link href="/create_profile/recordlabel" prefetch={false}>
+                <Button variant="ghost" className="text-foreground hover:text-foreground hover:bg-accent">
+                  <BuildingIcon className="mr-2 h-4 w-4" />
+                  Record Label
+                </Button>
+              </Link>
+            </nav>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="#" prefetch={false}>
+              <Button variant="ghost" className="text-foreground hover:text-foreground hover:bg-accent">
+                <HelpCircleIcon className="mr-2 h-4 w-4" />
+                Help
+              </Button>
+            </Link>
+            {session?.user ? (
+              <div className="flex items-center gap-4">
+                <span className="text-foreground">{session.user.name}</span>
+                <SignOutButton />
+              </div>
+            ) : (
+              <SignInButton />
+            )}
+          </div>
+        </div>
+      </header>
     )
-}
+  }
+  

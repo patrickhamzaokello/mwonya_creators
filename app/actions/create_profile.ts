@@ -1,7 +1,7 @@
 "use server"
 import * as z from "zod";
 import { CreateArtistSchema, CreateRecordLableSchema } from "@/lib/schemas";
-import { CreateArtistProfile, getArtistProfileByName, isAnyArtistIndependentByUserId, SaveArtistProfileUpload, updateArtistProfileImage } from "@/data-layer/artist";
+import { CreateArtistProfile, SaveArtistProfileUpload, updateArtistProfileImage } from "@/data-layer/artist";
 import { CreateNewRecordLabel, getLabelByName } from "@/data-layer/recordlabel";
 import { auth } from '@/auth';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
@@ -62,17 +62,8 @@ export const registerArtist = async (formData: FormData): Promise<CreateAristFor
             content_upload_policy: artistAgreetoContentUploadPolicy
         } = validatedFields;
 
-        // check if user is independent,
-        const isUserIndependent = await isAnyArtistIndependentByUserId(current_userId)
-        if (isUserIndependent) {
-            return { status: "error", message: "You can not create more than one Artist Profile. This option is only available for Record Labels" };
-        }
 
-        // confirm name is not taken
-        const exisitingName = await getArtistProfileByName(artistName)
-        if (exisitingName) {
-            return { status: "error", message: "Name already taken 😞" };
-        }
+     
 
         try {
             const createArtist = await CreateArtistProfile(artistName, artistGenre, artistBiography, artistIsIndependent, artistLabelId ?? "", artistAgreetoTermsConditions, artistAgreetoContentUploadPolicy, current_userId);

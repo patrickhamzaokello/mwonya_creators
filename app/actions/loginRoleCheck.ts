@@ -1,53 +1,52 @@
-import { getUserById, updateUserProfile } from '@/data-layer/user';
 import { getArtistProfileByUserId } from '@/data-layer/artist';
 import { getLabelProfileByUserId } from '@/data-layer/label';
-import { UserRole } from "@/types/user"
+import { UserRole } from "@/types/user";
+import { Session } from "next-auth";
 
-export const loginRoleChecks = async (userid: string) => {
+export const loginRoleChecks = async (session: Session | null) => {
     const profileStatus = {
         hasArtistProfile: false,
         hasLabelProfile: false,
         isMwonyaAdmin: false,
-        needsProfileCreation: false
+        needsProfileCreation: false,
+        isUser: false
     };
 
-    const user = await getUserById(userid);
-    if (user?.role) {
-        switch (user.role) {
-            case UserRole.ARTIST:
-                const artistProfile = await getArtistProfileByUserId(userid);
-                if (artistProfile) {
-                    profileStatus.hasArtistProfile = true;
-                } else {
-                    profileStatus.needsProfileCreation = true;
-                }
-                break;
-            case UserRole.LABEL:
-                const labelProfile = await getLabelProfileByUserId(userid);
-                if (labelProfile) {
-                    profileStatus.hasLabelProfile = true;
-                } else {
-                    profileStatus.needsProfileCreation = true;
-                }
-                break;
-
-            case UserRole.ADMIN:
-                profileStatus.isMwonyaAdmin = true
-                break;
-          
-
-
-                break;
-        }
+    if (!session) {
+        profileStatus.needsProfileCreation = true;
+        return profileStatus;
     }
 
-    return {
-        user: {
-            id: user?.id,
-            email: user?.email,
-            name: user?.name,
-            role: user?.role
-        },
-        profileStatus
-    };
-}
+    switch (session?.user.role) {
+        case UserRole.ADMIN:
+            profileStatus.isMwonyaAdmin = true;
+            break;
+        case UserRole.ARTIST:
+            const artistProfile = session?.user.id ? await getArtistProfileByUserId(session.user.id) : null;
+            if (artistProfile.status && artistProfile.artist_available) {
+                profileStatus.hasArtistProfile = true;
+            } else {
+                profileStatus.needsProfileCreation = true;
+            }
+            break;
+
+        case UserRole.LABEL:
+            const labelProfile = session?.user.id ? await getArtistProfileByUserId(session.user.id) : null;
+
+            if (labelProfile) {
+                profileStatus.hasLabelProfile = true;
+            } else {
+                profileStatus.needsProfileCreation = true;
+            }
+            break;
+
+        case UserRole.USER:
+            profileStatus.isUser = true;
+            break;
+        default:
+            profileStatus.needsProfileCreation = true;
+            break;
+    }
+
+    return profileStatus
+};

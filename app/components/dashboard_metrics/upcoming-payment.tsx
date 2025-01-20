@@ -61,12 +61,12 @@ function UpcomingPayoutSkeleton() {
   return (
     <Card className="col-span-3">
       <CardHeader>
-        <Skeleton className="h-6 w-1/4" />
-        <Skeleton className="h-4 w-1/2 mt-2" />
+        <Skeleton className="h-6 w-1/4 bg-accent" />
+        <Skeleton className="h-4 w-1/2 mt-2 bg-accent" />
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-8 w-full" />
-        <Skeleton className="h-4 w-2/3 mt-2" />
+        <Skeleton className="h-8 w-full bg-accent" />
+        <Skeleton className="h-4 w-2/3 mt-2 bg-accent" />
       </CardContent>
     </Card>
   )
