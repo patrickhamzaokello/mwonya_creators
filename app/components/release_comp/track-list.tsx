@@ -8,6 +8,8 @@ import { TrackRow } from './track-row'
 import { getContentDetails } from '@/actions/getArtists'
 import { AddTrackDialog } from './add-Track-Dialog'
 
+import { Skeleton } from '@/components/ui/skeleton'
+
 interface Track {
     title: string
     duration: string
@@ -17,29 +19,45 @@ interface Track {
 
 export function TrackList({ id }: { id: string }) {
     const [tracks, setTracks] = useState<Track[]>([])
-    const [artistId, setArtistId] = useState('');
-    const [albumId, setAlbumId] = useState('');
-    const [genreId, setGenreId] = useState<number>(0);
-    const [albumTag, setAlbumTag] = useState('');
-    const [albumReleaseDate, setAlbumReleaseDate] = useState('');
+    const [artistId, setArtistId] = useState('')
+    const [albumId, setAlbumId] = useState('')
+    const [genreId, setGenreId] = useState<number>(0)
+    const [albumTag, setAlbumTag] = useState('')
+    const [albumReleaseDate, setAlbumReleaseDate] = useState('')
     const [currentTrack, setCurrentTrack] = useState<number | null>(null)
     const [isPlaying, setIsPlaying] = useState(false)
     const [progress, setProgress] = useState(0)
     const [currentTime, setCurrentTime] = useState('0:00')
     const howlRef = useRef<Howl | null>(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [isFetching, setIsFetching] = useState(true)
 
+    const LoadingSkeleton = () => (
+        <div className="divide-y">
+            {[1, 2, 3, 4, 5].map((index) => (
+                <div key={index} className="flex items-center gap-4 p-4">
+                    <div className="flex items-center gap-3 flex-1">
+                        <Skeleton className="h-8 w-8 rounded-full" />
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-[200px]" />
+                            <Skeleton className="h-3 w-[100px]" />
+                        </div>
+                    </div>
+                    <Skeleton className="h-4 w-[100px]" />
+                </div>
+            ))}
+        </div>
+    )
 
     const handleUploadSuccess = () => {
-        // Refetch tracks after successful upload
         const fetchContent = async () => {
+            setIsFetching(true)
             const response = await getContentDetails(id)
             setTracks(response.content_info.tracks || [])
+            setIsFetching(false)
         }
         fetchContent()
     }
-
-
 
     const cleanup = () => {
         if (howlRef.current) {
@@ -58,17 +76,18 @@ export function TrackList({ id }: { id: string }) {
         return () => cleanup()
     }, [id])
 
-
     useEffect(() => {
         const fetchContent = async () => {
-            cleanup() // Cleanup before fetching new album
+            setIsFetching(true)
+            cleanup()
             const response = await getContentDetails(id)
             setTracks(response.content_info.tracks || [])
-            setArtistId(response.content_info.artist_id || '');
-            setAlbumId(response.content_info.content_id || '');
-            setGenreId(response.content_info.genre_id || 0);
-            setAlbumTag(response.content_info.releasetype || '');
-            setAlbumReleaseDate(response.content_info.releaseDate || '');
+            setArtistId(response.content_info.artist_id || '')
+            setAlbumId(response.content_info.content_id || '')
+            setGenreId(response.content_info.genre_id || 0)
+            setAlbumTag(response.content_info.releasetype || '')
+            setAlbumReleaseDate(response.content_info.releaseDate || '')
+            setIsFetching(false)
         }
         fetchContent()
     }, [id])
@@ -185,21 +204,25 @@ export function TrackList({ id }: { id: string }) {
                     />
                 </div>
 
-                <div className="divide-y">
-                    {tracks.map((track, index) => (
-                        <TrackRow
-                            key={index}
-                            track={track}
-                            index={index}
-                            isPlaying={currentTrack === index && isPlaying}
-                            onPlayToggle={() => handlePlayToggle(index)}
-                            progress={currentTrack === index ? progress : 0}
-                            currentTime={currentTrack === index ? currentTime : '0:00'}
-                            onSeek={(percent) => handleSeek(index, percent)}
-                            isLoading={currentTrack === index && isLoading}
-                        />
-                    ))}
-                </div>
+                {isFetching ? (
+                    <LoadingSkeleton />
+                ) : (
+                    <div className="divide-y">
+                        {tracks.map((track, index) => (
+                            <TrackRow
+                                key={index}
+                                track={track}
+                                index={index}
+                                isPlaying={currentTrack === index && isPlaying}
+                                onPlayToggle={() => handlePlayToggle(index)}
+                                progress={currentTrack === index ? progress : 0}
+                                currentTime={currentTrack === index ? currentTime : '0:00'}
+                                onSeek={(percent) => handleSeek(index, percent)}
+                                isLoading={currentTrack === index && isLoading}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     )

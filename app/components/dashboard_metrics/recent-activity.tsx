@@ -121,7 +121,7 @@ export function RecentActivity({ artistID }: ArtistID) {
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="text-left text-gray-400 border-b border-gray-700">
+                        <tr className="text-left text-gray-400 border-b">
                           <th className="pb-3 text-sm">Title</th>
                           <th className="pb-3 text-sm">Plays</th>
                           <th className="pb-3 text-sm">Unique Listeners</th>
@@ -130,7 +130,7 @@ export function RecentActivity({ artistID }: ArtistID) {
                       </thead>
                       <tbody>
                         {albumData.tracks.map((track: any) => (
-                          <tr key={track.songTitle} className="border-b border-gray-700/50">
+                          <tr key={track.songTitle} className="border-b">
                             <td className="py-3 text-sm">{track.songTitle}</td>
                             <td className="py-3 text-sm">{track.totalPlays}</td>
                             <td className="py-3 text-sm">{track.uniqueListeners}</td>
