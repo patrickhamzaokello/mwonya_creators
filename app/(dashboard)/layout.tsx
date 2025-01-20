@@ -3,12 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Menu from "@/components/Menu"
-import Navbar from "@/components/Navbar";
 import { auth, signOut } from '@/auth';
 import { ArtistProvider } from "@/contexts/ArtistContext";
 import { loginRoleChecks } from '@/actions/loginRoleCheck';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import AppSidebar from "@/components/Sidebar"
+import DashboardNavbar from "@/components/nav_bar/navbar";
 
 
 export default async function DashboardLayout({
@@ -34,7 +34,9 @@ export default async function DashboardLayout({
       <SidebarProvider>
         <AppSidebar  />
         <main className="w-full">
-          <Navbar session={session} userRole={roleCheckResult?.user.role} />
+         
+           <DashboardNavbar session={session} userRole={roleCheckResult?.user.role} />
+          
           <div className="p-4 md:gap-8 md:p-4" >
             {children}
           </div>
