@@ -44,6 +44,33 @@ interface ContentItem {
 }
 
 
+interface lastestTrack {
+    songTitle: string;
+    totalPlays: string;
+    uniqueListeners: number;
+    avgListenDuration: number;
+}
+
+interface lastestPerformance {
+    albumTotalPlays: string;
+    albumUniqueListeners: number;
+    avgListenDurationPerTrack: number;
+}
+
+interface lastestAlbum {
+    id: string;
+    title: string;
+    artist: string;
+    artistName: string;
+    artworkPath: string;
+    genre: number;
+    releaseDate: string;
+    exclusive: number;
+    tracks: lastestTrack[];
+    performance: lastestPerformance;
+}
+
+
 interface UploadTrackDetails {
     reference_id: string;
     title: string;

@@ -20,7 +20,7 @@ export function ArtistSelector({ artists, selectedArtist, onSelectArtist }: Arti
                     variant="outline"
                     role="combobox"
                     aria-expanded={false}
-                    className="w-[250px] justify-between"
+                    className="w-[200px] justify-between"
                 >
                     {selectedArtist ? (
                         <>
@@ -36,7 +36,7 @@ export function ArtistSelector({ artists, selectedArtist, onSelectArtist }: Arti
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[250px] p-0">
+            <PopoverContent className="w-[200px] p-0">
                 <Command>
                     <CommandList>
                         <CommandInput placeholder="Search artist..." />

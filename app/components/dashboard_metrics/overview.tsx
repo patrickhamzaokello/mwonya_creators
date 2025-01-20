@@ -75,12 +75,12 @@ export function Overview({ artistID }: ArtistID) {
   const yAxisDomain = [-absMax, absMax];
 
   return (
-    <Card className="col-span-4">
+    <Card className="col-span-7">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Total Plays Overview</CardTitle>
-            <CardDescription>Monthly % Change in Total Track Plays showing increase (green) and decline (red) areas</CardDescription>
+            <CardTitle>Listening Trend</CardTitle>
+            <CardDescription>Monthly  Change in Fans Listening</CardDescription>
           </div>
           <Select value={selectedMonthsNumber.toString()} onValueChange={(value) => {
             const periodValue = parseInt(value, 10);
@@ -148,7 +148,7 @@ export function Overview({ artistID }: ArtistID) {
                           </div>
                           <div className="flex flex-col">
                             <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              % Change
+                              Listens
                             </span>
                             <span className={`font-bold ${value >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                               {value}

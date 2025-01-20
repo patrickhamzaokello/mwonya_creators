@@ -55,7 +55,7 @@ export async function getArtistSummaryData(artist_id: string, isVerified: boolea
     }
   }
 
-  export async function getArtistActivity(artist_id: string): Promise<Activity[] | MessageType> {
+  export async function getArtistActivity(artist_id: string): Promise<lastestAlbum | MessageType> {
     try {
       const data = await fetchArtistActivities(artist_id)
       return data;

@@ -75,27 +75,27 @@ export default function DashboardPage() {
 
 
                         {selectedArtist ? (
-                            
+
                             <>
-                            
-                                <ArtistProfile 
+
+                                <ArtistProfile
                                     artistID={selectedArtist.id}
                                     name={selectedArtist.name}
                                     coverArt={selectedArtist.coverImage}
                                     profileImage={selectedArtist.profileImage}
                                     isVerified={selectedArtist.verified}
-                                    />
+                                />
 
                                 <DashboardMetrics artistID={selectedArtist.id} keyMetrics={["total_plays", "song_variety", "unique_listeners", "engagement_score", "current_play_count"]} />
 
                                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                                    <Overview artistID={selectedArtist.id} />
+                                    <RecentActivity artistID={selectedArtist.id} />
                                     <TopSongs artistID={selectedArtist.id} />
                                 </div>
 
                                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                                    <RecentActivity artistID={selectedArtist.id} />
-                                    <UpcomingPayout artistID={selectedArtist.id} />
+                                    <Overview artistID={selectedArtist.id} />
+                                    {/* <UpcomingPayout artistID={selectedArtist.id} /> */}
                                 </div>
 
                             </>
