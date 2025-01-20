@@ -91,7 +91,7 @@ export default function LandingPage() {
         <div className="min-h-screen bg-gradient-to-b from-zinc-50 via-zinc-100/50 to-white dark:from-zinc-950 dark:via-zinc-900/50 dark:to-zinc-950">
             {/* Promotional Banner */}
             {showBanner && (
-                <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-zinc-900 dark:bg-zinc-800 px-6 py-2.5 sm:px-3.5">
+                <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-primary dark:bg-zinc-800 px-6 py-2.5 sm:px-3.5">
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 flex-1">
                         <Volume2 className="h-5 w-5 text-zinc-100" />
                         <p className="text-sm leading-6 text-zinc-100">
