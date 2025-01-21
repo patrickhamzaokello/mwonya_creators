@@ -101,7 +101,7 @@ const ResetPassword = ({
             Reset password with this link
             </Text>
             <Link
-            href={`http://localhost:3000/auth/new-password?token=${token}`}
+            href={`https://creator.mwonya.com/auth/new-password?token=${token}`}
             target="_blank"
             style={{
               ...link,
@@ -122,7 +122,7 @@ const ResetPassword = ({
             <Text style={footer}>
               © 2024 Mwonya. All rights reserved.
               <br />
-              <Link href="http://localhost:3000/" style={anchor}>
+              <Link href="https://creator.mwonya.com/" style={anchor}>
                 mwonya.com
               </Link>
               {" - "}

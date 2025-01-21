@@ -33,6 +33,7 @@ import { usePathname } from 'next/navigation'
 import Link from "next/link";
 import { Home, BarChart2, Users, Settings } from 'lucide-react'
 import { Session } from "next-auth";
+import Image from "next/image";
 
 const AppSidebar = ({ session }: { session: Session }) => {
   const pathname = usePathname()
@@ -201,12 +202,12 @@ const AppSidebar = ({ session }: { session: Session }) => {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground">
+                  <Image src="/mwonya_logo_white.svg" alt="Logo" width={20} height={20} />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">MWONYA</span>
-                  <span className="truncate text-xs">{session.user.role}</span>
+                  <span className="truncate text-xs">Creator: {session.user.role}</span>
                 </div>
               </Link>
             </SidebarMenuButton>

@@ -77,7 +77,6 @@ export default function DashboardPage() {
                         {selectedArtist ? (
 
                             <>
-
                                 <ArtistProfile
                                     artistID={selectedArtist.id}
                                     name={selectedArtist.name}

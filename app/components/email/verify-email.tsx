@@ -89,7 +89,7 @@ const VerificationEmail = ({ token }: any) => {
             </Text>
             <Button
               style={button}
-              href={`http://localhost:3000/auth/new-verification?token=${token}`}
+              href={`https://creator.mwonya.com/auth/new-verification?token=${token}`}
             >
               Verify Email Address
             </Button>
@@ -105,7 +105,7 @@ const VerificationEmail = ({ token }: any) => {
             <Text style={footer}>
               © 2024 Mwonya. All rights reserved.
               <br />
-              <Link href="http://localhost:3000/" style={anchor}>
+              <Link href="https://creator.mwonya.com/" style={anchor}>
                 mwonya.com
               </Link>
               {" - "}

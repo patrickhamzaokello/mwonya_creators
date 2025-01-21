@@ -5,13 +5,13 @@ import { render } from "@react-email/render";
 
 const email_secret = process.env.EMAIL_SERVER_PASSWORD;
 const plunk  = new Plunk(email_secret??"undefined");
-const base_url = `http://localhost:3000/`;
+const base_url = `https://creator.mwonya.com/`;
 // Send a verification email to the user
 export const sendVerificationEmail = async (
     email: string,
     token: string
 ) => {
-    const confirmLink = `http://localhost:3000/auth/new-verification?token=${token}`;
+    const confirmLink = `https://creator.mwonya.com/auth/new-verification?token=${token}`;
    
 
     const emailHtml = await render(LinkEmail({token}));
@@ -36,7 +36,7 @@ export const sendPasswordResetEmail = async (
     email: string,
     token: string,
 ) => {
-    const resetLink = `http://localhost:3000/auth/new-password?token=${token}`;
+    const resetLink = `https://creator.mwonya.com/auth/new-password?token=${token}`;
     const emailHtml = await render(ResetPassword({token}))
 
 
