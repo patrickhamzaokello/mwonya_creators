@@ -1,20 +1,19 @@
 "use client"
 
-import { useRouter } from "next/navigation" 
-import { Button } from "@/components/ui/button"
-import { handleSignOut } from "@/actions/signOutServerAction"
+import { signOut } from "next-auth/react"
+import { Button, ButtonProps } from "@/components/ui/button"
 
-export const SignOutButton = (props: {
-    children?: React.ReactNode;
-    className?: string;
-  }) => {
+interface SignOutButtonProps extends ButtonProps {
+    children: React.ReactNode;
+}
+
+export function SignOutButton({ children, ...props }: SignOutButtonProps) {
     return (
         <Button
-        className={props.className}
-        style={{ cursor: "pointer" }}
-        onClick={() => handleSignOut()}
-      >
-        {props.children || "Sign Out"}
-      </Button>
+            {...props}
+            onClick={() => signOut()}
+        >
+            {children}
+        </Button>
     )
 }

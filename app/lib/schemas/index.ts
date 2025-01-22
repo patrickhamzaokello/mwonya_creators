@@ -60,9 +60,13 @@ export const CreateRecordLableSchema = z.object({
 const MAX_FILE_SIZE = 3 * 1024 * 1024;; // 3MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
+
+
 export const CreateArtistSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   genre: z.string().min(1, { message: "Please select a genre." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  phone_number: z.string().min(10, { message: "Phone number is required." }),
   biography: z
     .string()
     .min(10, "Biography should be at least 10 characters long")
@@ -101,12 +105,23 @@ export const CreateArtistSchema = z.object({
     })
     .optional(),
   isIndependent: z.boolean().optional(),
-  labelId: z.string().nullable().optional(),
+  labelName: z.string().optional(),
+  socialLinks: z.object({
+
+    instagram: z.string().optional(),
+
+    twitter: z.string().optional(),
+
+    facebook: z.string().optional(),
+
+    youtube: z.string().optional(),
+
+  }).optional(),
 }).refine(
-  (data) => data.isIndependent || (data.labelId && data.labelId.length > 0),
+  (data) => data.isIndependent || (data.labelName && data.labelName.length > 0),
   {
-    message: "labelId is required if the artist is not independent.",
-    path: ["labelId"], // This will highlight the labelId field in case of error
+    message: "Record Label Name is required if the artist is not independent.",
+    path: ["labelName"], // This will highlight the labelId field in case of error
   }
 );
 

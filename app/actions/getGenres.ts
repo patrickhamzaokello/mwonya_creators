@@ -3,7 +3,6 @@
 import { getAllGenre } from "@/data-layer/genre";
 
 export const retrieveAllGenres = async (trackType: string) => {
-    console.log(`Retrieving genres for track type: ${trackType}`);
 
     try {
         const result = await getAllGenre(trackType);

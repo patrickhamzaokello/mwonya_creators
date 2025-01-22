@@ -31,7 +31,7 @@ const generateFilename = (fileType: string, bytes = 32) => {
     return `${randomString}.${extension}`;
 };
 
-export async function getTrackSignedURL(fileType: string, fileSize: number, checksum: string, mw_upload_type: string) {
+export async function getTrackSignedURL(fileType: string, fileSize: number, checksum: string, mw_upload_type: string, aws_folder_prefix: string) {
     const session = await auth();
     if (!session) {
         return { failure: "Not authenticate",message: "Invalid User Details" }
@@ -49,7 +49,7 @@ export async function getTrackSignedURL(fileType: string, fileSize: number, chec
 
     const putObjectCommand = new PutObjectCommand({
         Bucket: process.env.AWS_BUCKET_NAME!,
-        Key: `${mw_upload_type}s/${file_genName}`,
+        Key: `${aws_folder_prefix}${file_genName}`,
         ContentType: fileType,
         ContentLength: fileSize,
         ChecksumSHA256: checksum,

@@ -60,6 +60,10 @@ const AppSidebar = ({ session }: { session: Session }) => {
             url: "/new_single",
           },
           {
+            title: "New Artist",
+            url: "/artist",
+          },
+          {
             title: "New Release",
             url: "/new_release",
           },

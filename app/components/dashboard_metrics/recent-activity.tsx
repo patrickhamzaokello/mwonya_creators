@@ -46,6 +46,10 @@ export function RecentActivity({ artistID }: ArtistID) {
     return <div className="text-red-500">{error}</div>
   }
 
+  if(!albumData.performance){
+    return <></>
+  }
+
   return (
     <Card className="col-span-4">
       <CardHeader>

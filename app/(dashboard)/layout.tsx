@@ -27,7 +27,7 @@ export default async function DashboardLayout({
   const roleCheckResult = await loginRoleChecks(session);
 
   if (roleCheckResult.needsProfileCreation) {
-    redirect("/create_profile");
+    redirect("/artist/create-profile");
   }
 
   return (

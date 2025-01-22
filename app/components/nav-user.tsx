@@ -90,7 +90,7 @@ export function NavUser({
             <DropdownMenuItem>
               <SignOutButton>
                 <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
+                <span>Sign out</span>
               </SignOutButton>
             </DropdownMenuItem>
           </DropdownMenuContent>

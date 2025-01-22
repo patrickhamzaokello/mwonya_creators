@@ -71,7 +71,7 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
         try {
 
             const checksum = await computeSHA256(file.file)
-            const signedURLResult = await getTrackSignedURL(file.file.type, file.file.size, checksum, 'track')
+            const signedURLResult = await getTrackSignedURL(file.file.type, file.file.size, checksum, 'track', 'tracks/');
 
 
             if (signedURLResult.failure !== undefined) {

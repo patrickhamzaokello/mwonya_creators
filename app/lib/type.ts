@@ -57,6 +57,29 @@ interface lastestPerformance {
     avgListenDurationPerTrack: number;
 }
 
+interface SocialLinks {
+    instagram?: string;
+    twitter?: string;
+    facebook?: string;
+    youtube?: string;
+}
+
+interface ArtistProfile {
+    artistID: string;
+    artistName: string;
+    artistEmail: string,
+    artistPhoneNumber: string,
+    artistGenre: number;
+    artistBiography: string;
+    artistIsIndependent: boolean;
+    artistlabelName?: string;
+    socialLinks: SocialLinks;
+    artistAgreetoTermsConditions: boolean;
+    artistAgreetoContentUploadPolicy: boolean;
+    current_userId: string;
+}
+
+
 interface lastestAlbum {
     id: string;
     title: string;

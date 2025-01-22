@@ -23,6 +23,8 @@ export function Overview({ artistID }: ArtistID) {
     { label: 'Last 36 months', value: 36 },
   ];
 
+  
+
   // Process data to separate positive and negative values
   const processChartData = (data: any[]) => {
     return data.map(item => ({
@@ -68,6 +70,10 @@ export function Overview({ artistID }: ArtistID) {
 
   if (error) {
     return <div className="text-red-500">{error}</div>
+  }
+
+  if (filteredData.length === 0) {
+    return <></>
   }
 
   // Calculate padding for Y-axis based on data range

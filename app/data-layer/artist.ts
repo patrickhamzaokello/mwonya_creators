@@ -1,6 +1,5 @@
 import axiosInstance from "@/lib/axiosInstance";
-import { prisma } from "@/lib/prisma";
-import { MediaUploadType } from "@prisma/client";
+import type { Artist } from '@/types/artist';
 
 // return artist profile where userId is matching
 export const getArtistProfileByUserId = async (userId: string) => {
@@ -164,77 +163,52 @@ export const fetchContentDetails = async (content_id: string) => {
 
 
 
+// detail creator list of aritists
+export const getDetailCreatorAritstList = async (creatorID: string, creatorRole: string) => {
+
+  try {
+        const response = await axiosInstance.post('artist/creator_artistlist_details.php', { creatorID: creatorID, creatorRole: creatorRole });
+        if (response.status === 200) {
+            const { status, data } = response.data
+            return data;
+        }
+        return null;
+    } catch (error) {
+        console.log('Error Saving user details:', error);
+        return null;
+    }
+  
+}
+
+
 
 // create new artist
-export const CreateArtistProfile = async (name: string, genred: string, biography: string | undefined, isIndependent: boolean | undefined, labelId: string, artistAgreetoTermsConditions: boolean | undefined, artistAgreetoContentUploadPolicy: boolean | undefined, currentUserID: string) => {
+
+export const CreateArtistProfile = async (artistProfile: ArtistProfile) => {
     try {
-        const artistProfile = await prisma.artist.create({
-            data: {
-                name,
-                biography,
-                AgreeToContentPolicy: artistAgreetoContentUploadPolicy,
-                AgreeToTermsPolicy: artistAgreetoTermsConditions,
-                isIndependent,
-                genre: {
-                    connect: {
-                        id: genred
-                    }
-                },
-                user: {
-                    connect: {
-                        id: currentUserID,
-                    }
-                },
-                ...(isIndependent ? {} : {
-                    label: {
-                        connect: {
-                            id: labelId
-                        }
-                    }
-                })
-
-            }
-        });
-
-        return artistProfile;
+        const response = await axiosInstance.post('artist/saveArtistDetails.php', { artistDetails: artistProfile });
+        if (response.status === 200) {
+            const { status, data } = response.data
+            return data;
+        }
+        return null;
     } catch (error) {
-        console.log(error)
+        console.log('Error Saving user details:', error);
         return null;
     }
 }
 
 // Update the artist table given artist id and profile id
-export const updateArtistProfileImage = async (artistId: string, mediaId: string, imageType: 'profile' | 'cover') => {
+export const updateArtistImages = async (artistId: string, mediaId: number, imageType: string, media_creatorID: number) => {
     try {
-        const dataToUpdate = imageType === 'profile'
-            ? { profileImage: { connect: { id: mediaId } } }
-            : { coverImage: { connect: { id: mediaId } } };
-
-        const updatedArtist = await prisma.artist.update({
-            where: { id: artistId },
-            data: dataToUpdate
-        });
-
-        return updatedArtist;
-    } catch (error) {
-        console.error("Error updating artist profile image:", error);
+        const response = await axiosInstance.post('artist/updateArtistImages.php', { artistID: artistId, uploaded_mediaID: mediaId, imageType: imageType, media_creatorID });
+        if (response.status === 200) {
+            const { status, data } = response.data
+            return data;
+        }
         return null;
-    }
-}
-
-// save artist profile upload details
-export const SaveArtistProfileUpload = async (signedURL: string, fileType: string, currentUserID: string) => {
-    try {
-        const createArtistMediaUpload = await prisma.mediaUpload.create({
-            data: {
-                fileUrl: signedURL,
-                type: fileType as MediaUploadType,
-                userId: currentUserID,
-            }
-        })
-
-        return createArtistMediaUpload;
     } catch (error) {
+        console.log('Error Saving user details:', error);
         return null;
     }
 }
