@@ -1,5 +1,4 @@
 import { getArtistProfileByUserId } from '@/data-layer/artist';
-import { getLabelProfileByUserId } from '@/data-layer/label';
 import { UserRole } from "@/types/user";
 import { Session } from "next-auth";
 
