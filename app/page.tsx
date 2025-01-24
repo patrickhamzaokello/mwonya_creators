@@ -26,19 +26,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { auth, signOut } from '@/auth';
-import { redirect } from "next/navigation";
-
-
 
 export default function LandingPage() {
-
-    const session = auth();
-
-    //redirect if session is null
-    if (session?.user?.id) {
-      redirect("/studio");
-    }
 
     const [showBanner, setShowBanner] = useState(true);
     const [activeTestimonial, setActiveTestimonial] = useState(0);

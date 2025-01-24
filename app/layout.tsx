@@ -4,6 +4,8 @@ import { Toaster } from "@/components/ui/toaster"
 import "./globals.css";
 import { cn } from '@/lib/utils'
 import localFont from 'next/font/local'
+import { redirect } from "next/navigation";
+import { auth, signOut } from '@/auth';
 
 const myFont = localFont({
     src: [
@@ -44,15 +46,25 @@ const myFont = localFont({
 })
 
 export const metadata: Metadata = {
-  title: "Mwonya Artist",
+  title: "Mwonya: Creator Studio",
   description: "Mwonya Artist Management System",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
+  const session = await auth();
+
+  //redirect if session is null
+  if (session?.user.id) {
+    redirect("/studio");
+  }
+
+
   return (
     <html lang="en">
       <body className={cn(myFont.className)}>
