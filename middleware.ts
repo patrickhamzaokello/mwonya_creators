@@ -16,6 +16,13 @@ export default async function middleware(request: any) {
     return NextResponse.next();
   }
 
+  if (pathname.startsWith('/')) {
+    if (session) {
+      return NextResponse.redirect(new URL('/studio', request.url));
+    }
+    return NextResponse.next();
+  }
+
   // Protect /studio and /artist routes
   if (pathname.startsWith('/studio') || pathname.startsWith('/artist')) {
     if (!session) {
