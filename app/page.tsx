@@ -125,7 +125,7 @@ export default function LandingPage() {
                             className="bg-primary text-primary-foreground hover:bg-primary/90"
                             asChild
                         >
-                            <Link href="/pricing">
+                            <Link href="/auth/login">
                                 Learn more <ChevronRight className="ml-2 h-4 w-4" />
                             </Link>
                         </Button>
@@ -178,9 +178,9 @@ export default function LandingPage() {
                                     className="border-input hover:bg-accent"
                                     asChild
                                 >
-                                    <Link href="/artist/create-profile">
+                                    <Link href="/create-profile">
                                         <Building2 className="mr-2 h-5 w-5" />
-                                        Get Started, its free!
+                                        Register Now, Its Free!
                                     </Link>
                                 </Button>
                             </div>
@@ -290,7 +290,7 @@ export default function LandingPage() {
                                 className="bg-primary text-primary-foreground hover:bg-primary/90"
                                 asChild
                             >
-                                <Link href="/create_profile/artist">
+                                <Link href="/auth/login">
                                     <Music className="mr-2 h-5 w-5" />
                                     Get Started Now
                                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -302,7 +302,7 @@ export default function LandingPage() {
                                 className="border-input hover:bg-accent"
                                 asChild
                             >
-                                <Link href="/learn-more">
+                                <Link href="/auth/login">
                                     Learn More
                                     <ChevronRight className="ml-2 h-5 w-5" />
                                 </Link>
