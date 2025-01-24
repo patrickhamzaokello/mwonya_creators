@@ -103,9 +103,8 @@ export default function LandingPage() {
                             We are adding real time Data reporting to stats..
                         </p>
                         <Button
-                            variant="secondary"
                             size="sm"
-                            className="text-primary-foreground hover:bg-primary/90"
+                            className="bg-primary text-primary-foreground hover:bg-primary/90"
                             asChild
                         >
                             <Link href="/pricing">

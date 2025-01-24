@@ -4,8 +4,6 @@ import { Toaster } from "@/components/ui/toaster"
 import "./globals.css";
 import { cn } from '@/lib/utils'
 import localFont from 'next/font/local'
-import { redirect } from "next/navigation";
-import { auth, signOut } from '@/auth';
 
 const myFont = localFont({
     src: [
@@ -56,13 +54,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-
-  const session = await auth();
-
-  //redirect if session is null
-  if (session?.user.id) {
-    redirect("/studio");
-  }
 
 
   return (
