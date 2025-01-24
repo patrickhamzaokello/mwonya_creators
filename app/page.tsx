@@ -27,21 +27,28 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react"
+import { auth, signOut } from '@/auth';
 
 export default function LandingPage() {
 
     const [showBanner, setShowBanner] = useState(true);
     const [activeTestimonial, setActiveTestimonial] = useState(0);
 
-    const { data: session, status } = useSession()
+
+
     const router = useRouter()
-  
+
     useEffect(() => {
-      if (status === 'authenticated') {
-        router.replace('/studio')
-      }
-    }, [status, router])
+
+        const checkSession = async () => {
+            const session = await auth()
+            if (session?.user) {
+                router.replace('/studio')
+            }
+        }
+        // Call the checkSession function
+        checkSession();
+    }, [router]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -146,10 +153,10 @@ export default function LandingPage() {
 
                             <div className="space-y-4">
                                 <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-                                Think bigger. Create louder.
+                                    Think bigger. Create louder.
                                 </h1>
                                 <p className="max-w-[600px] text-lg text-muted-foreground md:text-xl">
-                                Mwonya empowers artists and creators with digital tools to build, share, and grow—together. Whether you're an aspiring artist,
+                                    Mwonya empowers artists and creators with digital tools to build, share, and grow—together. Whether you're an aspiring artist,
                                     a professional or a record label, start your journey with us today.
                                 </p>
                             </div>
