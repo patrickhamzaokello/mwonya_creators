@@ -34,12 +34,14 @@ export default function LandingPage() {
     const [showBanner, setShowBanner] = useState(true);
     const [activeTestimonial, setActiveTestimonial] = useState(0);
 
-    const { data: session } = useSession()
-    const router = useRouter();
-
-    if (session) {
-        router.replace('/studio');
-    }
+    const { data: session, status } = useSession()
+    const router = useRouter()
+  
+    useEffect(() => {
+      if (status === 'authenticated') {
+        router.replace('/studio')
+      }
+    }, [status, router])
 
     useEffect(() => {
         const timer = setInterval(() => {
