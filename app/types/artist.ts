@@ -4,6 +4,14 @@ export interface MetricItemProps {
     prefix?: string;
   }
 
+
+  export interface TsearchArtist {
+    id: string
+    name: string
+    imageUrl: string
+}
+
+
   export interface Artist {
     id: string;
     name: string;

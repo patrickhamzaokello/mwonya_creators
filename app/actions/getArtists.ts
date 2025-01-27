@@ -1,6 +1,34 @@
 "use server";
-import { fetchUserArtists,fetchArtistsDiscover ,fetchContentDetails} from "@/data-layer/artist";
+import { fetchUserArtists, fetchArtistsDiscover, fetchContentDetails, searchArtistName } from "@/data-layer/artist";
 import { auth } from '@/auth';
+import { TsearchArtist } from "@/types/artist";
+
+
+
+// This is a mock database. In a real application, you would query your actual database here.
+const mockArtists: TsearchArtist[] = [
+    { id: "1", name: "The Beatles", imageUrl: "/placeholder.svg?height=40&width=40" },
+    { id: "2", name: "Queen", imageUrl: "/placeholder.svg?height=40&width=40" },
+    { id: "3", name: "Pink Floyd", imageUrl: "/placeholder.svg?height=40&width=40" },
+    { id: "4", name: "Led Zeppelin", imageUrl: "/placeholder.svg?height=40&width=40" },
+    { id: "5", name: "Radiohead", imageUrl: "/placeholder.svg?height=40&width=40" },
+]
+
+export async function searchArtistsName(query: string): Promise<TsearchArtist[]> {
+    // Simulate database query delay
+    const artist_result = await searchArtistName(query.toLowerCase());
+
+
+    if (artist_result.artist_data) {
+
+        const artist_content:TsearchArtist[] = artist_result.artist_data;
+
+        return artist_content;
+    } else {
+        return [];
+    }
+
+}
 
 
 export const getArtistDiscovery = async (artist_id: string) => {
@@ -12,8 +40,8 @@ export const getArtistDiscovery = async (artist_id: string) => {
 
             const artist_content = userArtists.artistDiscovery;
 
-           
-            return { status: "success", message: "Retrived discovery Successfully",artist_content};
+
+            return { status: "success", message: "Retrived discovery Successfully", artist_content };
         } else {
             return { status: "error", message: "Failed to get any artist details" };
         }
@@ -31,24 +59,24 @@ export const getArtistsForUser = async () => {
     const session_userID = session?.user.id;
     const role = session?.user.role;
     try {
-        const userArtists = await fetchUserArtists(session_userID??"", role??"");
+        const userArtists = await fetchUserArtists(session_userID ?? "", role ?? "");
 
         if (userArtists.fetchedArtists) {
 
             const artists = userArtists.fetchedArtists;
-            const formattedArtists:TArtist[] = artists.map((artist: { id: any; name: any; followers: any; genre: { id: any; name: any; }; profileImage: { fileUrl: any; }; coverImage: { fileUrl: any; }; verified: any; biography: any; }) => ({
+            const formattedArtists: TArtist[] = artists.map((artist: { id: any; name: any; followers: any; genre: { id: any; name: any; }; profileImage: { fileUrl: any; }; coverImage: { fileUrl: any; }; verified: any; biography: any; }) => ({
                 id: artist.id,
                 name: artist.name,
                 genreID: artist.genre?.id || '',
-                genreName: artist.genre?.name || '', 
-                profileImage: artist.profileImage?.fileUrl || '', 
+                genreName: artist.genre?.name || '',
+                profileImage: artist.profileImage?.fileUrl || '',
                 coverImage: artist.coverImage?.fileUrl || '',
                 followers: artist.followers || '0',
                 verified: artist.verified || false,
-                shortbio: artist.biography|| ''
+                shortbio: artist.biography || ''
             }));
-            
-            return { status: "success", message: "Retrived artist Successfully",formattedArtists};
+
+            return { status: "success", message: "Retrived artist Successfully", formattedArtists };
         } else {
             return { status: "error", message: "Failed to get any artist details" };
         }
@@ -65,10 +93,10 @@ export async function getContentDetails(content_id: string) {
 
     try {
         console.log(content_id)
-        const data = await fetchContentDetails(content_id??"");
+        const data = await fetchContentDetails(content_id ?? "");
         const content_info = data.content_details;
         if (content_info) {
-            return { status: "success", message: "Retrived artist Successfully", content_info};
+            return { status: "success", message: "Retrived artist Successfully", content_info };
         } else {
             return { status: "error", message: "Failed to get any artist details" };
         }
@@ -79,8 +107,7 @@ export async function getContentDetails(content_id: string) {
             message: `Error getting artist profile: ${error}`,
         };
     }
-    
-    
-  }
-  
-  
+
+
+}
+

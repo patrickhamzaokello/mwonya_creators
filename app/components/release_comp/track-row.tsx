@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreVertical, Pencil, Play, Pause, Heart, Download, Share2 } from 'lucide-react'
+import { MoreVertical, Pencil, Play, Pause, Heart, Download, Share2, Trash2 } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 import { formatAudioDuration } from '@/utils/audioutils'
+import { ArtistSearchPopup } from './artistSearch_popup'
 
 interface Track {
     title: string
@@ -76,6 +77,8 @@ export function TrackRow({ track, index, isPlaying, onPlayToggle, progress, curr
                         <Heart className="h-4 w-4" />
                         <span className="sr-only">Like</span>
                     </Button>
+                    <ArtistSearchPopup />
+
                     <Button variant="ghost" size="icon" className="h-8 w-8">
                         <Download className="h-4 w-4" />
                         <span className="sr-only">Download</span>
@@ -98,6 +101,7 @@ export function TrackRow({ track, index, isPlaying, onPlayToggle, progress, curr
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-destructive">
+                            <Trash2 className="mr-2 h-4 w-4" />
                                 Remove Track
                             </DropdownMenuItem>
                         </DropdownMenuContent>

@@ -118,7 +118,26 @@ export const updateTrack_File_Album_cover = async (referenceId: string, fileType
 
 };
 
+export const searchArtistName = async (query_name: string) => {
+    try {
 
+        const response = await axiosInstance.post('artist/searchArtist.php', { query: query_name });
+
+        const { status, data } = response.data
+        console.log(data)
+
+        return {
+            status: "success",
+            artist_data: data,
+        };
+    } catch (error) {
+        return {
+            status: "error",
+            message: "Fetch Error Has occured",
+        };
+    }
+
+};
 export const fetchArtistsDiscover = async (artist_id: string) => {
     try {
 
