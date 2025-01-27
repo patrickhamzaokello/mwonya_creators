@@ -1,7 +1,23 @@
 "use server";
 import { fetchUserArtists, fetchArtistsDiscover, fetchContentDetails, searchArtistName } from "@/data-layer/artist";
 import { auth } from '@/auth';
-import { TsearchArtist } from "@/types/artist";
+import { ProfileArtist, TsearchArtist } from "@/types/artist";
+
+
+
+
+
+export async function updateArtistProfile(data: Partial<ProfileArtist>): Promise<{ success: boolean; message: string }> {
+  // In a real application, you would update the database here
+  console.log("Updating artist profile:", data)
+
+  // Simulate a delay and return success
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  return { success: true, message: "Profile updated successfully" }
+}
+
+
 
 
 

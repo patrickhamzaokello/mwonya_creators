@@ -140,7 +140,7 @@ const MainLoginForm = () => {
         </form>
       </Form>
 
-      <SocialProviders />
+      {/* <SocialProviders /> */}
 
     </CardWrapper>
   )

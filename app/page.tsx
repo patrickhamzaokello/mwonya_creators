@@ -178,7 +178,7 @@ export default function LandingPage() {
                                     className="border-input hover:bg-accent"
                                     asChild
                                 >
-                                    <Link href="/create-profile">
+                                    <Link href="/auth/register">
                                         <Building2 className="mr-2 h-5 w-5" />
                                         Register Now, Its Free!
                                     </Link>
@@ -290,9 +290,9 @@ export default function LandingPage() {
                                 className="bg-primary text-primary-foreground hover:bg-primary/90"
                                 asChild
                             >
-                                <Link href="/auth/login">
+                                <Link href="/auth/register">
                                     <Music className="mr-2 h-5 w-5" />
-                                    Get Started Now
+                                    Register Now
                                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                             </Button>

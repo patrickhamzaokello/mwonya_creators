@@ -32,3 +32,41 @@ export interface MetricItemProps {
     profileImage?: string;
     isVerified: boolean;
   }
+
+
+  export type ProfileArtist = {
+    no: number
+    id: string
+    name: string
+    email: string
+    phone: string
+    facebookurl: string
+    twitterurl: string
+    instagramurl: string
+    youtubeurl: string
+    meta_data: string
+    RecordLable: string
+    isIndependent: boolean
+    password: string // Note: We won't display or edit this on the profile page
+    profilephoto: string
+    profile_image_id: string
+    cover_image_id: string
+    coverimage: string
+    bio: string
+    genre: string
+    datecreated: string
+    releaseDate: string
+    available: boolean
+    lastupdate: string
+    tag: string
+    overalplays: number
+    status: string
+    featured: boolean
+    verified: boolean
+    circle_cost: number
+    circle_cost_maximum: number
+    circle_duration: number
+    notified: boolean
+    indexed: boolean
+  }
+  

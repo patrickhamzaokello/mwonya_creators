@@ -148,7 +148,7 @@ const router = useRouter()
       </Button>
         </form>
       </Form>
-      <SocialProviders />
+      {/* <SocialProviders /> */}
     </CardWrapper>
   )
 }
