@@ -14,7 +14,15 @@ const revenueData = {
   monthlyStreams: 524890
 };
 
-function StatCard({ title, value, icon: Icon, trend, className = '' }) {
+interface StatCardProps {
+  title: string;
+  value: string | number;
+  icon: React.ComponentType<{ className?: string }>;
+  trend?: number;
+  className?: string;
+}
+
+function StatCard({ title, value, icon: Icon, trend, className = '' }: StatCardProps) {
   return (
     <div className={`border bg-card text-card-foreground shadow rounded-xl p-6${className}`}>
       <div className="flex items-center justify-between mb-4">
@@ -35,7 +43,7 @@ function StatCard({ title, value, icon: Icon, trend, className = '' }) {
 }
 
 function App() {
-  const formatCurrency = (amount) => {
+  const formatCurrency = (amount:number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -44,7 +52,7 @@ function App() {
     }).format(amount);
   };
 
-  const formatNumber = (num) => {
+  const formatNumber = (num:number) => {
     return new Intl.NumberFormat('en-US').format(num);
   };
 

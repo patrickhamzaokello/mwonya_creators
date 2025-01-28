@@ -26,29 +26,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { auth, signOut } from '@/auth';
 
 export default function LandingPage() {
 
     const [showBanner, setShowBanner] = useState(true);
     const [activeTestimonial, setActiveTestimonial] = useState(0);
-
-
-
-    const router = useRouter()
-
-    useEffect(() => {
-
-        const checkSession = async () => {
-            const session = await auth()
-            if (session?.user) {
-                router.replace('/studio')
-            }
-        }
-        // Call the checkSession function
-        checkSession();
-    }, [router]);
 
     useEffect(() => {
         const timer = setInterval(() => {
