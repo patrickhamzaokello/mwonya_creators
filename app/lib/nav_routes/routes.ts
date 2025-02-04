@@ -30,7 +30,7 @@ import {
       icon: Bot,
       url: '#',
       items: [
-        { id: 'earnings.revenue', title: 'Revenue', url: '/revenue', roles: ['artist','label', 'admin'] },
+        { id: 'earnings.revenue', title: 'Revenue', url: '/revenue', roles: ['label', 'admin'] },
         { id: 'earnings.circle', title: 'Circle', url: '#', roles: [] },
       ],
     },
