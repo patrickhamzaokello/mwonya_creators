@@ -1,9 +1,15 @@
 'use client'
 
-import * as z from 'zod'
-import { CardWrapper } from '@/components/auth/CardWrapper'
+import { useState, useTransition, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
+import toast, { Toaster } from 'react-hot-toast'
+import * as z from 'zod'
+
+// Components
+import { CardWrapper } from '@/components/auth/CardWrapper'
 import {
   Form,
   FormControl,
@@ -12,28 +18,26 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form'
-import { LoginSchema } from '@/lib/schemas'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { login } from '@/actions/login'
-import { useEffect, useRef, useTransition } from 'react'
-import { useSearchParams } from 'next/navigation'
-import Link from 'next/link'
-import toast, { Toaster } from 'react-hot-toast';
-import { SocialProviders } from './SocialProviders'
-import { useRouter } from 'next/navigation'
 import { Suspense } from 'react'
+import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
+
+// Schema and actions
+import { LoginSchema } from '@/lib/schemas'
+import { login } from '@/actions/login'
 
 const MainLoginForm = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
-
-  const urlError =
-    searchParams.get('error') === 'OAuthAccountNotLinked'
-      ? 'Email already in use with different provider!'
-      : ''
-
   const [isPending, startTransition] = useTransition()
+  const [showPassword, setShowPassword] = useState(false)
+  
+  // Handle OAuth error
+  const urlError = searchParams.get('error') === 'OAuthAccountNotLinked' 
+    ? 'Email already in use with different provider!' 
+    : ''
+  
   const hasDisplayedError = useRef(false)
   useEffect(() => {
     if (urlError && !hasDisplayedError.current) {
@@ -42,6 +46,7 @@ const MainLoginForm = () => {
     }
   }, [urlError])
 
+  // Form setup
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -51,14 +56,13 @@ const MainLoginForm = () => {
   })
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-
     startTransition(() => {
       login(values).then((data) => {
         if (data?.error) {
           toast.error(data.error)
         }
         if (data?.success) {
-          if(data?.message_type == "verify_email"){
+          if(data?.message_type === "verify_email"){
             router.push("/confirm-email")
           } else {
             toast.success(data.success)
@@ -72,83 +76,128 @@ const MainLoginForm = () => {
 
   return (
     <CardWrapper
-      headerTitle="Login"
+      headerTitle="Welcome Back"
       backButtonLabel="Don't have an account?"
       backButtonHref="/auth/register"
       showSocial
     >
       <Toaster />
+      
+      <div className="mb-6 text-center">
+        <p className="text-sm text-gray-500">Sign in to access your account</p>
+      </div>
+      
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-1 w-full"
+          className="space-y-4 w-full"
         >
-          <div className="space-y-2">
+          <div className="space-y-4">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Enter Email"
-                      disabled={isPending}
-                      type="email"
-                      className=" border-baseContent/20 text-baseContent"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-500" />
+                  <FormLabel className="text-sm font-medium">Email</FormLabel>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="you@example.com"
+                        disabled={isPending}
+                        type="email"
+                        className="pl-10 py-6 h-11 rounded-lg border-gray-200 focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage className="text-red-500 text-xs mt-1" />
                 </FormItem>
               )}
             />
+            
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your password"
-                      {...field}
-                      disabled={isPending}
-                      type="password"
-                      className=" border-baseContent/20 text-baseContent"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-500" />
-                  <Button
-                    size="sm"
-                    variant="link"
-                    className="px-0 "
-                    type="button"
-                  >
-                    <Link href="/auth/reset">Forgot Password?</Link>
-                  </Button>
+                  <div className="flex justify-between items-center">
+                    <FormLabel className="text-sm font-medium">Password</FormLabel>
+                    <Button
+                      size="sm"
+                      variant="link"
+                      className="p-0 h-auto text-xs text-blue-600 hover:text-blue-800"
+                      type="button"
+                    >
+                      <Link href="/auth/reset">Forgot Password?</Link>
+                    </Button>
+                  </div>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <FormControl>
+                      <Input
+                        placeholder="••••••••"
+                        {...field}
+                        disabled={isPending}
+                        type={showPassword ? "text" : "password"}
+                        className="pl-10 pr-10 py-6 h-11 rounded-lg border-gray-200 focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                      />
+                    </FormControl>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-2 top-2 h-7 w-7 p-0"
+                    >
+                      {showPassword ? 
+                        <EyeOff className="h-4 w-4 text-gray-400" /> : 
+                        <Eye className="h-4 w-4 text-gray-400" />
+                      }
+                    </Button>
+                  </div>
+                  <FormMessage className="text-red-500 text-xs mt-1" />
                 </FormItem>
               )}
             />
           </div>
 
+          <Button 
+            disabled={isPending} 
+            className="w-full py-6 h-11 rounded-lg bg-primary hover:bg-purple-700 text-white font-medium transition-all duration-200"
+            type="submit"
+          >
+            {isPending ? (
+              <div className="flex items-center justify-center">
+                <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                Signing in...
+              </div>
+            ) : (
+              "Sign In"
+            )}
+          </Button>
           
+          {/* <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-gray-200"></span>
+            </div>
+            <div className="relative flex justify-center">
+              <span className="bg-background px-4 text-sm text-primary-500">or continue with</span>
+            </div>
+          </div> */}
 
-          <Button disabled={isPending} className="px-8 py-2 font-semibold  rounded-[5px] relative w-full text-lg" type="submit">
-          Login
-      </Button>
+          {/* <SocialProviders /> */}
+          
+         
         </form>
       </Form>
-
-      {/* <SocialProviders /> */}
-
     </CardWrapper>
   )
 }
 
-export const LoginForm=()=>{
+export const LoginForm = () => {
   return (
-    <Suspense>
+    <Suspense fallback={<div className="flex justify-center items-center h-32">Loading...</div>}>
       <MainLoginForm />
     </Suspense>
   )
