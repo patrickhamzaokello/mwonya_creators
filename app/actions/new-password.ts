@@ -12,7 +12,7 @@ export const newPassword = async (
 ) => {
     // if no token, return error
     if (!token) {
-        return { error: "Token is required"};
+        return { error: "Token is required" };
     }
 
     // validate fields
@@ -29,18 +29,23 @@ export const newPassword = async (
     // token validation
     const existingToken = await getPasswordResetTokenByToken(token);
 
+    console.log(existingToken)
+
     // if token not found, return error
-    if(!existingToken) {
+    if (!existingToken) {
         return { error: "Invalid Token" };
     }
 
-    // check if token is expired (if it is less than the date we set, which is an hour)
-    const hasExpired = new Date(existingToken.expires) < new Date();
-
-    // if expired, return error
-    if (hasExpired) {
-        return { error: "Token has expired" };
+    const now = Date.now()
+    const expiresAt = Number(existingToken.expires) // Convert to number if it's stored as a string
+  
+    // Add a 5-minute buffer to account for potential clock discrepancies
+    const bufferTime = 5 * 60 * 1000 // 5 minutes in milliseconds
+    console.log(now, expiresAt, bufferTime)
+    if (now > expiresAt + bufferTime) {
+      return { error: "Token has expired" }
     }
+  
 
     // check exisiting user
     const existingUser = await getUserByEmail(existingToken.email);
@@ -66,5 +71,5 @@ export const newPassword = async (
     });
 
     // return success message
-    return { success: "Password updated successfully"}
+    return { success: "Password updated successfully" }
 }

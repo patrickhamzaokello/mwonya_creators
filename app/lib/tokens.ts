@@ -24,7 +24,8 @@ export const generateVerificationToken = async (email: string) => {
 export const generatePasswordResetToken = async (email: string) => {
     const token = uuidv4();
     // expires token in 1 hour
-    const expires = new Date(new Date().getTime() + 3600 * 1000);
+    // const expires = new Date(new Date().getTime() + 3600 * 1000);
+    const expires = new Date().getTime() + 3600 * 1000;
     // check if we have an exisiting token sent to his email, if it is, remove it
     const existingToken = await getPasswordResetTokenByEmail(email);
     // delete function

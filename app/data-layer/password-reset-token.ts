@@ -41,7 +41,7 @@ export const getDeletePasswordResetTokenbyID = async (id: string) => {
     }
 }
 
-export const CreatePasswordResetToken = async (email: string, token: string, expires: Date) => {
+export const CreatePasswordResetToken = async (email: string, token: string, expires: number) => {
     try {
         const create_token = await axiosInstance.post('createPasswordResetToken.php', { email, token, expires });
 

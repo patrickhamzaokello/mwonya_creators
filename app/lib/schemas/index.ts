@@ -129,7 +129,7 @@ export const CreateArtistSchema = z.object({
 
 export const ResetSchema = z.object({
   email: z.string().email({
-    message: 'Email is required'
+    message: 'Please enter a valid email address'
   })
 })
 
