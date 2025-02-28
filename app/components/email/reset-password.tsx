@@ -73,7 +73,6 @@ const ResetPassword = ({ token, username = "Mwonya User" }: ResetPasswordProps) 
     textAlign: "center" as const,
     display: "block",
     width: "100%",
-    padding: "12px",
     marginTop: "32px",
     marginBottom: "32px",
   }
@@ -115,7 +114,13 @@ const ResetPassword = ({ token, username = "Mwonya User" }: ResetPasswordProps) 
             can safely ignore this email.
           </Text>
           <Text style={paragraph}>To reset your password, click the button below:</Text>
-          <Button pX={20} pY={12} style={button} href={resetUrl}>
+          <Button
+            style={{
+              ...button,
+              padding: "12px 20px",
+            }}
+            href={resetUrl}
+          >
             Reset Your Password
           </Button>
           <Text style={paragraph}>
@@ -154,3 +159,4 @@ const ResetPassword = ({ token, username = "Mwonya User" }: ResetPasswordProps) 
 }
 
 export default ResetPassword
+
