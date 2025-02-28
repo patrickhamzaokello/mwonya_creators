@@ -1,145 +1,156 @@
-import * as React from "react";
 import {
   Body,
   Container,
   Head,
   Heading,
-  Section,
   Html,
   Img,
   Link,
   Preview,
+  Section,
   Text,
   Button,
-} from "@react-email/components";
+} from "@react-email/components"
 
 interface ResetPasswordProps {
-    token?: string; 
-  }
+  token?: string
+  username?: string
+}
 
-const ResetPassword = ({
-    token,
-  }: ResetPasswordProps) => {
+const ResetPassword = ({ token, username = "Mwonya User" }: ResetPasswordProps) => {
   const main = {
-    backgroundColor: "#f6f9fc",
+    backgroundColor: "#f9f9f9",
     fontFamily:
       "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-  };
+  }
 
   const container = {
     backgroundColor: "#ffffff",
     margin: "0 auto",
-    padding: "20px 0 48px",
-    marginTop:"20px",
+    padding: "24px",
     marginBottom: "64px",
-  };
+    borderRadius: "8px",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
+  }
 
-  const box = {
-    padding: "20px 48px",
-  };
+  const header = {
+    backgroundColor: "#8b34ff",
+    borderRadius: "8px 8px 0 0",
+    padding: "24px",
+    textAlign: "center" as const,
+  }
 
-  const hr = {
-    borderColor: "#e6ebf1",
-    margin: "20px 0",
-  };
+  const logo = {
+    margin: "0 auto",
+    width: "80px",
+    height: "auto",
+  }
+
+  const h1 = {
+    color: "#333333",
+    fontSize: "24px",
+    fontWeight: "bold",
+    margin: "32px 0 16px",
+    padding: "0",
+    textAlign: "center" as const,
+  }
 
   const paragraph = {
-    color: "#525f7f",
+    color: "#555555",
     fontSize: "16px",
     lineHeight: "24px",
-    textAlign: "left" as const
-  };
-
-  const anchor = {
-    color: "#556cd6",
-  };
+    margin: "16px 0",
+    textAlign: "left" as const,
+  }
 
   const button = {
     backgroundColor: "#8b34ff",
-    borderRadius: "5px",
-    color: "#fff",
+    borderRadius: "4px",
+    color: "#ffffff",
     fontSize: "16px",
     fontWeight: "bold",
     textDecoration: "none",
-    textAlign: "center",
+    textAlign: "center" as const,
     display: "block",
     width: "100%",
-    padding: "10px",
-  };
+    padding: "12px",
+    marginTop: "32px",
+    marginBottom: "32px",
+  }
 
   const footer = {
     color: "#8898aa",
     fontSize: "12px",
     lineHeight: "16px",
-  };
+    textAlign: "center" as const,
+    marginTop: "32px",
+  }
 
-  const h1 = {
-    color: "#333",
-    fontFamily:
-      "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-    fontSize: "24px",
-    fontWeight: "bold",
-    padding: "0",
-  };
+  const link = {
+    color: "#8b34ff",
+    textDecoration: "underline",
+  }
+
+  const resetUrl = `https://creator.mwonya.com/auth/new-password?token=${token}`
 
   return (
     <Html>
       <Head />
-      <Preview>Reset password with this link</Preview>
+      <Preview>Reset Your Mwonya Password</Preview>
       <Body style={main}>
         <Container style={container}>
-          <div style={box}>
+          <Section style={header}>
             <Img
-            src="/mwonya_logo.png"
-              width="40"
-              height="40"
+              src="https://creator.mwonya.com/mwonya_logo.png"
+              width="80"
+              height="80"
               alt="Mwonya Logo"
+              style={logo}
             />
-            <hr style={hr} />
-
-            <Text style={h1}>
-            Reset password with this link
-            </Text>
-            <Link
-            href={`https://creator.mwonya.com/auth/new-password?token=${token}`}
-            target="_blank"
-            style={{
-              ...link,
-              display: "block",
-              marginBottom: "16px",
-            }}
-          >
-            Click here to reset password </Link>
-            <Text style={paragraph}>
-            If you didn&apos;t try to reset your password, you can safely ignore this email
-            </Text>
-            
-            <Text style={paragraph}>
-              Best regards,<br />
-              The MWonya Team
-            </Text>
-            <hr style={hr} />
-            <Text style={footer}>
-              © 2024 Mwonya. All rights reserved.
-              <br />
-              <Link href="https://creator.mwonya.com/" style={anchor}>
-                mwonya.com
-              </Link>
-              {" - "}
-              Music, Podcast, DJ mixtapes, Events and Live Shows
-            </Text>
-          </div>
+          </Section>
+          <Heading style={h1}>Password Reset Request</Heading>
+          <Text style={paragraph}>Hello {username},</Text>
+          <Text style={paragraph}>
+            We received a request to reset your password for your Mwonya account. If you didn't make this request, you
+            can safely ignore this email.
+          </Text>
+          <Text style={paragraph}>To reset your password, click the button below:</Text>
+          <Button pX={20} pY={12} style={button} href={resetUrl}>
+            Reset Your Password
+          </Button>
+          <Text style={paragraph}>
+            This link will expire in 1 hour for security reasons. If you need to reset your password after that, please
+            request a new reset link.
+          </Text>
+          <Text style={paragraph}>
+            If the button above doesn't work, you can also copy and paste the following link into your browser:
+          </Text>
+          <Text style={{ ...paragraph, wordBreak: "break-all" }}>
+            <Link href={resetUrl} style={link}>
+              {resetUrl}
+            </Link>
+          </Text>
+          <Text style={paragraph}>
+            If you have any questions or need assistance, please don't hesitate to contact our support team.
+          </Text>
+          <Text style={paragraph}>
+            Best regards,
+            <br />
+            The Mwonya Team
+          </Text>
+          <Text style={footer}>
+            © 2024 Mwonya. All rights reserved.
+            <br />
+            <Link href="https://creator.mwonya.com/" style={link}>
+              mwonya.com
+            </Link>
+            {" - "}
+            Music, Podcast, DJ mixtapes, Events and Live Shows
+          </Text>
         </Container>
       </Body>
     </Html>
-  );
-};
-const link = {
-    color: "#2754C5",
-    fontFamily:
-      "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-    fontSize: "14px",
-    textDecoration: "underline",
-  };
+  )
+}
 
-export default ResetPassword;
+export default ResetPassword
