@@ -18,6 +18,7 @@ import { DashboardSkeleton } from "@/components/dashboard_metrics/dashboard-skel
 import { useEffect, useState } from 'react'
 import { DashboardMetrics } from "@/components/dashboard_metrics/metrics";
 import ArtistProfile from "@/components/dashboard_metrics/artist-profile";
+import OnboardingView from "@/components/dashboard_metrics/onboarding_profile";
 
 export default function DashboardPage() {
 
@@ -25,12 +26,29 @@ export default function DashboardPage() {
 
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const [userRole, setUserRole] = useState<string>('');
+    const [hasArtists, setHasArtists] = useState(false)
 
     useEffect(() => {
-        if (selectedArtist) {
-            setIsLoading(false)
-        }
-    }, [selectedArtist])
+        const fetchUserData = async () => {
+            try {
+                // Get user role from your API or session
+                const role = 'artist'; // Default to artist if not found
+                setUserRole(role);
+                // Check if user has any artists/profiles
+                // This could be determined by selectedArtist or a separate API call
+                const hasAnyArtists = !!selectedArtist; // Or check length of artists array
+                setHasArtists(hasAnyArtists);
+                
+                setIsLoading(false);
+            } catch (err) {
+                setError("Failed to load user data");
+                setIsLoading(false);
+            }
+        };
+        
+        fetchUserData();
+    }, [selectedArtist]);
 
     if (isLoading) {
         return <DashboardSkeleton />
@@ -41,6 +59,11 @@ export default function DashboardPage() {
 
     if (error) {
         return <div className="text-red-500">{error}</div>
+    }
+
+     // If user has no artists/profiles, show onboarding view
+     if (!hasArtists) {
+        return <OnboardingView userRole={userRole} />;
     }
 
 
