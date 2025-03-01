@@ -42,9 +42,9 @@ export const getDeletePasswordResetTokenbyID = async (id: string) => {
 }
 
 
-export const postUpdatePassword = async (user_id: string, password: string) => {
+export const postUpdatePassword = async (user_id: string, password: string, user_email: string) => {
     try {       
-        const update_password = await axiosInstance.post('updateCreatorPassword.php', { user_id, password });
+        const update_password = await axiosInstance.post('updateCreatorPassword.php', { user_id, password,user_email });
 
         if (update_password.status === 200) {
             const { status, message } = update_password.data.data

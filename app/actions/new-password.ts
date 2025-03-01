@@ -58,7 +58,7 @@ export const newPassword = async (
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // update db
-    await postUpdatePassword(existingUser.id, hashedPassword);
+    await postUpdatePassword(existingUser.id, hashedPassword, existingToken.email);
 
     await getDeletePasswordResetTokenbyID(existingToken.id);
 
