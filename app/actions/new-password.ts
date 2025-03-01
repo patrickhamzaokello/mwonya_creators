@@ -1,7 +1,7 @@
 'use server'
 import * as z from 'zod';
 import { NewPasswordSchema } from '@/lib/schemas';
-import { getPasswordResetTokenByToken } from '@/data-layer/password-reset-token';
+import { getDeletePasswordResetTokenbyID, getPasswordResetTokenByToken, postUpdatePassword } from '@/data-layer/password-reset-token';
 import { getUserByEmail } from '@/data-layer/user';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
@@ -38,14 +38,14 @@ export const newPassword = async (
 
     const now = Date.now()
     const expiresAt = Number(existingToken.expires) // Convert to number if it's stored as a string
-  
+
     // Add a 5-minute buffer to account for potential clock discrepancies
     const bufferTime = 5 * 60 * 1000 // 5 minutes in milliseconds
     console.log(now, expiresAt, bufferTime)
     if (now > expiresAt + bufferTime) {
-      return { error: "Token has expired" }
+        return { error: "Token has expired" }
     }
-  
+
 
     // check exisiting user
     const existingUser = await getUserByEmail(existingToken.email);
@@ -58,17 +58,9 @@ export const newPassword = async (
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // update db
-    await prisma.user.update({
-        where: { id: existingUser.id },
-        data: {
-            password: hashedPassword,
-        }
-    });
+    await postUpdatePassword(existingUser.id, hashedPassword);
 
-    // delete token
-    await prisma.passwordResetToken.delete({
-        where: { id: existingToken.id }
-    });
+    await getDeletePasswordResetTokenbyID(existingToken.id);
 
     // return success message
     return { success: "Password updated successfully" }
