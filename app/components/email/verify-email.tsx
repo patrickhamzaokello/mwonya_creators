@@ -75,7 +75,7 @@ const VerificationEmail = ({ token }: any) => {
         <Container style={container}>
           <div style={box}>
             <Img
-            src="/mwonya_logo.png"
+            src="https://creator.mwonya.com/MwonyaLogo.png"
               width="100"
               height="40"
               alt="Mwonya Logo"

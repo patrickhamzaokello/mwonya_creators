@@ -29,7 +29,7 @@ export default async function OnboardingLayout({
       <header className="border-b bg-card">
         <div className="container flex h-16 items-center justify-between px-4 md:px-6">
           <Link href="/" className="flex items-center">
-            <Image src="/logo.png" alt="Creator Studio" width={32} height={32} className="mr-2" />
+            <Image src="/mwonya_logo_white.svg" alt="Creator Studio" width={32} height={32} className="mr-2" />
             <span className="font-bold text-foreground">Creator Studio</span>
           </Link>
 

@@ -17,19 +17,19 @@ const AuthLayout: React.FC<{ children: React.ReactNode }> = ({
         {/* Large purple blob 1 */}
         <div 
           className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full opacity-20 blur-[80px]"
-          style={{ background: 'linear-gradient(to right, #8b5cf6, #d946ef)' }}
+          style={{ background: 'linear-gradient(to right,rgb(49, 10, 140),rgb(103, 3, 156))' }}
         ></div>
         
         {/* Large purple blob 2 */}
         <div 
           className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full opacity-20 blur-[80px]"
-          style={{ background: 'linear-gradient(to right, #a855f7, #ec4899)' }}
+          style={{ background: 'linear-gradient(to right,rgb(63, 7, 116),rgb(113, 21, 204))' }}
         ></div>
         
         {/* Middle accent blob */}
         <div 
           className="absolute top-[30%] right-[20%] w-[30%] h-[30%] rounded-full opacity-10 blur-[100px]"
-          style={{ background: 'linear-gradient(to right, #c026d3, #8b5cf6)' }}
+          style={{ background: 'linear-gradient(to right,rgb(63, 25, 98),rgb(71, 9, 147))' }}
         ></div>
       </div>
       

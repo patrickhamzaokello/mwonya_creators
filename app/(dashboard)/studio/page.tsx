@@ -50,11 +50,6 @@ export default function DashboardPage() {
         fetchUserData();
     }, [selectedArtist]);
 
-    // If user has no artists/profiles, show onboarding view
-    if (!hasArtists) {
-        router.push("/onboarding")
-    }
-
 
     if (isLoading) {
         return <DashboardSkeleton />
@@ -85,7 +80,6 @@ export default function DashboardPage() {
                                 <DashboardMetrics artistID={selectedArtist.id} keyMetrics={[]} />
                                 <Overview artistID={selectedArtist.id} />
                             </>
-
                         ) : (
                             // no artist
                             <p> Select Artist to Begin</p>
@@ -124,7 +118,7 @@ export default function DashboardPage() {
 
                         ) : (
                             // no artist
-                            <p> Select Artist to Begin</p>
+                            <></>
                         )}
 
 

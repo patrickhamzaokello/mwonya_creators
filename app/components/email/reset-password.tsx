@@ -100,7 +100,7 @@ const ResetPassword = ({ token, username = "Mwonya User" }: ResetPasswordProps) 
         <Container style={container}>
           <Section style={header}>
             <Img
-              src="https://creator.mwonya.com/mwonya_logo.png"
+              src="https://creator.mwonya.com/MwonyaLogo.png"
               width="80"
               height="80"
               alt="Mwonya Logo"
