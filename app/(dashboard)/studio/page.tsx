@@ -54,8 +54,6 @@ export default function DashboardPage() {
         return <DashboardSkeleton />
     }
 
-    console.log(selectedArtist)
-
 
     if (error) {
         return <div className="text-red-500">{error}</div>
