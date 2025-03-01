@@ -29,11 +29,10 @@ export const newPassword = async (
     // token validation
     const existingToken = await getPasswordResetTokenByToken(token);
 
-    console.log(existingToken)
 
     // if token not found, return error
     if (!existingToken) {
-        return { error: "Invalid Token" };
+        return { error: "Invalid Token, please use a new link" };
     }
 
     const now = Date.now()
@@ -41,7 +40,6 @@ export const newPassword = async (
 
     // Add a 5-minute buffer to account for potential clock discrepancies
     const bufferTime = 5 * 60 * 1000 // 5 minutes in milliseconds
-    console.log(now, expiresAt, bufferTime)
     if (now > expiresAt + bufferTime) {
         return { error: "Token has expired" }
     }

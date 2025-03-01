@@ -92,7 +92,7 @@ const PasswordForm = () => {
             setResetSuccess(true)
             toast.success(data.success)
             form.reset()
-            router.push("/auth/login")
+            // router.push("/auth/login")
           }
         })
         .catch((error) => {
@@ -139,10 +139,8 @@ const PasswordForm = () => {
             </p>
           </div>
 
-          <Button onClick={() => router.push("/auth/login")} className="w-full mt-4">
-            <div className="px-8 py-2 w-full rounded-[5px] relative group transition duration-200 text-base100 bg-primary text-lg">
+          <Button onClick={() => router.push("/auth/login")}   className="w-full py-6 h-11 rounded-lg bg-primary hover:bg-purple-700 text-white font-medium transition-all duration-200">
               Go to Login
-            </div>
           </Button>
         </div>
       </CardWrapper>
