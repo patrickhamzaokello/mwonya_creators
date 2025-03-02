@@ -70,7 +70,7 @@ const formSchema = z.object({
 
 
 export default function NewReleasePage() {
-    const [artworkPreview, setArtworkPreview] = useState("/album_placeholder.svg?height=300&width=300")
+    const [artworkPreview, setArtworkPreview] = useState("/album_album_placeholder.svg?height=300&width=300")
     const [tags, setTags] = useState<string[]>([])
     const [genres, setGenres] = useState<{ id: string; name: string }[]>([])
     const [tagInput, setTagInput] = useState("")
@@ -487,7 +487,7 @@ export default function NewReleasePage() {
                             <h2 className="text-xl font-semibold mb-4">Release Preview</h2>
                             <div className="space-y-4">
                                 <img
-                                    src={artworkPreview || "/placeholder.svg"}
+                                    src={artworkPreview || "/album_placeholder.svg"}
                                     alt="Release Artwork"
                                     className="w-full aspect-square object-cover rounded-md"
                                 />

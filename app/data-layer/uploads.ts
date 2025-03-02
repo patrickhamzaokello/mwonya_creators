@@ -12,7 +12,6 @@ export const getUploadMedias = async () => {
             }
         });
 
-        console.log('Uploads fetched:', uploads); // Debugging log
 
         return uploads;
 

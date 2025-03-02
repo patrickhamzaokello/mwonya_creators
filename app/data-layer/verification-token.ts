@@ -68,8 +68,6 @@ export const CreateVerificationToken = async (email: string, token: string, expi
     try {
         const create_token = await axiosInstance.post('createVerificationToken.php', { email, token, expires });
 
-        console.log(create_token)
-
         if (create_token.status === 200) {
             const { status, message } = create_token.data.data
             return message;

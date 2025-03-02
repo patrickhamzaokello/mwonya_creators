@@ -19,7 +19,6 @@ function App() {
     setIsLoading(true);
     listCreatorArtists()
       .then((creator_artist) => {
-        console.log(creator_artist)
         setArtists(creator_artist);
       })
       .catch((err) => {

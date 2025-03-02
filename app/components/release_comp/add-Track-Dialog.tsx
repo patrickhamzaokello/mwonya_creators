@@ -167,7 +167,6 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
 
 
                         } catch (saveError) {
-                            console.log('Error saving data:', saveError);
                             toast({
                                 title: "Error",
                                 description: String(saveError),

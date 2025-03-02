@@ -161,7 +161,6 @@ export default function ContentByYear() {
           setError('Failed to fetch artist content');
         }
       } catch (err) {
-        console.error(err);
         setError("An error occurred while fetching artists.");
       } finally {
         setLoading(false);

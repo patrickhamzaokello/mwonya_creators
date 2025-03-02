@@ -16,10 +16,10 @@ const artistData: ProfileArtist = {
   RecordLable: "Independent",
   isIndependent: true,
   password: "", // We won't display or edit this
-  profilephoto: "/placeholder.svg?height=200&width=200",
+  profilephoto: "/album_placeholder.svg?height=200&width=200",
   profile_image_id: "profile123",
   cover_image_id: "cover123",
-  coverimage: "/placeholder.svg?height=400&width=1200",
+  coverimage: "/album_placeholder.svg?height=400&width=1200",
   bio: "Jane is a contemporary artist known for her soulful vocals and introspective lyrics.",
   genre: "Indie Pop",
   datecreated: "2023-01-01",

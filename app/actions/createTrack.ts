@@ -46,22 +46,18 @@ export async function createNewRelease(formData: FormData) {
     };
     const data = await saveNewRelease(releaseDetails)
 
-    console.log(data)
 
     if (!data.success) {
       return { success: false, releaseID: releaseID }
     }
 
-    // Promise.all([
-    //   uploadFileToS3(releaseID, cover_artwork, 'coverArt')
-    // ]).catch(console.error)
+
 
     await uploadFileToS3(releaseID, cover_artwork, 'coverArt')
 
     return { success: true, releaseID: releaseID }
 
   } catch (error) {
-    console.error('Error creating track:', error)
     return { success: false, error: 'Failed to create track' }
   }
 
@@ -86,7 +82,6 @@ export async function createTrack(formData: FormData) {
   const trackFile = formData.get('trackFile') as File
   const coverArtFile = formData.get('coverArtFile') as File
 
-  console.log(FormData)
 
   try {
 
@@ -114,14 +109,11 @@ export async function createTrack(formData: FormData) {
     };
 
     const data = await uploadSingleTrack(trackDetails)
-    console.log(data)
 
     if (!data.success) {
       return { success: false, trackId: newAlbumId }
     }
 
-    console.log(newTrackReferenceID)
-    console.log(newAlbumId)
 
     // Start asynchronous upload process for both track and cover art
     Promise.all([
@@ -132,7 +124,6 @@ export async function createTrack(formData: FormData) {
     return { success: true, trackId: newAlbumId }
 
   } catch (error) {
-    console.error('Error creating track:', error)
     return { success: false, error: 'Failed to create track' }
   }
 }

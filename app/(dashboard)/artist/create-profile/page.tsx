@@ -27,8 +27,8 @@ import { SocialMediaLinks } from "@/components/create_artist/social-media-links"
 
 export default function CreateArtistPage() {
   const [isPending, startTransition] = useTransition()
-  const [profileImagePreview, setProfileImagePreview] = useState("/placeholder.svg")
-  const [coverImagePreview, setCoverImagePreview] = useState("/placeholder.svg")
+  const [profileImagePreview, setProfileImagePreview] = useState("/album_placeholder.svg")
+  const [coverImagePreview, setCoverImagePreview] = useState("/album_placeholder.svg")
   const [formProgress, setFormProgress] = useState(0)
   const { toast } = useToast()
   const router = useRouter()
@@ -49,7 +49,7 @@ export default function CreateArtistPage() {
       socialLinks: {
         instagram: "",
         twitter: "",
-        facebook: "",
+        tiktok: "",
         youtube: "",
       },
     },
@@ -409,7 +409,7 @@ export default function CreateArtistPage() {
                 <CardContent className="p-0">
                   <div className="relative h-48 bg-muted">
                     <Image
-                      src={coverImagePreview || "/placeholder.svg"}
+                      src={coverImagePreview || "/album_placeholder.svg"}
                       alt="Cover Picture"
                       layout="fill"
                       objectFit="cover"
@@ -418,7 +418,7 @@ export default function CreateArtistPage() {
                   <div className="relative -mt-16 ml-4">
                     <div className="relative h-32 w-32 rounded-full border-4 border-white bg-white shadow-lg overflow-hidden">
                       <Image
-                        src={profileImagePreview || "/placeholder.svg"}
+                        src={profileImagePreview || "/album_placeholder.svg"}
                         alt="Profile Picture"
                         layout="fill"
                         objectFit="cover"

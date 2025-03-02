@@ -74,7 +74,7 @@ export function ArtistSearchPopup() {
                 <div key={artist.id} className="flex items-center justify-between p-2 hover:bg-accent">
                   <div className="flex items-center gap-2">
                     <Image
-                      src={artist.imageUrl || "/placeholder.svg"}
+                      src={artist.imageUrl || "/album_placeholder.svg"}
                       alt={artist.name}
                       width={40}
                       height={40}

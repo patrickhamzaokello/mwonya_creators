@@ -46,7 +46,6 @@ export default function MediaList() {
             const data = await response.json();
             setMediaUploads(data);
         } catch (error) {
-            console.error('Error fetching media uploads:', error);
             setError({ success: false, message: 'Failed to fetch media uploads. Please try again later.' });
         } finally {
             setIsLoading(false);

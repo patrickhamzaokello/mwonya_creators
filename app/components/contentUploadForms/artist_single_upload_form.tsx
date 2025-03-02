@@ -56,7 +56,6 @@ export default function ArtistUploadForm() {
   })
 
   function onSubmit(data: FormData) {
-    console.log(data)
     // Here you would typically send the data to your backend
   }
 

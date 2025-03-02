@@ -41,7 +41,6 @@ async function main() {
           },
         });
       }
-      console.log("Languages seeded successfully");
 
       // seed genre
       const genres = [
@@ -104,7 +103,6 @@ main()
     await prisma.$disconnect()
   })
   .catch(async (e) => {
-    console.error(e)
     await prisma.$disconnect()
     process.exit(1)
   })

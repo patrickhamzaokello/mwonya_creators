@@ -8,11 +8,11 @@ export function ProfileView({ data, onEdit }: { data: ProfileArtist; onEdit: () 
   return (
     <div className="space-y-6">
       <div className="relative h-48 rounded-lg overflow-hidden">
-        <Image src={data.coverimage || "/placeholder.svg"} alt="Cover" layout="fill" objectFit="cover" />
+        <Image src={data.coverimage || "/album_placeholder.svg"} alt="Cover" layout="fill" objectFit="cover" />
       </div>
       <div className="flex items-center space-x-4">
         <Image
-          src={data.profilephoto || "/placeholder.svg"}
+          src={data.profilephoto || "/album_placeholder.svg"}
           alt={data.name}
           width={100}
           height={100}

@@ -143,7 +143,6 @@ export const fetchUserArtists = async (userId: string) => {
             fetchedArtists: data,
         };
     } catch (error) {
-        console.log(error)
         return {
             status: "error",
             message: "Fetch Error Has occured",

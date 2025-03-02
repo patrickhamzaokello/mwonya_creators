@@ -121,7 +121,7 @@ export function AlbumDetails({ id }: { id: string }) {
             <DialogTrigger asChild>
               <div className="relative aspect-square overflow-hidden rounded-xl cursor-pointer group ring-1 ring-muted">
                 <Image
-                  src={content.imageUrl || "/placeholder.svg"}
+                  src={content.imageUrl || "/album_placeholder.svg"}
                   alt={content.title}
                   fill
                   className="object-cover transition-all duration-300 group-hover:scale-105"

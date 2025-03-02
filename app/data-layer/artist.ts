@@ -16,7 +16,6 @@ export const getArtistProfileByUserId = async (userId: string) => {
 
 export const fetchUserArtists = async (userId: string, userRole: string) => {
     try {
-        console.log(userRole, userId)
         const response = await axiosInstance.post('/artist/getUserArtist.php', { user_id: userId, userRole: userRole });
         const { status, data } = response.data
 
@@ -25,7 +24,6 @@ export const fetchUserArtists = async (userId: string, userRole: string) => {
             fetchedArtists: data,
         };
     } catch (error) {
-        console.log(error)
         return {
             status: "error",
             message: "Fetch Error Has occured",
@@ -44,7 +42,6 @@ export const saveTrackDetails = async (trackDetails: UploadTrackDetails) => {
         }
         return null;
     } catch (error) {
-        console.log('Error Saving user details:', error);
         return null;
     }
 }
@@ -59,7 +56,6 @@ export const saveUploadDetails = async (mediaUpload_details: MediaUploadDetails)
         }
         return null;
     } catch (error) {
-        console.log('Error Saving user details:', error);
         return null;
     }
 }
@@ -67,14 +63,12 @@ export const saveUploadDetails = async (mediaUpload_details: MediaUploadDetails)
 export const saveNewRelease = async (releaseDetails: NewReleaseDetails) => {
     try {
         const response = await axiosInstance.post('artist/createNewRelease.php', { releaseDetails: releaseDetails });
-        console.log(response)
         if (response.status === 200) {
             const { status, data } = response.data
             return data;
         }
         return null;
     } catch (error) {
-        console.log('Error Saving user details:', error);
         return null;
     }
 }
@@ -83,8 +77,6 @@ export const uploadSingleTrack = async (trackDetails: SingleTrackDetails) => {
 
     try {
         const response = await axiosInstance.post('artist/uploadSingleTrack_Container.php', { trackDetails });
-        console.log('jim')
-        console.log(response)
 
         if (response.status === 200) {
             const { status, data } = response.data
@@ -103,7 +95,6 @@ export const updateTrack_File_Album_cover = async (referenceId: string, fileType
         const response = await axiosInstance.post('artist/updateTrack_File_Album_cover.php', { referenceId, fileType, awsUrl, upload_status });
 
         const { status, data } = response.data
-        console.log(data)
 
         return {
             status: "success",
@@ -124,7 +115,6 @@ export const searchArtistName = async (query_name: string) => {
         const response = await axiosInstance.post('artist/searchArtist.php', { query: query_name });
 
         const { status, data } = response.data
-        console.log(data)
 
         return {
             status: "success",
@@ -144,7 +134,6 @@ export const fetchArtistsDiscover = async (artist_id: string) => {
         const response = await axiosInstance.post('artist/getArtistDiscover.php', { artist_id: artist_id });
 
         const { status, data } = response.data
-        console.log(data)
 
         return {
             status: "success",
@@ -165,7 +154,6 @@ export const fetchContentDetails = async (content_id: string) => {
         const response = await axiosInstance.post('artist/getContentDetails.php', { content_id: content_id });
 
         const { status, data } = response.data
-        console.log(data)
 
         return {
             status: "success",
@@ -193,7 +181,6 @@ export const getDetailCreatorAritstList = async (creatorID: string, creatorRole:
         }
         return null;
     } catch (error) {
-        console.log('Error Saving user details:', error);
         return null;
     }
   
@@ -212,7 +199,6 @@ export const CreateArtistProfile = async (artistProfile: ArtistProfile) => {
         }
         return null;
     } catch (error) {
-        console.log('Error Saving user details:', error);
         return null;
     }
 }
@@ -227,7 +213,6 @@ export const updateArtistImages = async (artistId: string, mediaId: number, imag
         }
         return null;
     } catch (error) {
-        console.log('Error Saving user details:', error);
         return null;
     }
 }

@@ -66,7 +66,7 @@ export function TopTracks({ songs }: TopTracksProps) {
                 </span>
                 <div className="relative w-10 h-10 overflow-hidden rounded-sm">
                   <Image
-                    src={song.album_cover || "/placeholder.svg"}
+                    src={song.album_cover || "/album_placeholder.svg"}
                     alt={`${song.song_title} cover`}
                     layout="fill"
                     objectFit="cover"

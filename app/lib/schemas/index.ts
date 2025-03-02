@@ -112,7 +112,7 @@ export const CreateArtistSchema = z.object({
 
     twitter: z.string().optional(),
 
-    facebook: z.string().optional(),
+    tiktok: z.string().optional(),
 
     youtube: z.string().optional(),
 

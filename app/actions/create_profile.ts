@@ -4,6 +4,7 @@ import { CreateArtistProfile, updateArtistImages } from "@/data-layer/artist";
 import { auth } from '@/auth';
 import { getUserById } from "@/data-layer/user";
 import { getTrackSignedURL } from "./aws/release_track_upload";
+import { sign } from "crypto";
 
 
 
@@ -55,7 +56,7 @@ export const registerArtist = async (formData: FormData) => {
         const labelName = formData.get("labelName") as string;
         const instagram = formData.get('socialLinks.instagram') as string ?? "";
         const twitter = formData.get('socialLinks.twitter') as string ?? "";
-        const facebook = formData.get('socialLinks.facebook') as string ?? "";
+        const facebook = formData.get('socialLinks.tiktok') as string ?? "";
         const youtube = formData.get('socialLinks.youtube') as string ?? "";
         const terms_conditions_pp = formData.get("terms_conditions_pp") === "true";
         const content_upload_policy = formData.get("content_upload_policy") === "true";
@@ -85,7 +86,6 @@ export const registerArtist = async (formData: FormData) => {
         };
 
         try {
-            console.log(artistProfile);
             const createArtist = await CreateArtistProfile(artistProfile);
 
             if (!createArtist.success) {
@@ -101,10 +101,11 @@ export const registerArtist = async (formData: FormData) => {
                 const checksum = await computeSHA256(file)
                 const signedURLResult = await getTrackSignedURL(file.type, file.size, checksum, type_tag, 'images/artist/');
 
+
                 if (signedURLResult.failure !== undefined) {
                     return {
                         status: "error",
-                        message: `Error getting signed url`,
+                        message: signedURLResult.message ?? `Error getting signed URL for ${type_tag}`,
                     };
                 }
 

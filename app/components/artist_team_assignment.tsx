@@ -41,7 +41,6 @@ export default function ArtistTeamAssignment() {
 
     const handleSave = () => {
         // In a real application, you would send this data to your backend
-        console.log('Saving assignments:', assignments)
         alert('Assignments saved successfully!')
     }
 

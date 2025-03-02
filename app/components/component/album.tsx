@@ -10,7 +10,7 @@ import { X } from "lucide-react";
 
 export function Album() {
 
-  const [artworkPreview, setArtworkPreview] = useState("/placeholder.svg");
+  const [artworkPreview, setArtworkPreview] = useState("/album_placeholder.svg");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
 

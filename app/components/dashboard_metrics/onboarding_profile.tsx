@@ -35,7 +35,7 @@ export default function OnboardingView({ userRole }: { userRole: string }) {
         {/* Main content card */}
         <Card className="border-none shadow-lg overflow-hidden">
           <div className="relative h-40 bg-primary/10">
-            <div className="absolute inset-0 bg-[url('/placeholder.svg?height=160&width=1000')] opacity-20 bg-cover bg-center" />
+            <div className="absolute inset-0 bg-[url('/album_placeholder.svg?height=160&width=1000')] opacity-20 bg-cover bg-center" />
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/5" />
             <div className="absolute bottom-0 left-0 right-0 p-6">
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
@@ -147,7 +147,7 @@ export default function OnboardingView({ userRole }: { userRole: string }) {
               <div>
                 <p className="text-sm text-muted-foreground">Your profile can be updated anytime after creation</p>
               </div>
-              <Link href="/artist/create-profile">
+              <Link href="/onboarding/create-profile" >
                 <Button size="lg" className="group">
                   Create Your {userRole === "label" ? "First Artist" : "Profile"}
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

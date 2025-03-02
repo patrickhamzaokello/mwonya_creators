@@ -10,11 +10,9 @@ export const retrieveAllGenres = async (trackType: string) => {
         if (result.status === "success" && Array.isArray(result.genres)) {
             let filteredGenres = result.genres;
 
-            console.log(trackType)
 
             // Filter genres if trackType is 'episode' or 'podcast'
             if (trackType === 'episode' || trackType === 'podcast') {
-                console.log('Filtering genres for episode or podcast track type');
                 filteredGenres = result.genres.filter(genre => genre.tag === 'other');
             } else {
                 // Exclude genres tagged as 'other' for default trackType 'music'
