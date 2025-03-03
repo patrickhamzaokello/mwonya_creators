@@ -53,7 +53,7 @@ export function AddArtistDialog({ isOpen, onClose, onSave }: AddArtistDialogProp
             socialLinks: {
                 instagram: "",
                 twitter: "",
-                facebook: "",
+                tiktok: "",
                 youtube: "",
             },
         },
