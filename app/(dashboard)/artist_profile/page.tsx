@@ -15,11 +15,8 @@ const artistData: ProfileArtist = {
   meta_data: "",
   RecordLable: "Independent",
   isIndependent: true,
-  password: "", // We won't display or edit this
-  profilephoto: "/album_placeholder.svg?height=200&width=200",
-  profile_image_id: "profile123",
-  cover_image_id: "cover123",
-  coverimage: "/album_placeholder.svg?height=400&width=1200",
+  profilephoto: "https://mwonya-kasfa-assets-store.s3.us-east-1.amazonaws.com/images/artist/4495fad518d4929b0954e971820360e9a12e8d9787ba0f0d4f916084778f6ea0.jpeg",
+  cover_image:  "https://mwonya-kasfa-assets-store.s3.us-east-1.amazonaws.com/images/artist/4495fad518d4929b0954e971820360e9a12e8d9787ba0f0d4f916084778f6ea0.jpeg",
   bio: "Jane is a contemporary artist known for her soulful vocals and introspective lyrics.",
   genre: "Indie Pop",
   datecreated: "2023-01-01",
@@ -34,16 +31,11 @@ const artistData: ProfileArtist = {
   circle_cost: 5,
   circle_cost_maximum: 20,
   circle_duration: 30,
-  notified: true,
-  indexed: true,
 }
 
 export default function Home() {
   return (
-    <main className="container mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Artist Profile</h1>
       <ArtistProfile initialData={artistData} />
-    </main>
   )
 }
 

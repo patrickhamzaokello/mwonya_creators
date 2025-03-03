@@ -32,11 +32,8 @@ export default function DashboardPage() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                // Get user role from your API or session
                 const role = 'artist'; // Default to artist if not found
                 setUserRole(role);
-                // Check if user has any artists/profiles
-                // This could be determined by selectedArtist or a separate API call
                 const hasAnyArtists = !!selectedArtist; // Or check length of artists array
                 setHasArtists(hasAnyArtists);
 
@@ -60,14 +57,10 @@ export default function DashboardPage() {
         return <div className="text-red-500">{error}</div>
     }
 
-
-
     return (
         <>
 
             <div className="flex-col md:flex">
-
-
                 <Tabs defaultValue="overview" className="space-y-4">
                     <TabsList>
                         <TabsTrigger value="overview">Overview</TabsTrigger>

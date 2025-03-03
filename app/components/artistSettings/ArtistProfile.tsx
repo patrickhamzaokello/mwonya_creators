@@ -17,7 +17,7 @@ export function ArtistProfile({ initialData }: { initialData: ProfileArtist }) {
   }
 
   return (
-    <div className="border shadow-md rounded-lg p-6">
+    <div>
       {isEditing ? (
         <ProfileEdit data={artistData} onSave={handleSave} onCancel={handleCancel} />
       ) : (

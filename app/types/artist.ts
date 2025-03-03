@@ -47,11 +47,8 @@ export interface MetricItemProps {
     meta_data: string
     RecordLable: string
     isIndependent: boolean
-    password: string // Note: We won't display or edit this on the profile page
     profilephoto: string
-    profile_image_id: string
-    cover_image_id: string
-    coverimage: string
+    cover_image: string
     bio: string
     genre: string
     datecreated: string
@@ -66,7 +63,5 @@ export interface MetricItemProps {
     circle_cost: number
     circle_cost_maximum: number
     circle_duration: number
-    notified: boolean
-    indexed: boolean
   }
   

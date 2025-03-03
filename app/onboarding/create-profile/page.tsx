@@ -26,8 +26,8 @@ import { FaInstagram, FaTiktok, FaTwitter, FaYoutube } from "react-icons/fa"
 
 export default function CreateArtistPage() {
     const [isPending, startTransition] = useTransition()
-    const [profileImagePreview, setProfileImagePreview] = useState("/album_placeholder.svg?height=300&width=300")
-    const [coverImagePreview, setCoverImagePreview] = useState("/album_placeholder.svg?height=800&width=1200")
+    const [profileImagePreview, setProfileImagePreview] = useState("/album_placeholder.svg")
+    const [coverImagePreview, setCoverImagePreview] = useState("/album_placeholder.svg")
     const [formProgress, setFormProgress] = useState(0)
     const { toast } = useToast()
     const router = useRouter()
