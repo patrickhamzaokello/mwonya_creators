@@ -60,7 +60,7 @@ import {
       icon: Settings2,
       url: '#',
       items: [
-        { id: 'settings.profile', title: 'Profile', url: '/artist_profile', roles: ['artist'] },
+        { id: 'settings.profile', title: 'Profile', url: '/artist_profile', roles: [] },
       ],
     },
     DOCUMENTATION: {
