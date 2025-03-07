@@ -13,7 +13,7 @@ interface PageProps {
 export default function ReleasePage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-background">
-      <PageHeader />
+      <PageHeader id={params.id} />
       <main className="container mx-auto py-8 px-4">
         <div className="grid gap-8 lg:grid-cols-3">
           <Suspense fallback={<ContentSkeleton />}>
