@@ -127,13 +127,7 @@ export function AlbumDetails({ id }: { id: string }) {
                   className="object-cover transition-all duration-300 group-hover:scale-105"
                   priority
                 />
-                {!content.available && (
-                  <div className="absolute inset-0 bg-black/80 flex items-center justify-center backdrop-blur-sm">
-                    <Badge variant="destructive" className="text-lg px-4 py-2">
-                      Not Available
-                    </Badge>
-                  </div>
-                )}
+                
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <Pencil className="h-6 w-6 text-white" />
                 </div>

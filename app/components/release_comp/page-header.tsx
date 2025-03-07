@@ -9,7 +9,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Progress } from "@/components/ui/progress"
 import { Skeleton } from "@/components/ui/skeleton";
-import { getContentDetails } from '@/actions/getArtists'
+import { getContentDetails, publish_content } from '@/actions/getArtists'
 import { useToast } from '../ui/use-toast';
 
 function HeaderSkeleton() {
@@ -90,26 +90,11 @@ export function PageHeader({ id }: { id: string }) {
 
     try {
       // Make API request to submit album for review
-      const response = await fetch('https://creatorapi.mwonya.com/Requests/endpoints/artist/publishContent.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          content_id: id // Assuming 'id' is the album's content ID
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit release for review');
-      }
-
-      const data = await response.json();
+      const data = await publish_content(id);
 
       if (data.status === 'success' && data.data.success) {
         // Update local state
         setCurrentReleaseStatus(true);
-
         // Show success toast
         toast({
           title: "Release submitted for review",

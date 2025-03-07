@@ -104,6 +104,37 @@ export const getArtistsForUser = async () => {
     }
 }
 
+export async function publish_content(content_id: string) {
+
+
+    try {
+        const response = await fetch('https://creatorapi.mwonya.com/Requests/endpoints/artist/publishContent.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              content_id: content_id // Assuming 'id' is the album's content ID
+            })
+          });
+
+
+          if (!response.ok) {
+            throw new Error('Failed to submit release for review');
+          }
+    
+          const data = await response.json();
+
+          return data;
+    } catch (error) {
+        return {
+            status: "error",
+            message: `Error submitting release for review: ${error}`,
+        };
+    }
+
+}
+
 export async function getContentDetails(content_id: string) {
 
     try {
