@@ -1,121 +1,131 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import Image from "next/image"
 import {
     Music,
-    Building2,
     Sparkles,
     Users,
-    Globe2,
-    TrendingUp,
     Play,
-    Wand2,
     Mic2,
     ChevronRight,
-    Star,
     CheckCircle2,
     ArrowRight,
-    Headphones,
-    BarChart3,
-    Award,
     Volume2,
     MessageSquare,
-    X
-} from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+    X,
+    DollarSign,
+    Share2,
+    BookOpen,
+    Music2,
+    BarChart,
+    Check,
+    Upload,
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
+import HowMwonyaWorks from "./components/landingpage/how-mwonya-works"
 
 export default function LandingPage() {
-
-    const [showBanner, setShowBanner] = useState(true);
-    const [activeTestimonial, setActiveTestimonial] = useState(0);
+    const [showBanner, setShowBanner] = useState(true)
+    const [activeTestimonial, setActiveTestimonial] = useState(0)
 
     useEffect(() => {
         const timer = setInterval(() => {
-            setActiveTestimonial((prev) => (prev + 1) % 3);
-        }, 5000);
-        return () => clearInterval(timer);
-    }, []);
+            setActiveTestimonial((prev) => (prev + 1) % 3)
+        }, 5000)
+        return () => clearInterval(timer)
+    }, [])
 
     const testimonials = [
         {
-            quote: "The best platform I've used to manage my music releases. The analytics are incredible!",
-            author: "Sarah J.",
-            role: "Independent Artist"
+            name: "Ezzy.",
+            quote:
+                "The analytics tools helped me understand where my audience is located, allowing me to plan my first successful tour across Uganda.",
+            followers: "15.7K Followers",
+            releases: "24 Releases",
+            title: "Singer-Songwriter",
+            artwork: "/artist.jpg"
         },
         {
-            quote: "Finally, a platform that understands what our artists really need. Highly recommended!",
-            author: "Mike R.",
-            role: "Record Label Owner"
+            name: "Ole Jiggy",
+            quote:
+                "The direct fan subscription model has given me financial stability to focus on creating music that truly represents my artistic vision.",
+            followers: "8.3K Followers",
+            releases: "12 Releases",
+            title: "Afrobeat Artist",
+            artwork: "https://images.unsplash.com/photo-1641907068363-cd7789e13a45?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExMXx8fGVufDB8fHx8fA%3D%3D"
         },
         {
-            quote: "The marketing tools have helped me reach a whole new audience. Game changer!",
-            author: "Alex M.",
-            role: "Music Producer"
-        }
-    ];
+            name: "DJ Swizz",
+            title: "Producer & DJ",
+            quote:
+                "Mwonya has transformed how I connect with my fans. I've seen a 200% increase in my streaming revenue since joining the platform.",
+            followers: "12.5K Followers",
+            releases: "18 Releases",
+            artwork: "/creative.png"
+        },
+    ]
 
     const features = [
         {
-            icon: Headphones,
-            title: "Professional Distribution",
-            description: "Get your music on all major platforms with just a few clicks. Maintain 100% of your rights."
+            icon: Users,
+            title: "Artist Circles",
+            description: "Earn directly from your biggest fans with exclusive content and special perks.",
         },
         {
-            icon: BarChart3,
-            title: "Analytics & Insights",
-            description: "Track your performance with detailed analytics. Make data-driven decisions for your career."
+            icon: DollarSign,
+            title: "Stream Revenue",
+            description: "Get paid for every stream of your music with transparent and fair revenue sharing.",
         },
         {
-            icon: Award,
-            title: "Industry Recognition",
-            description: "Get featured in playlists and gain exposure to industry professionals and fans."
+            icon: Mic2,
+            title: "Live Shows",
+            description: "Host and promote live performances to grow your audience and create new revenue streams.",
         },
         {
-            icon: Globe2,
-            title: "Global Network",
-            description: "Connect with artists, producers, and industry professionals from around the world."
+            icon: Music,
+            title: "Promotion Tools",
+            description: "Reach the right fans with AI-powered discovery and targeted promotion tools.",
+        },
+        {
+            icon: Share2,
+            title: "Collaboration",
+            description: "Connect with other artists and create together through our collaboration platform.",
         },
         {
             icon: MessageSquare,
-            title: "Expert Support",
-            description: "Get guidance from industry experts and our dedicated support team."
+            title: "Fan Engagement",
+            description: "Build a loyal community with comments, shares, and playlists to grow your fanbase.",
         },
-        {
-            icon: Wand2,
-            title: "Marketing Tools",
-            description: "Promote your music effectively with our suite of marketing tools and resources."
-        }
-    ];
+    ]
 
     return (
         <div className="min-h-screen bg-background">
             {/* Promotional Banner */}
             {showBanner && (
-                <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-primary px-6 py-2.5 sm:px-3.5">
+                <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-[#000] px-6 py-2.5 sm:px-3.5">
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 flex-1">
-                        <Volume2 className="h-5 w-5 text-primary-foreground" />
-                        <p className="text-sm leading-6 text-primary-foreground">
-                            <strong className="font-semibold">Early Access 2025</strong>
-                            <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current"><circle cx="1" cy="1" r="1" /></svg>
-                            We are adding real time Data reporting to stats..
+                        <Volume2 className="h-5 w-5 text-white" />
+                        <p className="text-sm leading-6 text-white">
+                            <strong className="font-semibold">Mwonya</strong>
+                            <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current">
+                                <circle cx="1" cy="1" r="1" />
+                            </svg>
+                            Join mwonya and start sharing your work and meet your fans.
                         </p>
-                        <Button
-                            size="sm"
-                            className="bg-primary text-primary-foreground hover:bg-primary/90"
-                            asChild
-                        >
+                        <Button size="sm" className=" bg-white text-black border-none hover:bg-purple-100" asChild>
                             <Link href="/auth/login">
-                                Learn more <ChevronRight className="ml-2 h-4 w-4" />
+                                Login / Register <ChevronRight className="ml-2 h-4 w-4" />
                             </Link>
                         </Button>
                     </div>
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute right-4 top-4 text-primary-foreground hover:bg-primary/90"
+                        className="absolute right-4 top-4 text-white hover:bg-purple-600"
                         onClick={() => setShowBanner(false)}
                     >
                         <X className="h-4 w-4" />
@@ -124,65 +134,103 @@ export default function LandingPage() {
             )}
 
             {/* Hero Section */}
-            <section className="relative pt-20 pb-16 md:pt-32 md:pb-24">
-                <div className="container mx-auto px-4 md:px-6">
-                    <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-12">
-                        <div className="space-y-8">
-                            <div className="inline-flex items-center rounded-full bg-muted px-4 py-1.5 text-sm font-medium">
-                                <Sparkles className="mr-2 h-4 w-4" />
-                                Welcome to the future of music
+
+
+            <section className="relative pt-24 pb-20 md:pt-36 md:pb-32 bg-purple-950 overflow-hidden">
+                {/* Abstract background elements */}
+                <div className="absolute inset-0 z-0">
+                    <div className="absolute top-0 left-0 w-full h-full bg-purple-950 opacity-80"></div>
+                    <div className="absolute top-0 left-0 w-full h-full">
+                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-green-900/40 via-transparent to-purple-950"></div>
+                    </div>
+                    <div className="absolute -top-48 -right-48 w-96 h-96 rounded-full bg-green-800 blur-[100px] opacity-30"></div>
+                    <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-purple-600 blur-[100px] opacity-20"></div>
+                </div>
+
+                {/* Animated dots pattern */}
+                <div className="absolute inset-0 z-0 opacity-10">
+                    <div
+                        className="absolute inset-0"
+                        style={{
+                            backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+                            backgroundSize: "40px 40px",
+                        }}
+                    ></div>
+                </div>
+
+                <div className="container mx-auto px-4 md:px-6 relative z-10">
+                    <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
+                        <div className="space-y-10">
+                            <div className="inline-flex items-center rounded-full bg-purple-900/50 backdrop-blur-md border border-purple-700/30 px-5 py-2 text-sm font-medium text-purple-200">
+                                <Sparkles className="mr-2 h-4 w-4 text-green-300" />
+                                The Home of Ugandan Music
                             </div>
 
-                            <div className="space-y-4">
+                            <div className="space-y-6 text-white">
                                 <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-                                    Think bigger. Create louder.
+                                    <span className="block mb-2">Your Music, </span>
+                                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-white">
+                                        Your Community, <br />
+                                        Your Future
+                                    </span>
                                 </h1>
-                                <p className="max-w-[600px] text-lg text-muted-foreground md:text-xl">
-                                    Mwonya empowers artists and creators with digital tools to build, share, and grow—together. Whether you're an aspiring artist,
-                                    a professional or a record label, start your journey with us today.
+                                <p className="max-w-[600px] text-lg text-purple-100/80 md:text-xl">
+                                    Mwonya empowers Ugandan artists to take control of their careers, connect directly with fans, and build
+                                    sustainable income streams through their art.
                                 </p>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row gap-4">
+                            <div className="flex flex-col sm:flex-row gap-5">
                                 <Button
                                     size="lg"
-                                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+                                    className="bg-green-800 hover:bg-green-700 text-white py-6 px-8 rounded-full shadow-lg shadow-green-900/40 transition-all duration-300 hover:shadow-green-700/30 hover:scale-105"
                                     asChild
                                 >
                                     <Link href="/auth/login">
-                                        <Music className="mr-2 h-5 w-5" />
-                                        Login
+                                        <Music className="mr-3 h-5 w-5" />
+                                        Join Mwonya Today
                                     </Link>
                                 </Button>
                                 <Button
                                     size="lg"
                                     variant="outline"
-                                    className="border-input hover:bg-accent"
+                                    className="border-purple-700/50 text-purple-200 hover:bg-purple-800/40 py-6 px-8 rounded-full backdrop-blur-sm transition-all duration-300 hover:border-green-700"
                                     asChild
                                 >
                                     <Link href="/auth/register">
-                                        <Building2 className="mr-2 h-5 w-5" />
-                                        Register Now, Its Free!
+                                        <Play className="mr-3 h-5 w-5" />
+                                        Learn More
                                     </Link>
                                 </Button>
                             </div>
                         </div>
 
-                        <div className="lg:pl-8">
-                            <div className="grid gap-4 md:grid-cols-2">
-                                {features.slice(0, 4).map((feature, index) => (
-                                    <Card
-                                        key={index}
-                                        className={cn(
-                                            "group p-6 hover:shadow-lg transition-all duration-300",
-                                            "bg-card text-card-foreground"
-                                        )}
-                                    >
-                                        <feature.icon className="h-8 w-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
-                                        <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
-                                        <p className="text-sm text-muted-foreground">{feature.description}</p>
-                                    </Card>
-                                ))}
+                        <div className="lg:pl-8 relative">
+                            {/* Decorative elements */}
+                            <div className="absolute -top-10 -left-10 w-40 h-40 border border-green-800/30 rounded-full"></div>
+                            <div className="absolute -bottom-8 -right-8 w-64 h-64 border border-purple-600/20 rounded-full"></div>
+
+                            {/* Featured image with overlay effects */}
+                            <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl shadow-purple-900/40 z-10 border border-white/10">
+                                <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-transparent to-transparent z-10"></div>
+                                <Image
+                                    src="/joka.png"
+                                    alt="Ugandan artist performing"
+                                    fill
+                                    className="object-cover transition-all duration-700 hover:scale-105"
+                                />
+
+                                {/* Floating stats indicators */}
+                                <div className="absolute bottom-6 left-6 right-6 flex justify-between z-20">
+                                    <div className="bg-black/40 backdrop-blur-md rounded-xl px-4 py-2 border border-white/10">
+                                        <p className="text-xs text-green-200">Total Listeners</p>
+                                        <p className="text-white font-bold">10.2M+</p>
+                                    </div>
+                                    <div className="bg-black/40 backdrop-blur-md rounded-xl px-4 py-2 border border-white/10">
+                                        <p className="text-xs text-green-200">Total Artists</p>
+                                        <p className="text-white font-bold">1M+</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -190,109 +238,361 @@ export default function LandingPage() {
             </section>
 
             {/* Features Grid */}
-            <section className="py-16 md:py-24 bg-muted/50">
+            <section className="py-20 md:py-32 bg-gradient-to-b from-[#172026] to-[#333] relative">
                 <div className="container mx-auto px-4 md:px-6">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold mb-4">Everything You Need to Succeed</h2>
-                        <p className="text-muted-foreground max-w-2xl mx-auto">
-                            Comprehensive tools and resources to help you navigate the music industry and grow your career.
+                    <div className="max-w-3xl mx-auto text-center mb-16">
+                        <div className="inline-block text-sm font-medium text-white/90 mb-4 uppercase tracking-wider">
+                            For Artists
+                        </div>
+                        <h2 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">Everything You Need to Succeed</h2>
+                        <p className="text-white/80 mx-auto text-lg max-w-2xl">
+                            Mwonya provides all the tools you need to grow your music career, connect with fans, and earn from your art.
                         </p>
                     </div>
 
-                    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {features.map((feature, index) => (
-                            <Card
-                                key={index}
-                                className={cn(
-                                    "group p-6 hover:shadow-lg transition-all duration-300",
-                                    "bg-card text-card-foreground"
-                                )}
-                            >
-                                <feature.icon className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
-                                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                                <p className="text-muted-foreground">{feature.description}</p>
-                            </Card>
+
+                            <div key={index} className="group p-6 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition-all duration-300 flex flex-col h-full">
+                                <div className="mb-5 text-white">{<feature.icon className="h-6 w-6" />}</div>
+                                <h3 className="text-xl font-medium mb-2 text-white">{feature.title}</h3>
+                                <p className="text-white/80 text-sm leading-relaxed">{feature.description}</p>
+                            </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* Testimonials */}
-            <section className="py-16 md:py-24 bg-background">
-                <div className="container mx-auto px-4 md:px-6">
-                    <div className="text-center mb-12">
-                        <div className="flex justify-center mb-4">
-                            {[...Array(5)].map((_, i) => (
-                                <Star key={i} className="h-6 w-6 text-primary fill-primary" />
-                            ))}
-                        </div>
-                        <h2 className="text-3xl font-bold mb-4">Trusted by Artists Worldwide</h2>
-                    </div>
+            
 
-                    <div className="max-w-4xl mx-auto">
-                        <Card className={cn(
-                            "p-8 relative overflow-hidden",
-                            "bg-card text-card-foreground"
-                        )}>
-                            <div className="space-y-8">
-                                <p className="text-xl italic text-center">
-                                    "{testimonials[activeTestimonial].quote}"
-                                </p>
-                                <div className="flex items-center justify-center space-x-4">
-                                    <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
-                                        <Users className="h-6 w-6 text-muted-foreground" />
+
+            {/* How it works */}
+            <HowMwonyaWorks />
+
+
+
+            {/* Why Choose Mwonya Section */}
+            <section className="py-16 md:py-24 ">
+                <div className="container mx-auto px-4 md:px-6">
+                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <div className="relative h-[500px] w-full rounded-xl overflow-hidden">
+                                <Image
+                                    src="/creative.png"
+                                    alt="Ugandan artist in studio"
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        </div>
+                        <div className="space-y-6">
+                            <div className="inline-block rounded-lg bg-purple-100 px-3 py-1 text-sm text-purple-600 font-medium">
+                                Why Mwonya
+                            </div>
+                            <h2 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">Why Mwonya is Different</h2>
+                            <p className="text-lg text-muted-foreground">
+                                We've built Mwonya specifically for Ugandan artists and music lovers, with features that address the
+                                unique challenges and opportunities in our music industry.
+                            </p>
+
+                            <ul className="space-y-4">
+                                <li className="flex gap-3">
+                                    <CheckCircle2 className="h-6 w-6 text-purple-600 flex-shrink-0" />
+                                    <div>
+                                        <h3 className="font-bold">Focused solely on Ugandan music and artists</h3>
+                                        <p className="text-muted-foreground">We celebrate and promote Ugandan talent first and foremost.</p>
                                     </div>
-                                    <div className="text-center">
-                                        <p className="font-semibold">{testimonials[activeTestimonial].author}</p>
-                                        <p className="text-sm text-muted-foreground">
-                                            {testimonials[activeTestimonial].role}
+                                </li>
+                                <li className="flex gap-3">
+                                    <CheckCircle2 className="h-6 w-6 text-purple-600 flex-shrink-0" />
+                                    <div>
+                                        <h3 className="font-bold">90% revenue share from Artist Circles</h3>
+                                        <p className="text-muted-foreground">
+                                            Keep more of what you earn with our artist-friendly revenue model.
                                         </p>
                                     </div>
-                                </div>
-                            </div>
-                        </Card>
+                                </li>
+                                <li className="flex gap-3">
+                                    <CheckCircle2 className="h-6 w-6 text-purple-600 flex-shrink-0" />
+                                    <div>
+                                        <h3 className="font-bold">AI-powered tools to connect with your ideal audience</h3>
+                                        <p className="text-muted-foreground">
+                                            Our technology helps you find the fans who will love your music most.
+                                        </p>
+                                    </div>
+                                </li>
+                                <li className="flex gap-3">
+                                    <CheckCircle2 className="h-6 w-6 text-purple-600 flex-shrink-0" />
+                                    <div>
+                                        <h3 className="font-bold">A community of passionate music lovers</h3>
+                                        <p className="text-muted-foreground">
+                                            Connect with fans who truly appreciate and support Ugandan music.
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </section>
 
             {/* CTA Section */}
-            <section className="py-16 md:py-24">
+            <section className="py-16 md:py-24 bg-gradient-to-r from-purple-700 to-purple-900 text-white">
                 <div className="container mx-auto px-4 md:px-6">
-                    <Card className={cn(
-                        "p-8 md:p-12 text-center",
-                        "bg-card text-card-foreground"
-                    )}>
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Your Journey?</h2>
-                        <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                            Join our community of artists and music professionals. Take the first step towards your music career goals.
+                    <div className="text-center max-w-3xl mx-auto space-y-6">
+                        <h2 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+                            Ready to Take Your Music to the Next Level?
+                        </h2>
+                        <p className="text-xl text-purple-100">
+                            Join Mwonya today and start building your community, earning from your art, and connecting with fans like
+                            never before.
                         </p>
-                        <div className="flex flex-col sm:flex-row justify-center gap-4">
-                            <Button
-                                size="lg"
-                                className="bg-primary text-primary-foreground hover:bg-primary/90"
-                                asChild
-                            >
+                        <div className="pt-4">
+                            <Button size="lg" className=" text-purple-700 bg-white hover:bg-purple-100" asChild>
                                 <Link href="/auth/register">
-                                    <Music className="mr-2 h-5 w-5" />
-                                    Register Now
-                                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                                </Link>
-                            </Button>
-                            <Button
-                                size="lg"
-                                variant="outline"
-                                className="border-input hover:bg-accent"
-                                asChild
-                            >
-                                <Link href="/auth/login">
-                                    Learn More
-                                    <ChevronRight className="ml-2 h-5 w-5" />
+                                    Sign Up Now – It's Free! <ArrowRight className="ml-2 h-4 w-4" />
                                 </Link>
                             </Button>
                         </div>
-                    </Card>
+                        <p className="text-sm text-purple-200 pt-2">
+                            No credit card required. Start sharing your music in minutes.
+                        </p>
+                    </div>
                 </div>
             </section>
+
+            <section className="py-20 md:py-32 bg-red-600 relative overflow-hidden">
+                {/* Minimal background elements */}
+                <div className="absolute inset-0 z-0">
+                    <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-red-700 to-transparent"></div>
+                    <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-red-700 to-transparent"></div>
+                </div>
+
+                <div className="container mx-auto px-4 md:px-6 relative z-10">
+                    <div className="text-center mb-16">
+                        <div className="inline-block rounded-full bg-white/20 px-5 py-2 text-sm font-bold text-white mb-6">
+                            SUCCESS STORIES
+                        </div>
+                        <h2 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl mb-6 text-white">
+                            Artists Thriving with Mwonya
+                        </h2>
+                        <p className="text-white/90 max-w-2xl mx-auto text-lg">
+                            See how artists across Uganda are building their careers and connecting with fans through our platform.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {testimonials.map((testimony, index) => (
+                            <div
+                                className="bg-white/10 rounded-xl p-6 border border-white/20 hover:border-white/40 transition-all duration-300"
+                                key={index}
+                            >
+                                <div className="flex items-center mb-6">
+                                    <div className="h-16 w-16 rounded-full overflow-hidden mr-4 border-2 border-white/50">
+                                        <Image
+                                            src={testimony.artwork || "/placeholder.svg"}
+                                            alt={`${testimony.name} portrait`}
+                                            width={64}
+                                            height={64}
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-bold text-white">{testimony.name}</h3>
+                                        <p className="text-white/70">{testimony.title}</p>
+                                    </div>
+                                </div>
+
+                                <blockquote className="text-white/90 mb-6 text-lg">"{testimony.quote}"</blockquote>
+
+                                <div className="flex items-center justify-between border-t border-white/20 pt-4 mt-4">
+                                    <div className="flex items-center text-white/80">
+                                        <Users className="h-4 w-4 mr-2" />
+                                        <span className="text-sm">{testimony.followers}</span>
+                                    </div>
+                                    <div className="flex items-center text-white/80">
+                                        <Music2 className="h-4 w-4 mr-2" />
+                                        <span className="text-sm">{testimony.releases}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    
+                </div>
+            </section>
+
+
+
+            {/* Footer Section */}
+            <footer className="border-t  py-12">
+                <div className="container mx-auto px-4 md:px-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        <div className="col-span-2 md:col-span-1">
+                            <div className="flex items-center gap-2 mb-4">
+                                <div className="h-10 w-10 rounded-md bg-purple-600 flex items-center justify-center">
+                                    <Music className="h-6 w-6 text-white" />
+                                </div>
+                                <span className="text-xl font-bold text-purple-600">Mwonya</span>
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-4">Empowering Ugandan Artists, One Stream at a Time.</p>
+                            <div className="flex gap-4">
+                                <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="lucide lucide-facebook"
+                                    >
+                                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                                    </svg>
+                                    <span className="sr-only">Facebook</span>
+                                </Link>
+                                <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="lucide lucide-twitter"
+                                    >
+                                        <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+                                    </svg>
+                                    <span className="sr-only">Twitter</span>
+                                </Link>
+                                <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="lucide lucide-instagram"
+                                    >
+                                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                                        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                                    </svg>
+                                    <span className="sr-only">Instagram</span>
+                                </Link>
+                                <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="lucide lucide-youtube"
+                                    >
+                                        <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+                                        <path d="m10 15 5-3-5-3z" />
+                                    </svg>
+                                    <span className="sr-only">YouTube</span>
+                                </Link>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 className="font-bold mb-4">Company</h4>
+                            <ul className="space-y-2 text-sm">
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        About Us
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        Careers
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        Press
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        Blog
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 className="font-bold mb-4">Support</h4>
+                            <ul className="space-y-2 text-sm">
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        Help Center
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        Contact Us
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        FAQs
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        Community
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 className="font-bold mb-4">Legal</h4>
+                            <ul className="space-y-2 text-sm">
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        Terms of Service
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        Privacy Policy
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        Cookie Policy
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="#" className="text-muted-foreground hover:text-purple-600">
+                                        Copyright Info
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="border-t mt-12 pt-6 text-center text-sm text-muted-foreground">
+                        <p>&copy; {new Date().getFullYear()} Mwonya. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
         </div>
-    );
+    )
 }
+
