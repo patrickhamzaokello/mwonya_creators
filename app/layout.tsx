@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster"
 import "./globals.css";
 import { cn } from '@/lib/utils'
 import localFont from 'next/font/local'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const myFont = localFont({
     src: [
@@ -62,6 +63,7 @@ export default async function RootLayout({
         <main className="h-full">{children}</main>
         <Toaster />
       </body>
+      <GoogleAnalytics gaId="G-J8MHCYYF9P" />
 
     </html>
   );
