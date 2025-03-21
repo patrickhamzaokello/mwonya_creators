@@ -21,7 +21,7 @@ const acceptedFileTypes = [
     "video/mp4", "video/webm", "audio/mp3", "audio/aac", "audio/vnd.dlna.adts", "audio/x-m4a", "audio/wav", "audio/m4a", "audio/mpeg"
 ];
 
-const maxFileSize = 10 * 1024 * 1024; // 10MB
+const maxFileSize = 300 * 1024 * 1024; // 200MB
 
 const generateFilename = (fileType: string, bytes = 32) => {
     const array = new Uint8Array(bytes);
@@ -42,7 +42,7 @@ export async function getTrackSignedURL(fileType: string, fileSize: number, chec
     }
 
     if (fileSize > maxFileSize) {
-        return { failure: "File size too large", message: "The File is too large - allowed max. size is 10Mb" }
+        return { failure: "File size too large", message: "The File is too large - allowed max. size is 300Mb" }
     }
 
     const file_genName = generateFilename(fileType);
