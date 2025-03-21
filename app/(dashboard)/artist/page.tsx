@@ -47,23 +47,25 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen">
-      <main className="">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          <AddArtistCard onClick={() => setIsDialogOpen(true)} />
-          {Array.isArray(artists) && artists.map((artist) => (
-            <ArtistCard key={artist.id} artist={artist} />
-          ))}
-        </div>
-      </main>
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <main className="">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            <AddArtistCard onClick={() => setIsDialogOpen(true)} />
+            {Array.isArray(artists) && artists.map((artist) => (
+              <ArtistCard key={artist.id} artist={artist} />
+            ))}
+          </div>
+        </main>
 
-      <AddArtistDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        onSave={handleSaveArtist}
-      />
-    </div>
-  );
+        <AddArtistDialog
+          isOpen={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          onSave={handleSaveArtist}
+        />
+
+      </div>
+    </div>);
 }
 
 function OverViewSkeleton() {

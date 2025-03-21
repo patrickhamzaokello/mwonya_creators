@@ -12,10 +12,10 @@ interface PageProps {
 
 export default function ReleasePage({ params }: PageProps) {
   return (
-    <div className="min-h-screen bg-background">
-      <PageHeader id={params.id} />
-      <main className="container mx-auto py-8 px-4">
-        <div className="grid gap-8 lg:grid-cols-3">
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <PageHeader id={params.id} />
+        <div className="grid gap-8 lg:grid-cols-3 mt-3">
           <Suspense fallback={<ContentSkeleton />}>
             <AlbumDetails id={params.id} />
           </Suspense>
@@ -23,7 +23,7 @@ export default function ReleasePage({ params }: PageProps) {
             <TrackList id={params.id} />
           </Suspense>
         </div>
-      </main>
+      </div>
     </div>
   )
 }

@@ -63,31 +63,25 @@ const AppSidebar = ({ session }: { session: Session }) => {
   };
 
   return (
-    <Sidebar variant="inset" className="z-10 border-r-[1px]">
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground">
-                  <Image src="/mwonya_logo_white.svg" alt="Logo" width={20} height={20} />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">MWONYA</span>
-                  <span className="truncate text-xs">Creator: {session.user.role}</span>
-                </div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+    <Sidebar variant="inset" className="z-10 border-r-[1px] bg-background">
+      <SidebarHeader className=' border rounded' >
+        <div className="flex items-center space-x-2">
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-backgroutext-sidebar-background-foreground">
+            <Image src="/mwonya_logo_white.svg" alt="Logo" width={20} height={20} />
+          </div>
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-semibold">MWONYA</span>
+            <span className="truncate text-xs text-primary">{(session.user.role).toLocaleUpperCase()}</span>
+          </div>
+        </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className='bg-background'>
         <NavMain items={navMainWithActive} />
         <NavSecondary items={navSecondaryWithActive} className="mt-auto" />
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className='border rounded'>
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>

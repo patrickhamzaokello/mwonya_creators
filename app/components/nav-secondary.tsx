@@ -37,7 +37,7 @@ export function NavSecondary({
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
-          <SignOutButton className='w-full'>
+          <SignOutButton className='w-full bg-background  text-primary border-primary border hover:text-black'>
                             <span>Sign out</span>
                         </SignOutButton>
         </SidebarMenu>

@@ -59,7 +59,7 @@ const ContentCard = ({ item, onClick, view }: { item: ContentItem, onClick: () =
 
   if (view === 'grid') {
     return (
-      <Card 
+      <Card
         onClick={onClick}
         className="group hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden"
       >
@@ -97,7 +97,7 @@ const ContentCard = ({ item, onClick, view }: { item: ContentItem, onClick: () =
   }
 
   return (
-    <div 
+    <div
       onClick={onClick}
       className="group flex items-center gap-4 p-4 rounded-lg hover:bg-accent cursor-pointer transition-all"
     >
@@ -156,7 +156,7 @@ export default function ContentByYear() {
             return acc;
           }, []);
 
-            setContentByYear(groupedContent.sort((a: YearSection, b: YearSection) => b.year - a.year));
+          setContentByYear(groupedContent.sort((a: YearSection, b: YearSection) => b.year - a.year));
         } else {
           setError('Failed to fetch artist content');
         }
@@ -216,58 +216,60 @@ export default function ContentByYear() {
   }
 
   return (
-    <div className="w-full mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10 py-4">
-        <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold">Discography</h1>
-          <Badge variant="secondary" className="text-sm">
-            {contentByYear.reduce((acc, section) => acc + section.items.length, 0)} Releases
-          </Badge>
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex flex-col space-y-4">
+        <div className="flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10 py-4">
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-bold">Discography</h1>
+            <Badge variant="secondary" className="text-sm">
+              {contentByYear.reduce((acc, section) => acc + section.items.length, 0)} Releases
+            </Badge>
+          </div>
+          <div className="flex items-center gap-4">
+            <button className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-accent">
+              <Filter className="h-4 w-4" />
+              <span className="text-sm">Filter</span>
+            </button>
+            <ViewToggle view={view} setView={setView} />
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-accent">
-            <Filter className="h-4 w-4" />
-            <span className="text-sm">Filter</span>
-          </button>
-          <ViewToggle view={view} setView={setView} />
-        </div>
-      </div>
 
-      <Tabs defaultValue={contentByYear[0]?.year.toString()} className="w-full">
-        <ScrollArea className="w-full">
-          <TabsList className="inline-flex w-full justify-start border-b pb-0">
-            {contentByYear.map((section) => (
-              <TabsTrigger
-                key={section.year}
-                value={section.year.toString()}
-                className="flex items-center gap-2"
-              >
-                <Calendar className="h-4 w-4" />
-                {section.year}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </ScrollArea>
-
-        {contentByYear.map((section) => (
-          <TabsContent key={section.year} value={section.year.toString()}>
-            <div className={
-              view === 'grid'
-                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                : "divide-y"
-            }>
-              {section.items.map((item) => (
-                <ContentCard
-                  key={item.id}
-                  item={item}
-                  onClick={() => router.push(`/mwonya_release/${item.id}`)}
-                  view={view}
-                />
+        <Tabs defaultValue={contentByYear[0]?.year.toString()} className="w-full">
+          <ScrollArea className="w-full">
+            <TabsList className="inline-flex w-full justify-start border-b pb-0">
+              {contentByYear.map((section) => (
+                <TabsTrigger
+                  key={section.year}
+                  value={section.year.toString()}
+                  className="flex items-center gap-2"
+                >
+                  <Calendar className="h-4 w-4" />
+                  {section.year}
+                </TabsTrigger>
               ))}
-            </div>
-          </TabsContent>
-        ))}
-      </Tabs>
+            </TabsList>
+          </ScrollArea>
+
+          {contentByYear.map((section) => (
+            <TabsContent key={section.year} value={section.year.toString()}>
+              <div className={
+                view === 'grid'
+                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                  : "divide-y"
+              }>
+                {section.items.map((item) => (
+                  <ContentCard
+                    key={item.id}
+                    item={item}
+                    onClick={() => router.push(`/mwonya_release/${item.id}`)}
+                    view={view}
+                  />
+                ))}
+              </div>
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div>
     </div>
   );
 }

@@ -17,7 +17,8 @@ import {
       icon: SquareTerminal,
       url: '#',
       items: [
-        { id: 'home.dashboard', title: 'Dashboard', url: '/studio', roles: ['admin', 'artist', 'label'] },
+        { id: 'home.dashboard', title: 'Welcome', url: '/studio', roles: ['admin', 'artist', 'label'] },
+        { id: 'home.profile', title: 'Account', url: '/account', roles: ['admin', 'artist', 'label'] },
         { id: 'home.new_single', title: 'New Single', url: '/new_single', roles: [] },
         { id: 'home.new_artist', title: 'New Artist', url: '/artist', roles: ['admin', 'label'] }, // Override parent permissions
         { id: 'home.new_release', title: 'New Release', url: '/new_release', roles: ['admin', 'label', 'artist'] }, // Override parent permissions

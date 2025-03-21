@@ -191,17 +191,12 @@ export function PageHeader({ id }: { id: string }) {
 
             <Button variant="outline" size="sm" className="h-9">
               <Share2 className="mr-2 h-4 w-4" />
-              Share
+              Share Release
             </Button>
 
             <Button variant="outline" size="sm" className="h-9">
               <Download className="mr-2 h-4 w-4" />
               Download Files
-            </Button>
-
-            <Button variant="outline" size="sm" className="h-9">
-              <Share2 className="mr-2 h-4 w-4" />
-              Share
             </Button>
 
             <Button
