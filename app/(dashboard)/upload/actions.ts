@@ -29,7 +29,7 @@ const s3 = new S3Client({
 
 const acceptedFileTypes = ["image/jpeg", "image/JPG", "image/png", "image/webp", "image/gif", "video/mp4", "video/webm", "audio/mp3", "audio/wav", "audio/m4a", "audio/mpeg"]
 
-const maxFileSize = 10 * 1024 * 1024 // 10MB
+const maxFileSize = 300 * 1024 * 1024 // 30 0MB
 
 export async function getSignedURL(fileType: string, fileSize: number, checksum: string) {
     const session = await auth();

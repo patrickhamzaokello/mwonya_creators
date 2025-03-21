@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "find:unused": "next-unused"
   },
   "prisma": {
     "schema": "prisma/schema.prisma",
@@ -62,6 +63,7 @@
     "music-metadata": "^10.7.0",
     "next": "14.2.14",
     "next-auth": "^5.0.0-beta.22",
+    "next-unused": "^0.0.6",
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",

@@ -470,10 +470,10 @@ export default function TrackUploadForm({ artistId, artistName }: TrackUploadFor
                             onChange={(e) => {
                               const file = e.target.files?.[0];
                               if (file) {
-                                if (file.size > 10 * 1024 * 1024) {
+                                if (file.size > 300 * 1024 * 1024) {
                                   toast({
                                     title: "Error",
-                                    description: "Track file must be less than 10MB.",
+                                    description: "Track file must be less than 300MB.",
                                     variant: "destructive",
                                   });
                                   return;

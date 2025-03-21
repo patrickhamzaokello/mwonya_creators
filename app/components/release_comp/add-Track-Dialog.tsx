@@ -249,7 +249,7 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
                                         Click to upload or drag and drop multiple audio files
                                     </p>
                                     <p className="text-xs text-muted-foreground">
-                                        MP3, WAV, or M4A (max. 10MB each)
+                                        MP3, WAV, or M4A (max. 300MB each)
                                     </p>
                                 </div>
                                 <Input
