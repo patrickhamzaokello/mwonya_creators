@@ -1,20 +1,21 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Music, Bookmark, Plus, Share2, Edit3, PlayCircle, Users, TrendingUp, Globe, Check } from "lucide-react"
+import { Music, Plus, Edit3, Users, Check, Share2 } from "lucide-react"
 import type { MetricItemProps, ArtistProfileProps } from "@/types/artist"
 import { getArtistSummaryData } from "@/actions/dashboard/getOverview-stats"
-import { MetricsGrid } from "@/components/dashboard_metrics/MetricsGrid"
-import { Skeleton } from "@/components/ui/skeleton" // Add a skeleton component for loading states
 import { ShareComponent } from "../ShareComponent"
-import { Button } from "../ui/button"
+import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import Link from "next/link"
 
 const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: ArtistProfileProps) => {
   const [metrics, setMetrics] = useState<MetricItemProps[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState("overview")
 
   useEffect(() => {
     const fetchMetrics = async () => {
@@ -34,10 +35,51 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
     fetchMetrics()
   }, [artistID, isVerified])
 
+  const MetricItem = ({ value, label, prefix }: MetricItemProps) => (
+    <Card className="bg-background/60 border-border/40 hover:bg-accent/10 transition-all duration-300">
+      <CardContent className="p-5">
+        <div className="flex flex-col space-y-1">
+          <div className="flex items-baseline gap-1">
+            {prefix && <span className="text-sm text-muted-foreground">{prefix}</span>}
+            <span className="text-2xl font-bold tracking-tight">{value.toLocaleString()}</span>
+          </div>
+          <p className="text-sm text-muted-foreground">{label}</p>
+        </div>
+      </CardContent>
+    </Card>
+  )
+
+  const renderMetricsGrid = () => {
+    if (error) {
+      return (
+        <Alert variant="destructive" className="bg-destructive/10 border-destructive/20 text-destructive-foreground">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )
+    }
+
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        {isLoading
+          ? Array.from({ length: 4 }, (_, i) => (
+              <Card key={i} className="bg-background/60 border-border/40">
+                <CardContent className="p-5">
+                  <div className="space-y-2">
+                    <Skeleton className="h-8 w-24" />
+                    <Skeleton className="h-4 w-16" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          : metrics.map((metric, index) => <MetricItem key={index} {...metric} />)}
+      </div>
+    )
+  }
+
   return (
-    <div className="w-full border rounded-lg bg-background text-white">
+    <div className="w-full rounded-xl bg-background overflow-hidden">
       {/* Hero Section */}
-      <div className="relative h-80 w-full overflow-hidden" key={`cover-${artistID}`}>
+      <div className="relative h-64 sm:h-80 w-full" key={`cover-${artistID}`}>
         {coverArt ? (
           <img
             src={coverArt || "/placeholder.svg"}
@@ -45,20 +87,18 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-r from-blue-900 to-purple-900" />
+          <div className="w-full h-full bg-gradient-to-r from-primary/20 to-primary/40" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/50 to-background/80" />
-
-
+        <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-background/50 to-background" />
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-6 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Profile Section */}
-        <div className="flex flex-col md:flex-row md:items-end -mt-24 mb-8">
+        <div className="flex flex-col md:flex-row md:items-end -mt-20 mb-10">
           {/* Profile Image */}
           <div className="relative z-10" key={`profile-${artistID}`}>
-            <div className="w-36 h-36 rounded-xl overflow-hidden border-4 border-white shadow-2xl hover:shadow-3xl transition-shadow">
+            <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-xl overflow-hidden border-4 border-background shadow-lg">
               {profileImage ? (
                 <img
                   src={profileImage || "/placeholder.svg"}
@@ -66,35 +106,40 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                  <Music className="w-12 h-12 text-gray-400" />
+                <div className="w-full h-full bg-gradient-to-br from-muted to-muted/70 flex items-center justify-center">
+                  <Music className="w-10 h-10 text-muted-foreground" />
                 </div>
               )}
             </div>
             {isVerified && (
-              <div className="absolute -bottom-2 -right-2 bg-primary rounded-full p-1.5 border-2 border-background shadow-lg">
-                <Check className="h-4 w-4 text-white" />
+              <div className="absolute -bottom-2 -right-2 bg-primary rounded-full p-1.5 border-2 border-background shadow-md">
+                <Check className="h-4 w-4 text-primary-foreground" />
               </div>
             )}
           </div>
 
           {/* Artist Info */}
           <div className="flex-1 mt-6 md:mt-0 md:ml-6">
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
               <div>
-                <h1 className="text-4xl font-bold text-white tracking-tight mb-2">{name}</h1>
-                <div className="flex items-center gap-3">
-                  <span className="text-white/80 text-sm bg-white/10 px-3 py-1 rounded-full">Creator</span>
-
+                <div className="flex items-center gap-2">
+                  <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">{name}</h1>
+                </div>
+                <div className="flex items-center gap-2 mt-2">
+                  <Badge variant="secondary" className="text-xs font-normal">
+                    Creator
+                  </Badge>
                 </div>
               </div>
-              <div className="flex mt-4 md:mt-0 space-x-3">
-                <ShareComponent title="Share Profile Link" triggerClassName="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-all flex items-center gap-2 backdrop-blur-sm border border-white/10" mediaId={artistID} mediaType="artist" />
-                <Button
-                  className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-all flex items-center gap-2 backdrop-blur-sm border border-white/10"
-                  aria-label="Edit Profile"
-                >
-                  <Edit3 className="w-5 h-5" />
+              <div className="flex flex-wrap gap-3">
+                <ShareComponent
+                  title="Share Profile Link"
+                  triggerClassName="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-foreground hover:text-accent-foreground h-9 px-4 py-2"
+                  mediaId={artistID}
+                  mediaType="artist"
+                />
+                <Button variant="outline" size="sm" className="gap-2" aria-label="Edit Profile">
+                  <Edit3 className="w-4 h-4" />
                   <span>Edit Profile</span>
                 </Button>
               </div>
@@ -103,42 +148,30 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
         </div>
 
         {/* Action Bar */}
-        <div className="mb-8 flex gap-3">
+        <div className="mb-10 flex flex-wrap gap-3">
           <Link href={`/new_release`}>
-            <Button
-              className="flex items-center gap-2 bg-primary hover:bg-primary text-black px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg"
-              aria-label="New Release"
-            >
+            <Button className="gap-2" aria-label="New Release">
               <Plus className="w-4 h-4" />
               <span>New Release</span>
             </Button>
           </Link>
           <Link href={`/mwonya_release`}>
-            <Button
-              className="flex items-center text-foreground gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-sm font-medium transition-all backdrop-blur-sm border border-white/10"
-              aria-label="Manage Releases"
-            >
+            <Button variant="outline" className="gap-2" aria-label="Manage Releases">
               <Users className="w-4 h-4" />
               <span>Manage Releases</span>
             </Button>
           </Link>
         </div>
-      </div>
 
-      {/* Metrics Grid */}
-      <div className="bg-white/5 p-6 backdrop-blur-sm border border-white/10 shadow-xl">
-        {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <Skeleton key={index} className="h-24 rounded-lg bg-white/10" />
-            ))}
-          </div>
-        ) : (
-          <MetricsGrid metrics={metrics} isLoading={isLoading} error={error} />
-        )}
+        {/* Metrics Section */}
+        <div className="mb-10">
+          <h2 className="text-xl font-semibold mb-4">Performance Overview</h2>
+          {renderMetricsGrid()}
+        </div>
       </div>
     </div>
   )
 }
 
 export default ArtistProfile
+
