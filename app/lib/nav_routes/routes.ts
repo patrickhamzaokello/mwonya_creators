@@ -13,16 +13,17 @@ import {
   export const ROUTES = {
     HOME: {
       id: 'home',
-      title: 'Home',
+      title: 'Artist',
       icon: SquareTerminal,
       url: '#',
       items: [
-        { id: 'home.dashboard', title: 'Welcome', url: '/studio', roles: ['admin', 'artist', 'label'] },
-        { id: 'home.profile', title: 'Account', url: '/account', roles: ['admin', 'artist', 'label'] },
+        { id: 'home.dashboard', title: 'Home', url: '/studio', roles: ['admin', 'artist', 'label'] },
+        { id: 'home.profile', title: 'Profile', url: '/account', roles: ['admin', 'artist', 'label'] },
         { id: 'home.new_single', title: 'New Single', url: '/new_single', roles: [] },
         { id: 'home.new_artist', title: 'New Artist', url: '/artist', roles: ['admin', 'label'] }, // Override parent permissions
         { id: 'home.new_release', title: 'New Release', url: '/new_release', roles: ['admin', 'label', 'artist'] }, // Override parent permissions
         { id: 'home.releases', title: 'Releases', url: '/mwonya_release', roles: ['admin','label','artist'] },
+        { id: 'home.artist_settings', title: 'Account Settings', url: '/artist_profile', roles: ['admin','label','artist'] },
       ],
     },
     EARNINGS: {
@@ -61,7 +62,7 @@ import {
       icon: Settings2,
       url: '#',
       items: [
-        { id: 'settings.profile', title: 'Profile', url: '/artist_profile', roles: [] },
+        { id: 'settings.account', title: 'Profile', url: '/account_settings', roles: [] },
       ],
     },
     DOCUMENTATION: {

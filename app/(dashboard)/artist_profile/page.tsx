@@ -1,41 +1,76 @@
-import { ProfileArtist } from "@/types/artist"
-import { ArtistProfile } from "@/components/artistSettings/ArtistProfile"
+"use client"
+import { Metadata } from "next"
+import Image from "next/image"
+import { useArtist } from "@/contexts/ArtistContext";
 
-// In a real application, you would fetch this data from your database
-const artistData: ProfileArtist = {
-  no: 1,
-  id: "artist123",
-  name: "Jane Doe",
-  email: "jane@example.com",
-  phone: "+1234567890",
-  facebookurl: "https://facebook.com/janedoe",
-  twitterurl: "https://twitter.com/janedoe",
-  instagramurl: "https://instagram.com/janedoe",
-  youtubeurl: "https://youtube.com/janedoe",
-  meta_data: "",
-  RecordLable: "Independent",
-  isIndependent: true,
-  profilephoto: "https://mwonya-kasfa-assets-store.s3.us-east-1.amazonaws.com/images/artist/4495fad518d4929b0954e971820360e9a12e8d9787ba0f0d4f916084778f6ea0.jpeg",
-  cover_image:  "https://mwonya-kasfa-assets-store.s3.us-east-1.amazonaws.com/images/artist/4495fad518d4929b0954e971820360e9a12e8d9787ba0f0d4f916084778f6ea0.jpeg",
-  bio: "Jane is a contemporary artist known for her soulful vocals and introspective lyrics.",
-  genre: "Indie Pop",
-  datecreated: "2023-01-01",
-  releaseDate: "2023-06-15",
-  available: true,
-  lastupdate: "2023-06-20",
-  tag: "indie,pop,acoustic",
-  overalplays: 10000,
-  status: "active",
-  featured: true,
-  verified: true,
-  circle_cost: 5,
-  circle_cost_maximum: 20,
-  circle_duration: 30,
-}
+import { Button } from "@/components/ui/button"
 
-export default function Home() {
-  return (
-      <ArtistProfile initialData={artistData} />
-  )
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { DatePickerWithRange } from "@/components/dashboard_metrics/date-range-picker"
+import { MainNav } from "@/components/dashboard_metrics/main-nav"
+import { Overview } from "@/components/dashboard_metrics/overview"
+import { RecentActivity } from "@/components/dashboard_metrics/recent-activity"
+import { Search } from "@/components/dashboard_metrics/search"
+import { TopSongs } from "@/components/dashboard_metrics/top-songs"
+import { UserNav } from "@/components/dashboard_metrics/user-nav"
+import { UpcomingPayout } from "@/components/dashboard_metrics/upcoming-payment";
+import { DashboardSkeleton } from "@/components/dashboard_metrics/dashboard-skeleton";
+import { useEffect, useState } from 'react'
+import { DashboardMetrics } from "@/components/dashboard_metrics/metrics";
+import ArtistProfile from "@/components/dashboard_metrics/artist-profile";
+import { useRouter } from 'next/navigation'
+import Link from "next/link";
+import { CardTitle, CardDescription, CardFooter, Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Calendar, Music, Users, DollarSign, BarChart3, ChevronRight, Clock, Gift, Heart, MessageSquare, TrendingUp, Zap } from "lucide-react";
+import ArtistProfileEditorWithActions from "@/components/artistSettings/artist-profile-editor";
+import ProfileEditPage from "@/components/artistSettings/artist_profile_edit_better_flow";
+
+export default function DashboardPage() {
+
+    const [selectedArtist, setSelectedArtist] = useArtist();
+    const router = useRouter()
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+    const [userRole, setUserRole] = useState<string>('');
+    const [hasArtists, setHasArtists] = useState(false)
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const role = 'artist'; // Default to artist if not found
+                setUserRole(role);
+                const hasAnyArtists = !!selectedArtist; // Or check length of artists array
+                setHasArtists(hasAnyArtists);
+
+                setIsLoading(false);
+            } catch (err) {
+                setError("Failed to load user data");
+                setIsLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, [selectedArtist]);
+
+
+
+    if (error) {
+        return <div className="text-red-500">{error}</div>
+    }
+
+    if (selectedArtist) {
+
+        const artist = selectedArtist.id;
+        return (
+            <div className="min-h-screen text-foreground">
+                <div className="max-w-7xl mx-auto flex flex-col space-y-4">
+                    {/* <ArtistProfileEditorWithActions artistId={artist} /> */}
+                    <ProfileEditPage artistId={artist} />
+                </div>
+            </div>
+        )
+    }
+
+
 }
 

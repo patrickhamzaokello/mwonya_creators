@@ -158,7 +158,7 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
           </Link>
           
           
-          <Link href={`/edit_profile`}>
+          <Link href={`/artist_profile`}>
             <Button variant="outline" className="gap-2" aria-label="Manage Releases">
               <Edit3 className="w-4 h-4" />
               <span>Edit Profile</span>
