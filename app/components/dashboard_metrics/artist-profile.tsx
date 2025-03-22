@@ -62,15 +62,15 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {isLoading
           ? Array.from({ length: 4 }, (_, i) => (
-              <Card key={i} className="bg-background/60 border-border/40">
-                <CardContent className="p-5">
-                  <div className="space-y-2">
-                    <Skeleton className="h-8 w-24" />
-                    <Skeleton className="h-4 w-16" />
-                  </div>
-                </CardContent>
-              </Card>
-            ))
+            <Card key={i} className="bg-background/60 border-border/40">
+              <CardContent className="p-5">
+                <div className="space-y-2">
+                  <Skeleton className="h-8 w-24" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+              </CardContent>
+            </Card>
+          ))
           : metrics.map((metric, index) => <MetricItem key={index} {...metric} />)}
       </div>
     )
@@ -131,24 +131,19 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
                   </Badge>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-3">
-                <ShareComponent
-                  title="Share Profile Link"
-                  triggerClassName="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-foreground hover:text-accent-foreground h-9 px-4 py-2"
-                  mediaId={artistID}
-                  mediaType="artist"
-                />
-                <Button variant="outline" size="sm" className="gap-2" aria-label="Edit Profile">
-                  <Edit3 className="w-4 h-4" />
-                  <span>Edit Profile</span>
-                </Button>
-              </div>
+
             </div>
           </div>
         </div>
 
         {/* Action Bar */}
         <div className="mb-10 flex flex-wrap gap-3">
+        <ShareComponent
+            title="Share Profile Link"
+            triggerClassName="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-foreground hover:text-accent-foreground h-9 px-4 py-2"
+            mediaId={artistID}
+            mediaType="artist"
+          />
           <Link href={`/new_release`}>
             <Button className="gap-2" aria-label="New Release">
               <Plus className="w-4 h-4" />
@@ -159,6 +154,14 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
             <Button variant="outline" className="gap-2" aria-label="Manage Releases">
               <Users className="w-4 h-4" />
               <span>Manage Releases</span>
+            </Button>
+          </Link>
+          
+          
+          <Link href={`/edit_profile`}>
+            <Button variant="outline" className="gap-2" aria-label="Manage Releases">
+              <Edit3 className="w-4 h-4" />
+              <span>Edit Profile</span>
             </Button>
           </Link>
         </div>

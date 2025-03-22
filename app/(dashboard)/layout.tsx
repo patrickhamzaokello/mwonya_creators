@@ -35,7 +35,7 @@ export default async function DashboardLayout({
     <ArtistProvider>
       <SidebarProvider>
         <AppSidebar session={session} />
-        <main className="w-full">
+        <main className="w-full bg-sidebar-accent">
           <DashboardNavbar session={session} />
           <div className="p-4 md:gap-8 md:p-4" >
             {children}
