@@ -6,8 +6,10 @@ import { MoreVertical, Pencil, Play, Pause, Heart, Download, Share2, Trash2 } fr
 import { Progress } from '@/components/ui/progress'
 import { formatAudioDuration } from '@/utils/audioutils'
 import { ArtistSearchPopup } from './artistSearch_popup'
+import { ShareComponent } from '../ShareComponent'
 
 interface Track {
+    id: string
     title: string
     duration: string
     trackFilePath: string
@@ -23,9 +25,10 @@ interface TrackRowProps {
     currentTime: string;
     onSeek: (percent: number) => void;
     isLoading: boolean;
+    releasesStatus: boolean;
 }
 
-export function TrackRow({ track, index, isPlaying, onPlayToggle, progress, currentTime, onSeek, isLoading }: TrackRowProps) {
+export function TrackRow({ track, index, isPlaying, onPlayToggle, progress, currentTime, onSeek, isLoading, releasesStatus }: TrackRowProps) {
     const [isHovered, setIsHovered] = useState(false)
 
     const track_duration = formatAudioDuration(track.duration);
@@ -73,39 +76,26 @@ export function TrackRow({ track, index, isPlaying, onPlayToggle, progress, curr
                     </p>
                 </div>
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <Heart className="h-4 w-4" />
-                        <span className="sr-only">Like</span>
-                    </Button>
+
                     <ArtistSearchPopup />
 
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <Download className="h-4 w-4" />
-                        <span className="sr-only">Download</span>
-                    </Button>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
+                    {releasesStatus ? (
+                        <ShareComponent mediaId={track.id} mediaType="track" triggerClassName="bg-primary hover:bg-primary text-black hover:text-black"/>
+
+                    ) : (
+                        <div>
                             <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <MoreVertical className="h-4 w-4" />
-                                <span className="sr-only">More options</span>
+                                <Pencil className="h-4 w-4" />
+                                <span className="sr-only">Edit</span>
                             </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuItem>
-                                <Pencil className="mr-2 h-4 w-4" />
-                                Edit Track Details
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <Share2 className="mr-2 h-4 w-4" />
-                                Share Track
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-destructive">
-                            <Trash2 className="mr-2 h-4 w-4" />
-                                Remove Track
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Trash2 className="h-4 w-4" />
+                                <span className="sr-only">Edit</span>
+                            </Button>
+                        </div>
+                    )}
+
                 </div>
             </div>
             {(isPlaying || isHovered) && (

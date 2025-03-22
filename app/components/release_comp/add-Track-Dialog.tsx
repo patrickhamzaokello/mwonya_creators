@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,
@@ -32,6 +32,7 @@ interface AddTrackDialogProps {
     genre_id: number;
     album_tag: string;
     album_release_date: string; // ISO date string
+    album_available: boolean;
 }
 
 const computeSHA256 = async (file: File) => {
@@ -43,10 +44,11 @@ const computeSHA256 = async (file: File) => {
 }
 
 
-export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id, album_tag, album_release_date }: AddTrackDialogProps) {
+export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id, album_tag, album_release_date, album_available }: AddTrackDialogProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([])
     const [isUploading, setIsUploading] = useState(false)
+    const [is_album_available, set_is_album_available] = useState(album_available)
     const { toast } = useToast()
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(event.target.files || [])
@@ -61,6 +63,13 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
 
         setUploadingFiles(prev => [...prev, ...newUploadingFiles])
     }
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            set_is_album_available(album_available)
+        }
+        fetchContent()
+    }, [album_available])
 
     const removeFile = (index: number) => {
         setUploadingFiles(prev => prev.filter((_, i) => i !== index))
@@ -79,7 +88,7 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
                     title: "Error",
                     description: signedURLResult.message,
                     variant: "destructive",
-                  })
+                })
                 throw new Error(signedURLResult.failure)
             }
 
@@ -153,7 +162,7 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
                                     title: "Success",
                                     description: "Failed to save track details",
                                     variant: "destructive",
-                                  })
+                                })
                                 throw new Error(createTrackResponse.failure)
                             }
 
@@ -163,7 +172,7 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
                                 title: "Success",
                                 description: message,
                                 variant: "default",
-                              })
+                            })
 
 
                         } catch (saveError) {
@@ -171,7 +180,7 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
                                 title: "Error",
                                 description: String(saveError),
                                 variant: "destructive",
-                              })
+                            })
                             setUploadingFiles(prev => prev.map((f, i) =>
                                 i === index ? { ...f, status: 'error' } : f
                             ));
@@ -225,10 +234,12 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Tracks
-                </Button>
+                {!is_album_available ? (
+                    <Button>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Tracks
+                    </Button>
+                ) : null}
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>

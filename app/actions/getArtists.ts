@@ -104,7 +104,7 @@ export const getArtistsForUser = async () => {
     }
 }
 
-export async function publish_content(content_id: string) {
+export async function publish_content(content_id: string, content_state: number) {
 
 
     try {
@@ -114,7 +114,8 @@ export async function publish_content(content_id: string) {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              content_id: content_id // Assuming 'id' is the album's content ID
+              content_id: content_id, // Assuming 'id' is the album's content ID
+              content_state: content_state
             })
           });
 

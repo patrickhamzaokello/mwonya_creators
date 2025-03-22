@@ -6,6 +6,9 @@ import type { MetricItemProps, ArtistProfileProps } from "@/types/artist"
 import { getArtistSummaryData } from "@/actions/dashboard/getOverview-stats"
 import { MetricsGrid } from "@/components/dashboard_metrics/MetricsGrid"
 import { Skeleton } from "@/components/ui/skeleton" // Add a skeleton component for loading states
+import { ShareComponent } from "../ShareComponent"
+import { Button } from "../ui/button"
+import Link from "next/link"
 
 const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: ArtistProfileProps) => {
   const [metrics, setMetrics] = useState<MetricItemProps[]>([])
@@ -46,21 +49,7 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/50 to-background/80" />
 
-        {/* Action Buttons */}
-        <div className="absolute top-6 right-6 flex space-x-3">
-          <button
-            className="p-2.5 rounded-full bg-background/40 hover:bg-background/60 transition-all backdrop-blur-sm border border-white/10"
-            aria-label="Share"
-          >
-            <Share2 className="w-5 h-5" />
-          </button>
-          <button
-            className="p-2.5 rounded-full bg-background/40 hover:bg-background/60 transition-all backdrop-blur-sm border border-white/10"
-            aria-label="Bookmark"
-          >
-            <Bookmark className="w-5 h-5" />
-          </button>
-        </div>
+
       </div>
 
       {/* Main Content */}
@@ -83,7 +72,7 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
               )}
             </div>
             {isVerified && (
-              <div className="absolute -bottom-2 -right-2 bg-blue-500 rounded-full p-1.5 border-2 border-background shadow-lg">
+              <div className="absolute -bottom-2 -right-2 bg-primary rounded-full p-1.5 border-2 border-background shadow-lg">
                 <Check className="h-4 w-4 text-white" />
               </div>
             )}
@@ -96,24 +85,18 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
                 <h1 className="text-4xl font-bold text-white tracking-tight mb-2">{name}</h1>
                 <div className="flex items-center gap-3">
                   <span className="text-white/80 text-sm bg-white/10 px-3 py-1 rounded-full">Creator</span>
-                  
+
                 </div>
               </div>
               <div className="flex mt-4 md:mt-0 space-x-3">
-                <button
-                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-all flex items-center gap-2 shadow-lg"
-                  aria-label="Share Profile Link"
-                >
-                  <PlayCircle className="w-5 h-5" />
-                  <span>Share Profile Link</span>
-                </button>
-                <button
+                <ShareComponent title="Share Profile Link" triggerClassName="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-all flex items-center gap-2 backdrop-blur-sm border border-white/10" mediaId={artistID} mediaType="artist" />
+                <Button
                   className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-all flex items-center gap-2 backdrop-blur-sm border border-white/10"
                   aria-label="Edit Profile"
                 >
                   <Edit3 className="w-5 h-5" />
                   <span>Edit Profile</span>
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -121,20 +104,24 @@ const ArtistProfile = ({ artistID, name, coverArt, profileImage, isVerified }: A
 
         {/* Action Bar */}
         <div className="mb-8 flex gap-3">
-          <button
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg"
-            aria-label="New Release"
-          >
-            <Plus className="w-4 h-4" />
-            <span>New Release</span>
-          </button>
-          <button
-            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-sm font-medium transition-all backdrop-blur-sm border border-white/10"
-            aria-label="Manage Releases"
-          >
-            <Users className="w-4 h-4" />
-            <span>Manage Releases</span>
-          </button>
+          <Link href={`/new_release`}>
+            <Button
+              className="flex items-center gap-2 bg-primary hover:bg-primary text-black px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg"
+              aria-label="New Release"
+            >
+              <Plus className="w-4 h-4" />
+              <span>New Release</span>
+            </Button>
+          </Link>
+          <Link href={`/mwonya_release`}>
+            <Button
+              className="flex items-center text-foreground gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-sm font-medium transition-all backdrop-blur-sm border border-white/10"
+              aria-label="Manage Releases"
+            >
+              <Users className="w-4 h-4" />
+              <span>Manage Releases</span>
+            </Button>
+          </Link>
         </div>
       </div>
 
