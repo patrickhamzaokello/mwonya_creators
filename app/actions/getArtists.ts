@@ -7,32 +7,14 @@ import { ProfileArtist, TsearchArtist } from "@/types/artist";
 
 
 
-export async function updateArtistProfile(data: Partial<ProfileArtist>): Promise<{ success: boolean; message: string }> {
-  // In a real application, you would update the database here
-
-  // Simulate a delay and return success
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  return { success: true, message: "Profile updated successfully" }
-}
 
 
 
 
 
-// This is a mock database. In a real application, you would query your actual database here.
-const mockArtists: TsearchArtist[] = [
-    { id: "1", name: "The Beatles", imageUrl: "/album_placeholder.svg?height=40&width=40" },
-    { id: "2", name: "Queen", imageUrl: "/album_placeholder.svg?height=40&width=40" },
-    { id: "3", name: "Pink Floyd", imageUrl: "/album_placeholder.svg?height=40&width=40" },
-    { id: "4", name: "Led Zeppelin", imageUrl: "/album_placeholder.svg?height=40&width=40" },
-    { id: "5", name: "Radiohead", imageUrl: "/album_placeholder.svg?height=40&width=40" },
-]
 
 export async function searchArtistsName(query: string): Promise<TsearchArtist[]> {
-    // Simulate database query delay
     const artist_result = await searchArtistName(query.toLowerCase());
-
 
     if (artist_result.artist_data) {
 

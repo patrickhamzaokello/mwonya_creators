@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -18,9 +19,26 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Facebook, Instagram, Twitter, Youtube, Edit2, Save } from "lucide-react";
+import {
+    Facebook,
+    Instagram,
+    Twitter,
+    Youtube,
+    Save,
+    X,
+    User,
+    Mail,
+    Music,
+    DollarSign,
+    FileText,
+    Image,
+    Share2,
+    ChevronLeft,
+    ChevronRight
+} from "lucide-react";
 import { ArtistData, getArtistProfile, updateArtistProfile } from "@/actions/artist-profile-edit";
 import { toast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 interface ArtistProfileEditorProps {
     artistId: string;
@@ -29,19 +47,31 @@ interface ArtistProfileEditorProps {
 export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) {
     const [loading, setLoading] = useState(true);
     const [data, setArtistData] = useState<ArtistData | null>(null);
-    const [editSections, setEditSections] = useState({
-        name: false,
-        contact: false,
-        artistInfo: false,
-        financial: false,
-        bio: false,
-        profileImage: false,
-        coverImage: false,
-        socialMedia: false,
-    });
     const [tempData, setTempData] = useState<ArtistData | null>(null);
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-    const [currentSection, setCurrentSection] = useState("");
+    const [hasChanges, setHasChanges] = useState(false);
+    const [activeTab, setActiveTab] = useState("basic");
+
+    const [scrollPosition, setScrollPosition] = useState(0);
+
+    const tabs = [
+        { id: 'basic', icon: User, label: 'Basic' },
+        { id: 'contact', icon: Mail, label: 'Contact' },
+        { id: 'artist', icon: Music, label: 'Artist Info' },
+        { id: 'financial', icon: DollarSign, label: 'Financial' },
+        { id: 'bio', icon: FileText, label: 'Biography' },
+        { id: 'images', icon: Image, label: 'Images' },
+        { id: 'social', icon: Share2, label: 'Social' },
+    ];
+
+    const handleScroll = (direction: string) => {
+        const newPosition = direction === 'left'
+            ? Math.max(0, scrollPosition - 1)
+            : Math.min(tabs.length - (window.innerWidth < 768 ? 3 : 5), scrollPosition + 1);
+        setScrollPosition(newPosition);
+    };
+
+    const isScrollable = window.innerWidth < 1024;
 
     useEffect(() => {
         async function loadArtistData() {
@@ -74,13 +104,15 @@ export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) 
         loadArtistData();
     }, [artistId]);
 
-    const toggleEdit = (section: string) => {
-        setEditSections({
-            ...editSections,
-            [section]: !editSections[section as keyof typeof editSections],
-        });
-        setTempData(data);
-    };
+    useEffect(() => {
+        // Check for changes between original and temp data
+        if (data && tempData) {
+            const changed = Object.keys(data).some(
+                key => data[key as keyof ArtistData] !== tempData[key as keyof ArtistData]
+            );
+            setHasChanges(changed);
+        }
+    }, [data, tempData]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (tempData) {
@@ -109,121 +141,236 @@ export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) 
         }
     };
 
-    const openConfirmDialog = (section: string) => {
-        setCurrentSection(section);
+    const openConfirmDialog = () => {
         setConfirmDialogOpen(true);
+    };
+
+    const cancelChanges = () => {
+        if (data) {
+            setTempData(data);
+            setHasChanges(false);
+            toast({
+                title: "Changes discarded",
+                description: "Your changes have been discarded."
+            });
+        }
     };
 
     const saveChangesToBackend = async (modifiedFields: Partial<ArtistData>) => {
         try {
-            const updateprofile = await updateArtistProfile(modifiedFields);
-            if (!updateprofile.success) throw new Error("Failed to save changes");
-            toast({ title: "Success", description: "Profile updated successfully!" });
+            const updateprofile = await updateArtistProfile({
+                ...modifiedFields,
+                id: artistId // Ensure ID is included
+            });
+
+            if (!updateprofile.success) throw new Error(updateprofile.error || "Failed to save changes");
+
+            // Update the base data with the new values
+            setArtistData(tempData);
+            setHasChanges(false);
+
+            toast({
+                title: "Success",
+                description: "Profile updated successfully!"
+            });
+
+            setConfirmDialogOpen(false);
         } catch (error) {
-            toast({ title: "Error", description: "Failed to save changes", variant: "destructive" });
+            toast({
+                title: "Error",
+                description: error instanceof Error ? error.message : "Failed to save changes",
+                variant: "destructive"
+            });
         }
     };
 
     const saveChanges = () => {
         if (data && tempData) {
             // Identify modified fields
-            const modifiedFields: Partial<ArtistData> = {};
+            const modifiedFields: Partial<ArtistData> = { id: artistId };
+
             for (const [key, value] of Object.entries(tempData)) {
                 if (value !== data[key as keyof ArtistData]) {
                     modifiedFields[key as keyof ArtistData] = value as any;
                 }
             }
-    
+
             // If no fields were modified, exit early
-            if (Object.keys(modifiedFields).length === 0) {
-                toast({ title: "No Changes", description: "No changes were made.", variant: "default" });
+            if (Object.keys(modifiedFields).length <= 1) { // Only id is present
+                toast({
+                    title: "No Changes",
+                    description: "No changes were made.",
+                    variant: "default"
+                });
                 return;
             }
-    
-            // Update local state with modified fields
-            setArtistData({ ...data, ...modifiedFields });
-    
+
             // Send modified fields to the backend
             saveChangesToBackend(modifiedFields);
-    
-            // Turn off edit mode and close the confirmation dialog
-            setEditSections({
-                ...editSections,
-                [currentSection]: false,
-            });
-            setConfirmDialogOpen(false);
         }
     };
 
-    const cancelEdit = (section: string) => {
-        setEditSections({
-            ...editSections,
-            [section]: false,
-        });
-        setTempData(data);
-    };
-
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        );
     }
 
     if (!data) {
-        return <div>Error loading profile data.</div>;
+        return (
+            <div className="container mx-auto py-10 text-center">
+                <h2 className="text-2xl font-bold text-destructive">Error loading profile data</h2>
+                <p className="mt-2">Unable to retrieve artist information. Please try again later.</p>
+                <Button className="mt-4" onClick={() => window.location.reload()}>
+                    Retry
+                </Button>
+            </div>
+        );
     }
 
-    return (
-        <div className="container mx-auto py-6 px-4 max-w-4xl">
-            <h1 className="text-3xl font-bold mb-8">Edit Profile</h1>
 
-            <div className="grid gap-6">
-                {/* Name Card */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Name</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => toggleEdit("name")}>
-                            <Edit2 className="h-4 w-4" />
-                        </Button>
-                    </CardHeader>
-                    <CardContent>
-                        {editSections.name ? (
+    return (
+        <div className="container mx-auto py-8 px-4 max-w-6xl">
+            <div className="flex justify-between items-center mb-8">
+                <div>
+                    <h1 className="text-3xl font-bold">Edit Artist Profile</h1>
+                    <p className="text-muted-foreground mt-1">Update your public profile information</p>
+                </div>
+
+                <div className="flex space-x-3">
+                    {hasChanges && (
+                        <>
+                            <Button variant="outline" onClick={cancelChanges}>
+                                <X className="h-4 w-4 mr-2" />
+                                Discard
+                            </Button>
+                            <Button onClick={openConfirmDialog}>
+                                <Save className="h-4 w-4 mr-2" />
+                                Save All Changes
+                            </Button>
+                        </>
+                    )}
+                </div>
+            </div>
+
+            {/* Preview section with profile image and cover image */}
+            <Card className="mb-8 overflow-hidden">
+                <div
+                    className="h-48 bg-cover bg-center relative"
+                    style={{
+                        backgroundImage: `url(${tempData?.cover_image || "/placeholder.svg"})`,
+                        backgroundColor: !tempData?.cover_image ? "#f0f0f0" : undefined
+                    }}
+                >
+                    <div className="absolute -bottom-16 left-8">
+                        <div className="rounded-full w-32 h-32 border-4 border-background overflow-hidden bg-muted">
+                            <img
+                                src={tempData?.profilephoto || "/placeholder.svg"}
+                                alt="Profile"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="pt-20 pb-6 px-8">
+                    <h2 className="text-2xl font-bold">{tempData?.name}</h2>
+                    <p className="text-muted-foreground">{tempData?.tag}</p>
+                </div>
+            </Card>
+
+            {/* Tabs for different sections */}
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <div className="relative flex items-center">
+                    {isScrollable && scrollPosition > 0 && (
+                        <button
+                            onClick={() => handleScroll('left')}
+                            className="absolute left-0 z-10 p-1 bg-background rounded-full shadow-md hover:bg-accent/50 transition-all"
+                        >
+                            <ChevronLeft className="h-5 w-5" />
+                        </button>
+                    )}
+
+                    <TabsList
+                        className="relative flex h-auto p-1 bg-muted rounded-lg overflow-x-hidden w-full mx-auto"
+                    >
+                        <div
+                            className="flex transition-transform duration-300 ease-in-out"
+                            style={{ transform: `translateX(-${scrollPosition * (100 / tabs.length)}%)` }}
+                        >
+                            {tabs.map((tab) => {
+                                const Icon = tab.icon;
+                                return (
+                                    <TabsTrigger
+                                        key={tab.id}
+                                        value={tab.id}
+                                        className={cn(
+                                            "flex flex-col items-center py-3 px-4 gap-2 flex-1 min-w-24 transition-all duration-200",
+                                            "data-[state=active]:bg-background data-[state=active]:shadow-sm",
+                                            "hover:bg-accent/50"
+                                        )}
+                                    >
+                                        <div className={cn(
+                                            "p-2 rounded-full transition-colors",
+                                            activeTab === tab.id ? "bg-primary/10 text-primary" : "text-muted-foreground"
+                                        )}>
+                                            <Icon className="h-5 w-5" />
+                                        </div>
+                                        <span className="text-sm font-medium">{tab.label}</span>
+                                    </TabsTrigger>
+                                );
+                            })}
+                        </div>
+                    </TabsList>
+
+                    {isScrollable && scrollPosition < tabs.length - (window.innerWidth < 768 ? 3 : 5) && (
+                        <button
+                            onClick={() => handleScroll('right')}
+                            className="absolute right-0 z-10 p-1 bg-background rounded-full shadow-md hover:bg-accent/50 transition-all"
+                        >
+                            <ChevronRight className="h-5 w-5" />
+                        </button>
+                    )}
+                </div>
+
+                {/* Basic Information */}
+                <TabsContent value="basic">
+                    <Card>
+                        <CardContent className="p-6 space-y-4">
+                            <h3 className="text-xl font-semibold mb-4">Basic Information</h3>
                             <div className="space-y-2">
                                 <Label htmlFor="name">Artist Name</Label>
-                                <Input id="name" name="name" value={tempData?.name || ""} onChange={handleChange} />
+                                <Input
+                                    id="name"
+                                    name="name"
+                                    value={tempData?.name || ""}
+                                    onChange={handleChange}
+                                    className="max-w-md"
+                                />
                             </div>
-                        ) : (
-                            <p className="text-lg">{data.name}</p>
-                        )}
-                    </CardContent>
-                    {editSections.name && (
-                        <CardFooter className="flex justify-end space-x-2">
-                            <Button variant="outline" onClick={() => cancelEdit("name")}>
-                                Cancel
-                            </Button>
-                            <Button onClick={() => openConfirmDialog("name")}>
-                                <Save className="h-4 w-4 mr-2" />
-                                Save
-                            </Button>
-                        </CardFooter>
-                    )}
-                </Card>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
 
-                {/* Contact Info Card */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Contact Information</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => toggleEdit("contact")}>
-                            <Edit2 className="h-4 w-4" />
-                        </Button>
-                    </CardHeader>
-                    <CardContent>
-                        {editSections.contact ? (
-                            <div className="space-y-4">
+                {/* Contact Information */}
+                <TabsContent value="contact">
+                    <Card>
+                        <CardContent className="p-6 space-y-4">
+                            <h3 className="text-xl font-semibold mb-4">Contact Information</h3>
+                            <div className="grid gap-6 max-w-md">
                                 <div className="space-y-2">
-                                    <Label htmlFor="email">Email</Label>
-                                    <Input id="email" name="email" type="email" value={tempData?.email || ""} onChange={handleChange} />
+                                    <Label htmlFor="email">Email Address</Label>
+                                    <Input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        value={tempData?.email || ""}
+                                        onChange={handleChange}
+                                    />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="phone">Phone</Label>
+                                    <Label htmlFor="phone">Phone Number</Label>
                                     <Input
                                         id="phone"
                                         name="phone"
@@ -234,116 +381,84 @@ export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) 
                                     />
                                 </div>
                             </div>
-                        ) : (
-                            <div className="space-y-2">
-                                <p>
-                                    <strong>Email:</strong> {data.email}
-                                </p>
-                                <p>
-                                    <strong>Phone:</strong> {data.phone || "Not provided"}
-                                </p>
-                            </div>
-                        )}
-                    </CardContent>
-                    {editSections.contact && (
-                        <CardFooter className="flex justify-end space-x-2">
-                            <Button variant="outline" onClick={() => cancelEdit("contact")}>
-                                Cancel
-                            </Button>
-                            <Button onClick={() => openConfirmDialog("contact")}>
-                                <Save className="h-4 w-4 mr-2" />
-                                Save
-                            </Button>
-                        </CardFooter>
-                    )}
-                </Card>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
 
-                {/* Artist Info Card */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Artist Information</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => toggleEdit("artistInfo")}>
-                            <Edit2 className="h-4 w-4" />
-                        </Button>
-                    </CardHeader>
-                    <CardContent>
-                        {editSections.artistInfo ? (
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="RecordLable">Record Label</Label>
-                                    <Input id="RecordLable" name="RecordLable" value={tempData?.RecordLable || ""} onChange={handleChange} />
-                                </div>
-                                <div className="flex items-center space-x-2">
+                {/* Artist Information */}
+                <TabsContent value="artist">
+                    <Card>
+                        <CardContent className="p-6 space-y-4">
+                            <h3 className="text-xl font-semibold mb-4">Artist Information</h3>
+                            <div className="grid gap-6 max-w-lg">
+                                <div className="flex items-center space-x-4">
                                     <Switch
                                         id="isIndependent"
                                         checked={tempData?.isIndependent === 1}
                                         onCheckedChange={(checked) => handleSwitchChange("isIndependent", checked)}
                                     />
-                                    <Label htmlFor="isIndependent">Independent Artist</Label>
+                                    <Label htmlFor="isIndependent">I am an independent artist</Label>
                                 </div>
+
                                 <div className="space-y-2">
-                                    <Label htmlFor="tag">Tag</Label>
-                                    <Input id="tag" name="tag" value={tempData?.tag || ""} onChange={handleChange} />
+                                    <Label htmlFor="RecordLable">Record Label</Label>
+                                    <Input
+                                        id="RecordLable"
+                                        name="RecordLable"
+                                        value={tempData?.RecordLable || ""}
+                                        onChange={handleChange}
+                                        disabled={tempData?.isIndependent === 1}
+                                    />
                                 </div>
+
                                 <div className="space-y-2">
-                                    <Label htmlFor="genre">Genre</Label>
-                                    <Select value={tempData?.genre || ""} onValueChange={(value) => handleSelectChange("genre", value)}>
+                                    <Label htmlFor="tag">Artist Tag/Slogan</Label>
+                                    <Input
+                                        id="tag"
+                                        name="tag"
+                                        value={tempData?.tag || ""}
+                                        onChange={handleChange}
+                                        placeholder="Your signature phrase or tagline"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="genre">Primary Genre</Label>
+                                    <Select
+                                        value={tempData?.genre || ""}
+                                        onValueChange={(value) => handleSelectChange("genre", value)}
+                                    >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select genre" />
+                                            <SelectValue placeholder="Select your main genre" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Hiphop or Rap">Hiphop or Rap</SelectItem>
-                                            <SelectItem value="R&B">R&B</SelectItem>
+                                            <SelectItem value="Hiphop or Rap">Hip-Hop / Rap</SelectItem>
+                                            <SelectItem value="R&B">R&B / Soul</SelectItem>
                                             <SelectItem value="Pop">Pop</SelectItem>
                                             <SelectItem value="Rock">Rock</SelectItem>
-                                            <SelectItem value="Electronic">Electronic</SelectItem>
+                                            <SelectItem value="Electronic">Electronic / Dance</SelectItem>
+                                            <SelectItem value="Jazz">Jazz</SelectItem>
+                                            <SelectItem value="Classical">Classical</SelectItem>
+                                            <SelectItem value="Country">Country</SelectItem>
+                                            <SelectItem value="Folk">Folk</SelectItem>
+                                            <SelectItem value="Alternative">Alternative</SelectItem>
+                                            <SelectItem value="Other">Other</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
                             </div>
-                        ) : (
-                            <div className="space-y-2">
-                                <p>
-                                    <strong>Record Label:</strong> {data.RecordLable}
-                                </p>
-                                <p>
-                                    <strong>Independent Artist:</strong> {data.isIndependent === 1 ? "Yes" : "No"}
-                                </p>
-                                <p>
-                                    <strong>Tag:</strong> {data.tag}
-                                </p>
-                                <p>
-                                    <strong>Genre:</strong> {data.genre}
-                                </p>
-                            </div>
-                        )}
-                    </CardContent>
-                    {editSections.artistInfo && (
-                        <CardFooter className="flex justify-end space-x-2">
-                            <Button variant="outline" onClick={() => cancelEdit("artistInfo")}>
-                                Cancel
-                            </Button>
-                            <Button onClick={() => openConfirmDialog("artistInfo")}>
-                                <Save className="h-4 w-4 mr-2" />
-                                Save
-                            </Button>
-                        </CardFooter>
-                    )}
-                </Card>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
 
-                {/* Financial Info Card */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Financial Information</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => toggleEdit("financial")}>
-                            <Edit2 className="h-4 w-4" />
-                        </Button>
-                    </CardHeader>
-                    <CardContent>
-                        {editSections.financial ? (
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="circle_cost">Circle Cost</Label>
+                {/* Financial Information */}
+                <TabsContent value="financial">
+                    <Card>
+                        <CardContent className="p-6 space-y-4">
+                            <h3 className="text-xl font-semibold mb-4">Financial Information</h3>
+                            <div className="grid gap-6 max-w-md">
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="circle_cost">Circle Cost ($)</Label>
                                     <Input
                                         id="circle_cost"
                                         name="circle_cost"
@@ -352,9 +467,11 @@ export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) 
                                         value={tempData?.circle_cost || ""}
                                         onChange={handleChange}
                                     />
+                                    <p className="text-sm text-muted-foreground">Base price for circle membership</p>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="circle_cost_maximum">Circle Cost Maximum</Label>
+
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="circle_cost_maximum">Circle Cost Maximum ($)</Label>
                                     <Input
                                         id="circle_cost_maximum"
                                         name="circle_cost_maximum"
@@ -363,8 +480,10 @@ export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) 
                                         value={tempData?.circle_cost_maximum || ""}
                                         onChange={handleChange}
                                     />
+                                    <p className="text-sm text-muted-foreground">The maximum price for upgraded membership</p>
                                 </div>
-                                <div className="space-y-2">
+
+                                <div className="flex flex-col space-y-2">
                                     <Label htmlFor="circle_duration">Circle Duration (days)</Label>
                                     <Input
                                         id="circle_duration"
@@ -373,52 +492,33 @@ export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) 
                                         value={tempData?.circle_duration || ""}
                                         onChange={handleChange}
                                     />
+                                    <p className="text-sm text-muted-foreground">Length of membership period</p>
                                 </div>
                             </div>
-                        ) : (
-                            <div className="space-y-2">
-                                <p>
-                                    <strong>Circle Cost:</strong> ${Number.parseFloat(data.circle_cost).toFixed(2)}
-                                </p>
-                                <p>
-                                    <strong>Circle Cost Maximum:</strong> ${Number.parseFloat(data.circle_cost_maximum).toFixed(2)}
-                                </p>
-                                <p>
-                                    <strong>Circle Duration:</strong> {data.circle_duration} days
-                                </p>
-                            </div>
-                        )}
-                    </CardContent>
-                    {editSections.financial && (
-                        <CardFooter className="flex justify-end space-x-2">
-                            <Button variant="outline" onClick={() => cancelEdit("financial")}>
-                                Cancel
-                            </Button>
-                            <Button onClick={() => openConfirmDialog("financial")}>
-                                <Save className="h-4 w-4 mr-2" />
-                                Save
-                            </Button>
-                        </CardFooter>
-                    )}
-                </Card>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
 
-                {/* Bio Card */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Biography</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => toggleEdit("bio")}>
-                            <Edit2 className="h-4 w-4" />
-                        </Button>
-                    </CardHeader>
-                    <CardContent>
-                        {editSections.bio ? (
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="bio">Bio</Label>
-                                    <Textarea id="bio" name="bio" value={tempData?.bio || ""} onChange={handleChange} rows={4} />
+                {/* Biography */}
+                <TabsContent value="bio">
+                    <Card>
+                        <CardContent className="p-6 space-y-4">
+                            <h3 className="text-xl font-semibold mb-4">Biography</h3>
+                            <div className="grid gap-6">
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="bio">Artist Biography</Label>
+                                    <Textarea
+                                        id="bio"
+                                        name="bio"
+                                        value={tempData?.bio || ""}
+                                        onChange={handleChange}
+                                        rows={6}
+                                        placeholder="Tell your story and connect with fans"
+                                    />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="releaseDate">Release Date</Label>
+
+                                <div className="flex flex-col space-y-2 max-w-md">
+                                    <Label htmlFor="releaseDate">Next Release Date</Label>
                                     <Input
                                         id="releaseDate"
                                         name="releaseDate"
@@ -426,152 +526,101 @@ export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) 
                                         value={tempData?.releaseDate ? tempData.releaseDate.replace(" ", "T") : ""}
                                         onChange={handleChange}
                                     />
+                                    <p className="text-sm text-muted-foreground">When is your next song, album or EP dropping?</p>
                                 </div>
                             </div>
-                        ) : (
-                            <div className="space-y-2">
-                                <p>
-                                    <strong>Bio:</strong> {data.bio}
-                                </p>
-                                <p>
-                                    <strong>Release Date:</strong> {new Date(data.releaseDate).toLocaleString()}
-                                </p>
-                            </div>
-                        )}
-                    </CardContent>
-                    {editSections.bio && (
-                        <CardFooter className="flex justify-end space-x-2">
-                            <Button variant="outline" onClick={() => cancelEdit("bio")}>
-                                Cancel
-                            </Button>
-                            <Button onClick={() => openConfirmDialog("bio")}>
-                                <Save className="h-4 w-4 mr-2" />
-                                Save
-                            </Button>
-                        </CardFooter>
-                    )}
-                </Card>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
 
-                {/* Profile Image Card */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Profile Image</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => toggleEdit("profileImage")}>
-                            <Edit2 className="h-4 w-4" />
-                        </Button>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex flex-col items-center">
-                            <img
-                                src={data.profilephoto || "/placeholder.svg"}
-                                alt="Profile"
-                                className="w-48 h-48 object-cover rounded-full mb-4"
-                            />
-                            {editSections.profileImage && (
-                                <div className="w-full space-y-2">
-                                    <Label htmlFor="profilephoto">Profile Image URL</Label>
-                                    <Input id="profilephoto" name="profilephoto" value={tempData?.profilephoto || ""} onChange={handleChange} />
-                                    <div className="mt-4">
-                                        <Label htmlFor="profile-upload">Or upload a new image</Label>
-                                        <Input id="profile-upload" type="file" accept="image/*" className="mt-2" />
+                {/* Images */}
+                <TabsContent value="images">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Profile Image */}
+                        <Card>
+                            <CardContent className="p-6 space-y-4">
+                                <h3 className="text-xl font-semibold mb-4">Profile Image</h3>
+                                <div className="flex flex-col items-center space-y-4">
+                                    <div className="w-40 h-40 rounded-full overflow-hidden bg-muted">
+                                        <img
+                                            src={tempData?.profilephoto || "/placeholder.svg"}
+                                            alt="Profile"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+
+                                    <div className="w-full space-y-4">
+                                        <Label htmlFor="profilephoto">Profile Image URL</Label>
+                                        <Input
+                                            id="profilephoto"
+                                            name="profilephoto"
+                                            value={tempData?.profilephoto || ""}
+                                            onChange={handleChange}
+                                            placeholder="https://example.com/image.jpg"
+                                        />
+
+                                        <div className="pt-2">
+                                            <Label htmlFor="profile-upload">Or upload a new image</Label>
+                                            <Input
+                                                id="profile-upload"
+                                                type="file"
+                                                accept="image/*"
+                                                className="mt-2"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            )}
-                        </div>
-                    </CardContent>
-                    {editSections.profileImage && (
-                        <CardFooter className="flex justify-end space-x-2">
-                            <Button variant="outline" onClick={() => cancelEdit("profileImage")}>
-                                Cancel
-                            </Button>
-                            <Button onClick={() => openConfirmDialog("profileImage")}>
-                                <Save className="h-4 w-4 mr-2" />
-                                Save
-                            </Button>
-                        </CardFooter>
-                    )}
-                </Card>
+                            </CardContent>
+                        </Card>
 
-                {/* Cover Image Card */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Cover Image</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => toggleEdit("coverImage")}>
-                            <Edit2 className="h-4 w-4" />
-                        </Button>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex flex-col items-center">
-                            <img
-                                src={data.cover_image || "/placeholder.svg"}
-                                alt="Cover"
-                                className="w-full h-48 object-cover rounded-md mb-4"
-                            />
-                            {editSections.coverImage && (
-                                <div className="w-full space-y-2">
-                                    <Label htmlFor="cover_image">Cover Image URL</Label>
-                                    <Input id="cover_image" name="cover_image" value={tempData?.cover_image || ""} onChange={handleChange} />
-                                    <div className="mt-4">
-                                        <Label htmlFor="cover-upload">Or upload a new image</Label>
-                                        <Input id="cover-upload" type="file" accept="image/*" className="mt-2" />
+                        {/* Cover Image */}
+                        <Card>
+                            <CardContent className="p-6 space-y-4">
+                                <h3 className="text-xl font-semibold mb-4">Cover Image</h3>
+                                <div className="flex flex-col items-center space-y-4">
+                                    <div className="w-full h-40 rounded-md overflow-hidden bg-muted">
+                                        <img
+                                            src={tempData?.cover_image || "/placeholder.svg"}
+                                            alt="Cover"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+
+                                    <div className="w-full space-y-4">
+                                        <Label htmlFor="cover_image">Cover Image URL</Label>
+                                        <Input
+                                            id="cover_image"
+                                            name="cover_image"
+                                            value={tempData?.cover_image || ""}
+                                            onChange={handleChange}
+                                            placeholder="https://example.com/cover.jpg"
+                                        />
+
+                                        <div className="pt-2">
+                                            <Label htmlFor="cover-upload">Or upload a new image</Label>
+                                            <Input
+                                                id="cover-upload"
+                                                type="file"
+                                                accept="image/*"
+                                                className="mt-2"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            )}
-                        </div>
-                    </CardContent>
-                    {editSections.coverImage && (
-                        <CardFooter className="flex justify-end space-x-2">
-                            <Button variant="outline" onClick={() => cancelEdit("coverImage")}>
-                                Cancel
-                            </Button>
-                            <Button onClick={() => openConfirmDialog("coverImage")}>
-                                <Save className="h-4 w-4 mr-2" />
-                                Save
-                            </Button>
-                        </CardFooter>
-                    )}
-                </Card>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </TabsContent>
 
-                {/* Social Media Card */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Social Media</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={() => toggleEdit("socialMedia")}>
-                            <Edit2 className="h-4 w-4" />
-                        </Button>
-                    </CardHeader>
-                    <CardContent>
-                        {editSections.socialMedia ? (
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="facebookurl" className="flex items-center">
-                                        <Facebook className="h-4 w-4 mr-2" />
-                                        Facebook
-                                    </Label>
-                                    <Input
-                                        id="facebookurl"
-                                        name="facebookurl"
-                                        value={tempData?.facebookurl || ""}
-                                        onChange={handleChange}
-                                        placeholder="https://facebook.com/username"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="twitterurl" className="flex items-center">
-                                        <Twitter className="h-4 w-4 mr-2" />
-                                        Twitter
-                                    </Label>
-                                    <Input
-                                        id="twitterurl"
-                                        name="twitterurl"
-                                        value={tempData?.twitterurl || ""}
-                                        onChange={handleChange}
-                                        placeholder="https://twitter.com/username"
-                                    />
-                                </div>
+                {/* Social Media */}
+                <TabsContent value="social">
+                    <Card>
+                        <CardContent className="p-6 space-y-4">
+                            <h3 className="text-xl font-semibold mb-4">Social Media</h3>
+                            <div className="grid gap-6 max-w-xl">
                                 <div className="space-y-2">
                                     <Label htmlFor="instagramurl" className="flex items-center">
-                                        <Instagram className="h-4 w-4 mr-2" />
+                                        <Instagram className="h-5 w-5 mr-2" />
                                         Instagram
                                     </Label>
                                     <Input
@@ -582,9 +631,38 @@ export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) 
                                         placeholder="https://instagram.com/username"
                                     />
                                 </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="twitterurl" className="flex items-center">
+                                        <Twitter className="h-5 w-5 mr-2" />
+                                        Twitter
+                                    </Label>
+                                    <Input
+                                        id="twitterurl"
+                                        name="twitterurl"
+                                        value={tempData?.twitterurl || ""}
+                                        onChange={handleChange}
+                                        placeholder="https://twitter.com/username"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="facebookurl" className="flex items-center">
+                                        <Facebook className="h-5 w-5 mr-2" />
+                                        Facebook
+                                    </Label>
+                                    <Input
+                                        id="facebookurl"
+                                        name="facebookurl"
+                                        value={tempData?.facebookurl || ""}
+                                        onChange={handleChange}
+                                        placeholder="https://facebook.com/username"
+                                    />
+                                </div>
+
                                 <div className="space-y-2">
                                     <Label htmlFor="youtubeurl" className="flex items-center">
-                                        <Youtube className="h-4 w-4 mr-2" />
+                                        <Youtube className="h-5 w-5 mr-2" />
                                         YouTube
                                     </Label>
                                     <Input
@@ -596,48 +674,18 @@ export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) 
                                     />
                                 </div>
                             </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="flex items-center">
-                                    <Facebook className="h-5 w-5 mr-2" />
-                                    <span>{data.facebookurl || "Not provided"}</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <Twitter className="h-5 w-5 mr-2" />
-                                    <span>{data.twitterurl || "Not provided"}</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <Instagram className="h-5 w-5 mr-2" />
-                                    <span>{data.instagramurl || "Not provided"}</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <Youtube className="h-5 w-5 mr-2" />
-                                    <span>{data.youtubeurl || "Not provided"}</span>
-                                </div>
-                            </div>
-                        )}
-                    </CardContent>
-                    {editSections.socialMedia && (
-                        <CardFooter className="flex justify-end space-x-2">
-                            <Button variant="outline" onClick={() => cancelEdit("socialMedia")}>
-                                Cancel
-                            </Button>
-                            <Button onClick={() => openConfirmDialog("socialMedia")}>
-                                <Save className="h-4 w-4 mr-2" />
-                                Save
-                            </Button>
-                        </CardFooter>
-                    )}
-                </Card>
-            </div>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+            </Tabs>
 
             {/* Confirmation Dialog */}
             <AlertDialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogTitle>Save Profile Changes</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action will update your profile information. Do you want to continue?
+                            You've made changes to your artist profile. Would you like to save these changes?
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
