@@ -168,7 +168,7 @@ export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) 
     }
 
     return (
-        <div className="container mx-auto py-8 px-4">
+        <div className="container mx-auto py-6 px-4 max-w-4xl">
             <h1 className="text-3xl font-bold mb-8">Edit Profile</h1>
 
             <div className="grid gap-6">

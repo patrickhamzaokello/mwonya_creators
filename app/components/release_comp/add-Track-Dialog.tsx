@@ -21,7 +21,7 @@ import { useToast } from "@/components/ui/use-toast"
 interface UploadingFile {
     file: File
     progress: number
-    status: 'waiting' | 'uploading' | 'completed' | 'error'
+    status: 'Selected file' | 'uploading' | 'completed' | 'error'
     name: string
 }
 
@@ -57,7 +57,7 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
         const newUploadingFiles: UploadingFile[] = validFiles.map(file => ({
             file,
             progress: 0,
-            status: 'waiting',
+            status: 'Selected file',
             name: file.name
         }))
 
@@ -178,7 +178,7 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
                         } catch (saveError) {
                             toast({
                                 title: "Error",
-                                description: String(saveError),
+                                description: "Failed to save track details",
                                 variant: "destructive",
                             })
                             setUploadingFiles(prev => prev.map((f, i) =>
@@ -296,7 +296,7 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
                                         </div>
                                         <Progress value={file.progress} className="h-2" />
                                         <span className="text-xs text-muted-foreground">
-                                            {file.status === 'waiting' && 'Waiting...'}
+                                            {file.status === 'Selected file' && 'Selected file'}
                                             {file.status === 'uploading' && `Uploading: ${Math.round(file.progress)}%`}
                                             {file.status === 'completed' && 'Upload complete'}
                                             {file.status === 'error' && 'Upload failed'}
