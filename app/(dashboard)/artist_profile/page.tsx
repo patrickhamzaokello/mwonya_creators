@@ -22,7 +22,6 @@ import { useRouter } from 'next/navigation'
 import Link from "next/link";
 import { CardTitle, CardDescription, CardFooter, Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Calendar, Music, Users, DollarSign, BarChart3, ChevronRight, Clock, Gift, Heart, MessageSquare, TrendingUp, Zap } from "lucide-react";
-import ArtistProfileEditorWithActions from "@/components/artistSettings/artist-profile-editor";
 import ProfileEditPage from "@/components/artistSettings/artist_profile_edit_better_flow";
 
 export default function DashboardPage() {
