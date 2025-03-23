@@ -23,6 +23,7 @@ import {
         { id: 'home.new_artist', title: 'New Artist', url: '/artist', roles: ['admin', 'label'] }, // Override parent permissions
         { id: 'home.new_release', title: 'New Release', url: '/new_release', roles: ['admin', 'label', 'artist'] }, // Override parent permissions
         { id: 'home.releases', title: 'Releases', url: '/mwonya_release', roles: ['admin','label','artist'] },
+        { id: 'home.lyrics', title: 'Lyrics maker', url: '/lyrics_maker', roles: ['admin','label','artist'] },
         { id: 'home.artist_settings', title: 'Account Settings', url: '/artist_profile', roles: ['admin','label','artist'] },
       ],
     },
