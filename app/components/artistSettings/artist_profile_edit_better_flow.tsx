@@ -19,7 +19,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Facebook, Instagram, Twitter, Youtube, Edit2, Save } from "lucide-react";
-import { ArtistData, getArtistProfile } from "@/actions/artist-profile-edit";
+import { ArtistData, getArtistProfile, updateArtistProfile } from "@/actions/artist-profile-edit";
 import { toast } from "@/components/ui/use-toast";
 
 interface ArtistProfileEditorProps {
@@ -114,35 +114,39 @@ export default function ProfileEditPage({ artistId }: ArtistProfileEditorProps) 
         setConfirmDialogOpen(true);
     };
 
+    const saveChangesToBackend = async (modifiedFields: Partial<ArtistData>) => {
+        try {
+            const updateprofile = await updateArtistProfile(modifiedFields);
+            if (!updateprofile.success) throw new Error("Failed to save changes");
+            toast({ title: "Success", description: "Profile updated successfully!" });
+        } catch (error) {
+            toast({ title: "Error", description: "Failed to save changes", variant: "destructive" });
+        }
+    };
+
     const saveChanges = () => {
         if (data && tempData) {
-            setArtistData({
-                ...data,
-                ...Object.fromEntries(
-                    Object.entries(tempData).filter(([key]) => {
-                        switch (currentSection) {
-                            case "name":
-                                return key === "name";
-                            case "contact":
-                                return ["email", "phone"].includes(key);
-                            case "artistInfo":
-                                return ["RecordLable", "isIndependent", "tag", "genre", "genre_id"].includes(key);
-                            case "financial":
-                                return ["circle_cost", "circle_cost_maximum", "circle_duration"].includes(key);
-                            case "bio":
-                                return ["bio", "releaseDate"].includes(key);
-                            case "profileImage":
-                                return ["profilephoto", "profile_image_id"].includes(key);
-                            case "coverImage":
-                                return ["cover_image", "cover_image_id"].includes(key);
-                            case "socialMedia":
-                                return ["facebookurl", "twitterurl", "instagramurl", "youtubeurl"].includes(key);
-                            default:
-                                return false;
-                        }
-                    }),
-                ),
-            });
+            // Identify modified fields
+            const modifiedFields: Partial<ArtistData> = {};
+            for (const [key, value] of Object.entries(tempData)) {
+                if (value !== data[key as keyof ArtistData]) {
+                    modifiedFields[key as keyof ArtistData] = value as any;
+                }
+            }
+    
+            // If no fields were modified, exit early
+            if (Object.keys(modifiedFields).length === 0) {
+                toast({ title: "No Changes", description: "No changes were made.", variant: "default" });
+                return;
+            }
+    
+            // Update local state with modified fields
+            setArtistData({ ...data, ...modifiedFields });
+    
+            // Send modified fields to the backend
+            saveChangesToBackend(modifiedFields);
+    
+            // Turn off edit mode and close the confirmation dialog
             setEditSections({
                 ...editSections,
                 [currentSection]: false,

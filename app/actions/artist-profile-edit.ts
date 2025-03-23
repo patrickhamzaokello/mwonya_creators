@@ -29,37 +29,7 @@ export type ArtistData = {
   youtubeurl: string,
 }
 
-// Simulated database operations
-const artistsDb: Record<string, ArtistData> = {}
 
-// Initialize with sample data
-const sampleArtist: ArtistData = {
-  id: "artist123",
-  name: "Jane Doe",
-  email: "jane@example.com",
-  phone: "+1234567890",
-  facebookurl: "https://facebook.com/janedoe",
-  twitterurl: "https://twitter.com/janedoe",
-  instagramurl: "https://instagram.com/janedoe",
-  youtubeurl: "https://youtube.com/janedoe",
-  meta_data: "",
-  RecordLable: "Independent",
-  isIndependent: 1,
-  profilephoto:
-    "https://mwonya-kasfa-assets-store.s3.us-east-1.amazonaws.com/images/artist/4495fad518d4929b0954e971820360e9a12e8d9787ba0f0d4f916084778f6ea0.jpeg",
-  cover_image:
-    "https://mwonya-kasfa-assets-store.s3.us-east-1.amazonaws.com/images/artist/4495fad518d4929b0954e971820360e9a12e8d9787ba0f0d4f916084778f6ea0.jpeg",
-  bio: "Jane is a contemporary artist known for her soulful vocals and introspective lyrics.",
-  genre: "Indie Pop",
-  releaseDate: "2023-06-15",
-  tag: "indie,pop,acoustic",
-  circle_cost: "5000",
-  circle_cost_maximum: "20000",
-  circle_duration: 30,
-}
-
-// Initialize the database with sample data
-artistsDb[sampleArtist.id] = sampleArtist
 
 /**
  * Upload an image to AWS S3
@@ -104,13 +74,15 @@ export async function uploadImageToS3(formData: FormData): Promise<{ success: bo
  * @returns Success status and updated artist data
  */
 export async function updateArtistProfile(
-  artistData: ArtistData,
-): Promise<{ success: boolean; data?: ArtistData; error?: string }> {
+  artistData: Partial<ArtistData>
+): Promise<{ success: boolean; data?: Partial<ArtistData>; error?: string }> {
   try {
     // Validate required fields
-    if (!artistData.id || !artistData.name || !artistData.email) {
-      return { success: false, error: "Missing required fields" }
-    }
+    // if (!artistData.id || !artistData.name || !artistData.email) {
+    //   return { success: false, error: "Missing required fields" }
+    // }
+
+    console.log(artistData);
 
     // In a real implementation, you would update the database
     // For this example, we'll update our in-memory database
@@ -118,12 +90,9 @@ export async function updateArtistProfile(
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    // Update the artist in the database
-    artistsDb[artistData.id] = artistData
 
     // Revalidate the artist profile page to reflect the changes
-    revalidatePath(`/artists/${artistData.id}`)
-    revalidatePath("/dashboard")
+    revalidatePath("/artist_profile")
 
     return { success: true, data: artistData }
   } catch (error) {
@@ -192,19 +161,8 @@ export async function deleteArtistAccount(
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 1500))
 
-    const artist = artistsDb[artistId]
 
-    if (!artist) {
-      return { success: false, error: "Artist not found" }
-    }
 
-    // Verify email for security
-    if (artist.email !== email) {
-      return { success: false, error: "Email verification failed" }
-    }
-
-    // Delete the artist from the database
-    delete artistsDb[artistId]
 
     // Revalidate relevant paths
     revalidatePath("/dashboard")
