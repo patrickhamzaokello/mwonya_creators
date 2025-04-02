@@ -23,7 +23,7 @@ export const CardWrapper = ({
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       {/* Optional logo area */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-baseContent">MWONYA MEDIA</h1>
+        <h1 className="text-2xl font-bold text-baseContent">MWONYA APP</h1>
       </div>
       
       <Card className="w-full max-w-xl shadow-lg rounded-xl border-baseContent/10">

@@ -57,16 +57,12 @@ export const RegisterForm = () => {
 
   return (
     <CardWrapper
-      headerTitle="Create an Account"
+      headerTitle="Create a new creator account"
       showSocial
       backButtonLabel="Already have an account?"
       backButtonHref="/auth/login"
     >
       <Toaster />
-      
-      <div className="mb-6 text-center">
-        <p className="text-sm text-gray-500">Sign up to get started with our services</p>
-      </div>
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -128,7 +124,7 @@ export const RegisterForm = () => {
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="you@example.com"
+                        placeholder="pk@mwonya.com"
                         disabled={isPending}
                         type="email"
                         className="pl-10 py-6 h-11 rounded-lg border-gray-200 focus:ring-2 focus:ring-blue-500 transition-all duration-200"
@@ -179,7 +175,7 @@ export const RegisterForm = () => {
 
           <Button 
             disabled={isPending} 
-            className="w-full py-6 h-11 mt-2 rounded-lg bg-primary hover:bg-purple-700 text-white font-medium transition-all duration-200"
+            className="w-full py-6 h-11 mt-2 text-md rounded-lg bg-purple-700 text-white hover:bg-primary font-bold transition-all duration-200"
             type="submit"
           >
             {isPending ? (
@@ -192,8 +188,8 @@ export const RegisterForm = () => {
             )}
           </Button>
           
-          <div className="text-xs text-center text-gray-500 mt-4">
-            By creating an account, you agree to our <a href="#" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
+          <div className="text-xs text-center  mt-4">
+            By creating an account, you agree to our <a href="#" className="text-green-600 hover:underline">Terms of Service</a> and <a href="#" className="text-green-600 hover:underline">Privacy Policy</a>
           </div>
           
           {/* <div className="relative my-6">

@@ -62,13 +62,13 @@ export const ResetForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Enter Email</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                       <Input
                         {...field}
-                        placeholder="your.email@example.com"
+                        placeholder="Email address"
                         disabled={isPending}
                         type="email"
                         className="border-baseContent/20 text-baseContent pl-10"
@@ -80,10 +80,20 @@ export const ResetForm = () => {
               )}
             />
           </div>
-          <Button disabled={isPending} type="submit" className="p-[3px] bg-transparent relative font-semibold w-full">
-            <div className="px-8 py-2 w-full rounded-[5px] relative group transition duration-200 text-base100 bg-primary text-lg flex items-center justify-center">
-              {isPending ? "Sending..." : "Reset Password"}
-            </div>
+         
+          <Button 
+            disabled={isPending} 
+            className="w-full py-6 h-11 mt-2 text-md rounded-lg bg-purple-700 text-white hover:bg-primary font-bold transition-all duration-200"
+            type="submit"
+          >
+            {isPending ? (
+              <div className="flex items-center justify-center">
+                <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                Sending...
+              </div>
+            ) : (
+              "Reset Password"
+            )}
           </Button>
         </form>
       </Form>

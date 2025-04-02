@@ -83,10 +83,6 @@ const MainLoginForm = () => {
     >
       <Toaster />
       
-      <div className="mb-6 text-center">
-        <p className="text-sm text-gray-500">Sign in to access your account</p>
-      </div>
-      
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -104,7 +100,7 @@ const MainLoginForm = () => {
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="you@example.com"
+                        placeholder="pk@mwonya.com"
                         disabled={isPending}
                         type="email"
                         className="pl-10 py-6 h-11 rounded-lg border-gray-200 focus:ring-2 focus:ring-blue-500 transition-all duration-200"
@@ -124,9 +120,8 @@ const MainLoginForm = () => {
                   <div className="flex justify-between items-center">
                     <FormLabel className="text-sm font-medium">Password</FormLabel>
                     <Button
-                      size="sm"
                       variant="link"
-                      className="p-0 h-auto text-xs text-blue-600 hover:text-blue-800"
+                      className="p-0 h-auto  hover:text-green-800"
                       type="button"
                     >
                       <Link href="/auth/reset">Forgot Password?</Link>
@@ -164,7 +159,7 @@ const MainLoginForm = () => {
 
           <Button 
             disabled={isPending} 
-            className="w-full py-6 h-11 rounded-lg bg-primary hover:bg-purple-700 text-white font-medium transition-all duration-200"
+            className="w-full py-6 h-11 mt-2 text-md rounded-lg text-white bg-purple-700 hover:bg-primary font-bold transition-all duration-200"
             type="submit"
           >
             {isPending ? (
