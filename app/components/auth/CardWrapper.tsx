@@ -20,6 +20,8 @@ export const CardWrapper = ({
   headerTitle
 }: CardWrapperProps) => {
   return (
+
+    
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       {/* Optional logo area */}
       <div className="mb-6">
