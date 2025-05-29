@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { updateTrack_File_Album_cover } from '@/data-layer/artist';
 
+
 //using edge function to generate file names
 const generateFilename = (fileType: string, bytes = 32) => {
     const array = new Uint8Array(bytes);
@@ -39,7 +40,7 @@ const computeSHA256 = async (file: File) => {
 }
 
 
-export async function uploadFileToS3(trackId: string, file: File, fileType: 'track' | 'coverArt') {
+export async function uploadFileToS3(trackId: string, file: File, fileType: 'track' | 'coverArt', aws_folder_prefix: string = "images/albums/") {
 
   try {
 
@@ -58,9 +59,10 @@ export async function uploadFileToS3(trackId: string, file: File, fileType: 'tra
         return { failure: "File size too large" }
     }
 
+    const file_genName = generateFilename(file.type);
     const putObjectCommand = new PutObjectCommand({
         Bucket: process.env.AWS_BUCKET_NAME!,
-        Key: generateFilename(file.type),
+        Key: `${aws_folder_prefix}${file_genName}`,
         ContentType: file.type,
         ContentLength: file.size,
         ChecksumSHA256: checksum,
