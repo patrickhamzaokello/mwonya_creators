@@ -97,7 +97,7 @@ export default function LandingPage() {
         },
         {
             icon: MessageSquare,
-            title: "Fan Engagement",
+            title: "Community Engagement",
             description: "Build a loyal community with comments, shares, and playlists to grow your fanbase.",
         },
     ]
