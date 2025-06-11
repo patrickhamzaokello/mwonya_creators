@@ -24,7 +24,7 @@ export default function HeroSection() {
         ></div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 relative z-10 py-5">
         <div className="text-center max-w-5xl mx-auto">
           {/* Badge */}
           <div className="inline-flex items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 text-sm font-medium text-white/90 mb-8">
@@ -82,7 +82,7 @@ export default function HeroSection() {
             <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl shadow-black/40 border border-white/10">
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
               <Image
-                src="/placeholder.svg?height=500&width=800"
+                src="/joka.png"
                 alt="Ugandan artists performing and creating music"
                 fill
                 className="object-cover"
@@ -92,15 +92,15 @@ export default function HeroSection() {
               <div className="absolute bottom-6 left-6 right-6 flex justify-between z-20">
                 <div className="bg-black/50 backdrop-blur-md rounded-xl px-4 py-3 border border-white/20">
                   <p className="text-sm text-green-300 font-medium">Active Artists</p>
-                  <p className="text-white font-bold text-xl">12K+</p>
+                  <p className="text-white font-bold text-xl">250+</p>
                 </div>
                 <div className="bg-black/50 backdrop-blur-md rounded-xl px-4 py-3 border border-white/20">
                   <p className="text-sm text-green-300 font-medium">Monthly Listeners</p>
-                  <p className="text-white font-bold text-xl">2.5M+</p>
+                  <p className="text-white font-bold text-xl">102k+</p>
                 </div>
                 <div className="bg-black/50 backdrop-blur-md rounded-xl px-4 py-3 border border-white/20">
                   <p className="text-sm text-green-300 font-medium">Songs Streamed</p>
-                  <p className="text-white font-bold text-xl">50M+</p>
+                  <p className="text-white font-bold text-xl">20upd8+</p>
                 </div>
               </div>
             </div>
