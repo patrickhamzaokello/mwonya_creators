@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import HowMwonyaWorks from "./components/landingpage/how-mwonya-works"
+import HeroSection from "../hero-section"
 
 export default function LandingPage() {
     const [showBanner, setShowBanner] = useState(true)
