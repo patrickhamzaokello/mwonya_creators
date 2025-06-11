@@ -27,7 +27,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import HowMwonyaWorks from "./components/landingpage/how-mwonya-works"
-import HeroSection from "../hero-section"
+import HeroSection from "./components/landingpage/hero-section"
 
 export default function LandingPage() {
     const [showBanner, setShowBanner] = useState(true)
@@ -137,11 +137,9 @@ export default function LandingPage() {
             {/* Hero Section */}
 
 
-            <section className="relative pt-24 pb-20 md:pt-36 md:pb-32 bg-purple-950 overflow-hidden">
-                 <main>
-      <HeroSection />
-    </main>
-            </section>
+            <main>
+                <HeroSection />
+            </main>
 
             {/* Features Grid */}
             <section className="py-20 md:py-32 bg-gradient-to-b from-[#172026] to-[#333] relative">
