@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import HowMwonyaWorks from "./components/landingpage/how-mwonya-works"
+import HeroSection from "./components/landingpage/hero-section"
 
 export default function LandingPage() {
     const [showBanner, setShowBanner] = useState(true)
@@ -97,7 +98,7 @@ export default function LandingPage() {
         },
         {
             icon: MessageSquare,
-            title: "Fan Engagement",
+            title: "Community Engagement",
             description: "Build a loyal community with comments, shares, and playlists to grow your fanbase.",
         },
     ]
@@ -136,106 +137,9 @@ export default function LandingPage() {
             {/* Hero Section */}
 
 
-            <section className="relative pt-24 pb-20 md:pt-36 md:pb-32 bg-purple-950 overflow-hidden">
-                {/* Abstract background elements */}
-                <div className="absolute inset-0 z-0">
-                    <div className="absolute top-0 left-0 w-full h-full bg-purple-950 opacity-80"></div>
-                    <div className="absolute top-0 left-0 w-full h-full">
-                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-green-900/40 via-transparent to-purple-950"></div>
-                    </div>
-                    <div className="absolute -top-48 -right-48 w-96 h-96 rounded-full bg-green-800 blur-[100px] opacity-30"></div>
-                    <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-purple-600 blur-[100px] opacity-20"></div>
-                </div>
-
-                {/* Animated dots pattern */}
-                <div className="absolute inset-0 z-0 opacity-10">
-                    <div
-                        className="absolute inset-0"
-                        style={{
-                            backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
-                            backgroundSize: "40px 40px",
-                        }}
-                    ></div>
-                </div>
-
-                <div className="container mx-auto px-4 md:px-6 relative z-10">
-                    <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
-                        <div className="space-y-10">
-                            <div className="inline-flex items-center rounded-full bg-purple-900/50 backdrop-blur-md border border-purple-700/30 px-5 py-2 text-sm font-medium text-purple-200">
-                                <Sparkles className="mr-2 h-4 w-4 text-green-300" />
-                                The Home of Ugandan Music
-                            </div>
-
-                            <div className="space-y-6 text-white">
-                                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-                                    <span className="block mb-2">Your Music, </span>
-                                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-white">
-                                        Your Community, <br />
-                                        Your Future
-                                    </span>
-                                </h1>
-                                <p className="max-w-[600px] text-lg text-purple-100/80 md:text-xl">
-                                    Mwonya empowers Ugandan artists to take control of their careers, connect directly with fans, and build
-                                    sustainable income streams through their art.
-                                </p>
-                            </div>
-
-                            <div className="flex flex-col sm:flex-row gap-5">
-                                <Button
-                                    size="lg"
-                                    className="bg-green-800 hover:bg-green-700 text-white py-6 px-8 rounded-full shadow-lg shadow-green-900/40 transition-all duration-300 hover:shadow-green-700/30 hover:scale-105"
-                                    asChild
-                                >
-                                    <Link href="/auth/login">
-                                        <Music className="mr-3 h-5 w-5" />
-                                        Join Mwonya Today
-                                    </Link>
-                                </Button>
-                                <Button
-                                    size="lg"
-                                    variant="outline"
-                                    className="border-purple-700/50 text-purple-200 hover:bg-purple-800/40 py-6 px-8 rounded-full backdrop-blur-sm transition-all duration-300 hover:border-green-700"
-                                    asChild
-                                >
-                                    <Link href="/auth/register">
-                                        <Play className="mr-3 h-5 w-5" />
-                                        Learn More
-                                    </Link>
-                                </Button>
-                            </div>
-                        </div>
-
-                        <div className="lg:pl-8 relative">
-                            {/* Decorative elements */}
-                            <div className="absolute -top-10 -left-10 w-40 h-40 border border-green-800/30 rounded-full"></div>
-                            <div className="absolute -bottom-8 -right-8 w-64 h-64 border border-purple-600/20 rounded-full"></div>
-
-                            {/* Featured image with overlay effects */}
-                            <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl shadow-purple-900/40 z-10 border border-white/10">
-                                <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-transparent to-transparent z-10"></div>
-                                <Image
-                                    src="/joka.png"
-                                    alt="Ugandan artist performing"
-                                    fill
-                                    className="object-cover transition-all duration-700 hover:scale-105"
-                                />
-
-                                {/* Floating stats indicators */}
-                                <div className="absolute bottom-6 left-6 right-6 flex justify-between z-20">
-                                    <div className="bg-black/40 backdrop-blur-md rounded-xl px-4 py-2 border border-white/10">
-                                        <p className="text-xs text-green-200">Total Listeners</p>
-                                        <p className="text-white font-bold">10.2M+</p>
-                                    </div>
-                                    <div className="bg-black/40 backdrop-blur-md rounded-xl px-4 py-2 border border-white/10">
-                                        <p className="text-xs text-green-200">Total Artists</p>
-                                        <p className="text-white font-bold">1M+</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <main>
+                <HeroSection />
+            </main>
 
             {/* Features Grid */}
             <section className="py-20 md:py-32 bg-gradient-to-b from-[#172026] to-[#333] relative">
