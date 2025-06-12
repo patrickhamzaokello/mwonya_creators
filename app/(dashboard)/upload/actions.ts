@@ -8,15 +8,9 @@ import { prisma } from "@/lib/prisma"
 
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { generateFilename } from '@/utils/filenameUtil';
 
-//using edge function to generate file names
-const generateFilename = (fileType: string, bytes = 32) => {
-    const array = new Uint8Array(bytes);
-    crypto.getRandomValues(array);
-    const randomString = Array.from(array).map(b => b.toString(16).padStart(2, "0")).join("");
-    const extension = fileType.split('/')[1];
-    return `${randomString}.${extension}`;
-}
+
 
 const s3 = new S3Client({
     region: process.env.AWS_BUCKET_REGION!,

@@ -4,7 +4,7 @@ import { saveUploadDetails, saveTrackDetails } from '@/data-layer/artist';
 
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
-
+import { generateFilename } from '@/utils/filenameUtil';
 
 
 const s3 = new S3Client({
@@ -23,13 +23,7 @@ const acceptedFileTypes = [
 
 const maxFileSize = 300 * 1024 * 1024; // 300MB
 
-const generateFilename = (fileType: string, bytes = 32) => {
-    const array = new Uint8Array(bytes);
-    crypto.getRandomValues(array);
-    const randomString = Array.from(array).map(b => b.toString(16).padStart(2, "0")).join("");
-    const extension = fileType.split('/')[1];
-    return `${randomString}.${extension}`;
-};
+
 
 export async function getTrackSignedURL(fileType: string, fileSize: number, checksum: string, mw_upload_type: string, aws_folder_prefix: string) {
     const session = await auth();
