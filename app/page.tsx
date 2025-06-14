@@ -243,7 +243,10 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            <Component />
+
+            <div className="bg-white">
+                 <Component />
+                </div>
 
             {/* CTA Section */}
             <section className="py-16 md:py-24 bg-gradient-to-r from-purple-700 to-purple-900 text-white">
