@@ -28,7 +28,7 @@ import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import HowMwonyaWorks from "./components/landingpage/how-mwonya-works"
 import HeroSection from "./components/landingpage/hero-section"
-import Component from "/components/landingpage/audio-upload-guide"
+import Component from "./components/landingpage/audio-upload-guide"
 
 export default function LandingPage() {
     const [showBanner, setShowBanner] = useState(true)
