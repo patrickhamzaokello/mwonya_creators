@@ -28,6 +28,7 @@ import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import HowMwonyaWorks from "./components/landingpage/how-mwonya-works"
 import HeroSection from "./components/landingpage/hero-section"
+import Component from "/components/landingpage/audio-upload-guide"
 
 export default function LandingPage() {
     const [showBanner, setShowBanner] = useState(true)
@@ -173,6 +174,8 @@ export default function LandingPage() {
             {/* How it works */}
             <HowMwonyaWorks />
 
+            
+
 
 
             {/* Why Choose Mwonya Section */}
@@ -239,6 +242,8 @@ export default function LandingPage() {
                     </div>
                 </div>
             </section>
+
+            <Component />
 
             {/* CTA Section */}
             <section className="py-16 md:py-24 bg-gradient-to-r from-purple-700 to-purple-900 text-white">
