@@ -77,7 +77,7 @@ export async function uploadFileToS3(trackId: string, file: File, fileType: 'tra
 
         const media_details: MediaUploadDetails = {
             user_id: session.user.id ?? "null",
-            upload_type: "cover_image",
+            upload_type: fileType,
             file_path: signedURL.split("?")[0],
             file_name: file_genName,
             file_hash: checksum,
