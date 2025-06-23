@@ -6,7 +6,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { updateTrack_File_Album_cover } from '@/data-layer/artist';
+import { updateTrack_File_Album_cover, saveUploadDetails } from '@/data-layer/artist';
 import { generateFilename } from '@/utils/filenameUtil';
 
 
