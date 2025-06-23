@@ -75,7 +75,31 @@ export async function uploadFileToS3(trackId: string, file: File, fileType: 'tra
         },
     })
 
-    await updateTrack_File_Album_cover(trackId,fileType, signedURL.split("?")[0], "uploaded")
+        const media_details: MediaUploadDetails = {
+            user_id: session.user.id ?? "null",
+            upload_type: "cover_image",
+            file_path: signedURL.split("?")[0],
+            file_name: file_genName,
+            file_hash: checksum,
+            file_size: file.size,
+            file_format: file.type,
+            metadata: JSON.stringify({ file_genName, fileType }),
+            is_active: 0
+    }
+    
+        const mediaResult = await saveUploadDetails(media_details);
+    
+    
+        if (!mediaResult) {
+            return { failure: "Failed to save upload details", message: "Invalid response" }
+        }
+    
+        if (!mediaResult.success) {
+            return { failure: "Failed to Save upload Details", message: mediaResult.message }
+        }
+
+
+    await updateTrack_File_Album_cover(trackId,fileType, mediaResult.upload_id, "uploaded")
 
 
   } catch (error) {
