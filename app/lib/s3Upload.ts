@@ -32,7 +32,7 @@ const computeSHA256 = async (file: File) => {
 }
 
 
-export async function uploadFileToS3(trackId: string, file: File, fileType: 'track' | 'coverArt', aws_folder_prefix: string = "images/albums/") {
+export async function uploadFileToS3(trackId: string, file: File, fileType: 'track' | 'cover_image', aws_folder_prefix: string = "images/albums/") {
 
   try {
 

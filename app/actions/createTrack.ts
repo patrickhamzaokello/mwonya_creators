@@ -51,9 +51,7 @@ export async function createNewRelease(formData: FormData) {
       return { success: false, releaseID: releaseID }
     }
 
-
-
-    await uploadFileToS3(releaseID, cover_artwork, 'coverArt')
+    await uploadFileToS3(releaseID, cover_artwork, 'cover_image')
 
     return { success: true, releaseID: releaseID }
 
@@ -118,7 +116,7 @@ export async function createTrack(formData: FormData) {
     // Start asynchronous upload process for both track and cover art
     Promise.all([
       uploadFileToS3(newTrackReferenceID, trackFile, 'track'),
-      uploadFileToS3(newAlbumId, coverArtFile, 'coverArt')
+      uploadFileToS3(newAlbumId, coverArtFile, 'cover_image')
     ]).catch(console.error)
 
     return { success: true, trackId: newAlbumId }
