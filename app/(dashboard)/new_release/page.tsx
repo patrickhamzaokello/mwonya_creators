@@ -200,25 +200,25 @@ export default function NewReleasePage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
             {/* Header */}
-            <div className="bg-white border-b border-gray-200">
+            <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
                 <div className="max-w-7xl mx-auto px-6 py-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
-                            <Button variant="ghost" size="sm" className="text-gray-600">
+                            <Button variant="ghost" size="sm" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
                                 <ArrowLeft className="h-4 w-4 mr-2" />
                                 Back
                             </Button>
                             <div>
-                                <h1 className="text-2xl font-semibold text-gray-900">Create New Release</h1>
-                                <p className="text-gray-600 mt-1">
+                                <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Create New Release</h1>
+                                <p className="text-gray-600 dark:text-gray-400 mt-1">
                                     {selectedArtist ? `For ${selectedArtist.name}` : "No artist selected"}
                                 </p>
                             </div>
                         </div>
                         <Link href="/mwonya_release">
-                            <Button variant="outline" className="border-gray-300">
+                            <Button variant="outline" className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">
                                 Add Tracks to Existing Release
                             </Button>
                         </Link>
@@ -230,25 +230,25 @@ export default function NewReleasePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Main Form */}
                     <div className="lg:col-span-2">
-                        <Card className="bg-white shadow-sm border-gray-200">
+                        <Card className="bg-white dark:bg-gray-900 shadow-sm border-gray-200 dark:border-gray-800">
                             <CardContent className="p-8">
                                 <Form {...form}>
                                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                                         {/* Basic Information */}
                                         <div className="space-y-6">
                                             <div>
-                                                <h3 className="text-lg font-medium text-gray-900 mb-4">Basic Information</h3>
+                                                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Basic Information</h3>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                     <FormField
                                                         control={form.control}
                                                         name="title"
                                                         render={({ field }) => (
                                                             <FormItem className="md:col-span-2">
-                                                                <FormLabel className="text-gray-700 font-medium">Release Title</FormLabel>
+                                                                <FormLabel className="text-gray-700 dark:text-gray-300 font-medium">Release Title</FormLabel>
                                                                 <FormControl>
                                                                     <Input 
                                                                         placeholder="Enter your release title" 
-                                                                        className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                                                        className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400"
                                                                         {...field} 
                                                                     />
                                                                 </FormControl>
@@ -262,23 +262,23 @@ export default function NewReleasePage() {
                                                         name="releaseType"
                                                         render={({ field }) => (
                                                             <FormItem>
-                                                                <FormLabel className="text-gray-700 font-medium">Content Type</FormLabel>
+                                                                <FormLabel className="text-gray-700 dark:text-gray-300 font-medium">Content Type</FormLabel>
                                                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                                     <FormControl>
-                                                                        <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                                                        <SelectTrigger className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400">
                                                                             <SelectValue placeholder="Select type" />
                                                                         </SelectTrigger>
                                                                     </FormControl>
-                                                                    <SelectContent>
-                                                                        <SelectItem value="music">
+                                                                    <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                                                                        <SelectItem value="music" className="text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700">
                                                                             <div className="flex items-center">
-                                                                                <Music className="mr-2 h-4 w-4 text-blue-600" />
+                                                                                <Music className="mr-2 h-4 w-4 text-blue-600 dark:text-blue-400" />
                                                                                 Music
                                                                             </div>
                                                                         </SelectItem>
-                                                                        <SelectItem value="podcast">
+                                                                        <SelectItem value="podcast" className="text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700">
                                                                             <div className="flex items-center">
-                                                                                <Podcast className="mr-2 h-4 w-4 text-purple-600" />
+                                                                                <Podcast className="mr-2 h-4 w-4 text-purple-600 dark:text-purple-400" />
                                                                                 Podcast
                                                                             </div>
                                                                         </SelectItem>
@@ -294,16 +294,16 @@ export default function NewReleasePage() {
                                                         name="genre"
                                                         render={({ field }) => (
                                                             <FormItem>
-                                                                <FormLabel className="text-gray-700 font-medium">Genre</FormLabel>
+                                                                <FormLabel className="text-gray-700 dark:text-gray-300 font-medium">Genre</FormLabel>
                                                                 <Select onValueChange={field.onChange} value={field.value}>
                                                                     <FormControl>
-                                                                        <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                                                        <SelectTrigger className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400">
                                                                             <SelectValue placeholder="Select genre" />
                                                                         </SelectTrigger>
                                                                     </FormControl>
-                                                                    <SelectContent>
+                                                                    <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
                                                                         {genres.map((genre) => (
-                                                                            <SelectItem key={genre.id} value={genre.id}>
+                                                                            <SelectItem key={genre.id} value={genre.id} className="text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700">
                                                                                 {genre.name}
                                                                             </SelectItem>
                                                                         ))}
@@ -319,20 +319,20 @@ export default function NewReleasePage() {
                                                         name="aesCode"
                                                         render={({ field }) => (
                                                             <FormItem>
-                                                                <FormLabel className="text-gray-700 font-medium">Format</FormLabel>
+                                                                <FormLabel className="text-gray-700 dark:text-gray-300 font-medium">Format</FormLabel>
                                                                 <Select onValueChange={field.onChange} value={field.value}>
                                                                     <FormControl>
-                                                                        <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                                                        <SelectTrigger className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400">
                                                                             <SelectValue placeholder="Select format" />
                                                                         </SelectTrigger>
                                                                     </FormControl>
-                                                                    <SelectContent>
-                                                                        <SelectItem value="single">Single</SelectItem>
-                                                                        <SelectItem value="ep">EP</SelectItem>
-                                                                        <SelectItem value="album">Album</SelectItem>
-                                                                        <SelectItem value="mixtape">Mixtape</SelectItem>
-                                                                        <SelectItem value="episode">Episode</SelectItem>
-                                                                        <SelectItem value="live">Live</SelectItem>
+                                                                    <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                                                                        <SelectItem value="single" className="text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700">Single</SelectItem>
+                                                                        <SelectItem value="ep" className="text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700">EP</SelectItem>
+                                                                        <SelectItem value="album" className="text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700">Album</SelectItem>
+                                                                        <SelectItem value="mixtape" className="text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700">Mixtape</SelectItem>
+                                                                        <SelectItem value="episode" className="text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700">Episode</SelectItem>
+                                                                        <SelectItem value="live" className="text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700">Live</SelectItem>
                                                                     </SelectContent>
                                                                 </Select>
                                                                 <FormMessage />
@@ -345,15 +345,15 @@ export default function NewReleasePage() {
                                                         name="releaseDate"
                                                         render={({ field }) => (
                                                             <FormItem>
-                                                                <FormLabel className="text-gray-700 font-medium">Release Date</FormLabel>
+                                                                <FormLabel className="text-gray-700 dark:text-gray-300 font-medium">Release Date</FormLabel>
                                                                 <Popover>
                                                                     <PopoverTrigger asChild>
                                                                         <FormControl>
                                                                             <Button
                                                                                 variant={"outline"}
                                                                                 className={cn(
-                                                                                    "w-full justify-start text-left font-normal border-gray-300 focus:border-blue-500 focus:ring-blue-500",
-                                                                                    !field.value && "text-gray-500"
+                                                                                    "w-full justify-start text-left font-normal border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400",
+                                                                                    !field.value && "text-gray-500 dark:text-gray-400"
                                                                                 )}
                                                                             >
                                                                                 <CalendarIcon className="mr-2 h-4 w-4" />
@@ -365,7 +365,7 @@ export default function NewReleasePage() {
                                                                             </Button>
                                                                         </FormControl>
                                                                     </PopoverTrigger>
-                                                                    <PopoverContent className="w-auto p-0" align="start">
+                                                                    <PopoverContent className="w-auto p-0 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700" align="start">
                                                                         <Calendar
                                                                             mode="single"
                                                                             selected={field.value}
@@ -374,6 +374,7 @@ export default function NewReleasePage() {
                                                                                 date < new Date(new Date().setHours(0, 0, 0, 0)) || date < new Date("1900-01-01")
                                                                             }
                                                                             initialFocus
+                                                                            className="dark:text-gray-100"
                                                                         />
                                                                     </PopoverContent>
                                                                 </Popover>
@@ -387,7 +388,7 @@ export default function NewReleasePage() {
 
                                         {/* Description */}
                                         <div className="space-y-4">
-                                            <h3 className="text-lg font-medium text-gray-900">Description</h3>
+                                            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Description</h3>
                                             <FormField
                                                 control={form.control}
                                                 name="description"
@@ -396,7 +397,7 @@ export default function NewReleasePage() {
                                                         <FormControl>
                                                             <Textarea
                                                                 placeholder="Describe your release..."
-                                                                className="min-h-[120px] border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                                                className="min-h-[120px] border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400"
                                                                 {...field}
                                                             />
                                                         </FormControl>
@@ -408,17 +409,17 @@ export default function NewReleasePage() {
 
                                         {/* Artwork Upload */}
                                         <div className="space-y-4">
-                                            <h3 className="text-lg font-medium text-gray-900">Artwork</h3>
+                                            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Artwork</h3>
                                             <FormField
                                                 control={form.control}
                                                 name="artwork"
                                                 render={({ field: { value, onChange, ...field } }) => (
                                                     <FormItem>
                                                         <FormControl>
-                                                            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-                                                                <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                                                            <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
+                                                                <Upload className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4" />
                                                                 <div className="space-y-2">
-                                                                    <p className="text-gray-600">Upload your release artwork</p>
+                                                                    <p className="text-gray-600 dark:text-gray-400">Upload your release artwork</p>
                                                                     <Input
                                                                         type="file"
                                                                         accept="image/*"
@@ -439,11 +440,11 @@ export default function NewReleasePage() {
                                                                     />
                                                                     <label 
                                                                         htmlFor="artwork-upload"
-                                                                        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer transition-colors"
+                                                                        className="inline-flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-700 cursor-pointer transition-colors"
                                                                     >
                                                                         Choose File
                                                                     </label>
-                                                                    <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                                                    <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF up to 10MB</p>
                                                                 </div>
                                                             </div>
                                                         </FormControl>
@@ -455,7 +456,7 @@ export default function NewReleasePage() {
 
                                         {/* Tags */}
                                         <div className="space-y-4">
-                                            <h3 className="text-lg font-medium text-gray-900">Tags</h3>
+                                            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Tags</h3>
                                             <FormField
                                                 control={form.control}
                                                 name="tags"
@@ -468,13 +469,13 @@ export default function NewReleasePage() {
                                                                         {tags.map((tag) => (
                                                                             <span
                                                                                 key={tag}
-                                                                                className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                                                                                className="inline-flex items-center px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm rounded-full"
                                                                             >
                                                                                 {tag}
                                                                                 <button
                                                                                     type="button"
                                                                                     onClick={() => removeTag(tag)}
-                                                                                    className="ml-2 text-blue-600 hover:text-blue-800"
+                                                                                    className="ml-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200"
                                                                                 >
                                                                                     <X size={14} />
                                                                                 </button>
@@ -487,11 +488,11 @@ export default function NewReleasePage() {
                                                                     value={tagInput}
                                                                     onChange={(e) => setTagInput(e.target.value)}
                                                                     onKeyDown={handleTagInput}
-                                                                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                                                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400"
                                                                 />
                                                             </div>
                                                         </FormControl>
-                                                        <FormDescription className="text-gray-600">
+                                                        <FormDescription className="text-gray-600 dark:text-gray-400">
                                                             Add relevant tags to help users discover your release
                                                         </FormDescription>
                                                     </FormItem>
@@ -501,23 +502,23 @@ export default function NewReleasePage() {
 
                                         {/* Options */}
                                         <div className="space-y-4">
-                                            <h3 className="text-lg font-medium text-gray-900">Options</h3>
+                                            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Options</h3>
                                             <FormField
                                                 control={form.control}
                                                 name="exclusive"
                                                 render={({ field }) => (
                                                     <FormItem>
-                                                        <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                                                        <div className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
                                                             <FormControl>
                                                                 <Checkbox
                                                                     checked={field.value}
                                                                     onCheckedChange={field.onChange}
-                                                                    className="border-gray-300"
+                                                                    className="border-gray-300 dark:border-gray-600 data-[state=checked]:bg-blue-600 dark:data-[state=checked]:bg-blue-600"
                                                                 />
                                                             </FormControl>
                                                             <div>
-                                                                <FormLabel className="text-gray-900 font-medium">Exclusive Release</FormLabel>
-                                                                <FormDescription className="text-gray-600">
+                                                                <FormLabel className="text-gray-900 dark:text-gray-100 font-medium">Exclusive Release</FormLabel>
+                                                                <FormDescription className="text-gray-600 dark:text-gray-400">
                                                                     Make this release available only to premium users
                                                                 </FormDescription>
                                                             </div>
@@ -528,14 +529,14 @@ export default function NewReleasePage() {
                                         </div>
 
                                         {/* Submit Buttons */}
-                                        <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-                                            <Button type="button" variant="outline" className="border-gray-300">
+                                        <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+                                            <Button type="button" variant="outline" className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">
                                                 Cancel
                                             </Button>
                                             <Button 
                                                 type="submit" 
                                                 disabled={status === 'uploading'}
-                                                className="bg-blue-600 hover:bg-blue-700 text-white"
+                                                className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white"
                                             >
                                                 {status === 'uploading' ? 'Creating Release...' : 'Create Release'}
                                             </Button>
@@ -548,13 +549,13 @@ export default function NewReleasePage() {
 
                     {/* Preview Sidebar */}
                     <div className="space-y-6">
-                        <Card className="bg-white shadow-sm border-gray-200">
+                        <Card className="bg-white dark:bg-gray-900 shadow-sm border-gray-200 dark:border-gray-800">
                             <CardHeader className="pb-4">
-                                <CardTitle className="text-lg font-medium text-gray-900">Release Preview</CardTitle>
+                                <CardTitle className="text-lg font-medium text-gray-900 dark:text-gray-100">Release Preview</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-6">
                                 {/* Artwork */}
-                                <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                                <div className="aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
                                     <img
                                         src={artworkPreview || "/album_placeholder.svg"}
                                         alt="Release artwork"
@@ -565,10 +566,10 @@ export default function NewReleasePage() {
                                 {/* Release Info */}
                                 <div className="space-y-3">
                                     <div>
-                                        <h3 className="font-semibold text-gray-900 text-lg">
+                                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg">
                                             {watchedValues.title || "Untitled Release"}
                                         </h3>
-                                        <p className="text-gray-600">
+                                        <p className="text-gray-600 dark:text-gray-400">
                                             {selectedArtist?.name || "Unknown Artist"}
                                         </p>
                                     </div>
