@@ -35,13 +35,13 @@ interface YearSection {
 }
 
 const ViewToggle = ({ view, setView }: { view: string, setView: React.Dispatch<React.SetStateAction<string>> }) => (
-  <div className="flex bg-gray-100 rounded-lg p-1">
+  <div className="flex bg-secondary rounded-lg p-1">
     <button
       onClick={() => setView('grid')}
       className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
         view === 'grid' 
-          ? 'bg-white text-gray-900 shadow-sm' 
-          : 'text-gray-600 hover:text-gray-900'
+          ? 'bg-primary text-primary-foreground shadow-sm' 
+          : 'text-muted-foreground hover:text-foreground'
       }`}
     >
       <Grid className="h-4 w-4 mr-2 inline" />
@@ -51,8 +51,8 @@ const ViewToggle = ({ view, setView }: { view: string, setView: React.Dispatch<R
       onClick={() => setView('list')}
       className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
         view === 'list' 
-          ? 'bg-white text-gray-900 shadow-sm' 
-          : 'text-gray-600 hover:text-gray-900'
+          ? 'bg-primary text-primary-foreground shadow-sm' 
+          : 'text-muted-foreground hover:text-foreground'
       }`}
     >
       <List className="h-4 w-4 mr-2 inline" />
@@ -62,10 +62,10 @@ const ViewToggle = ({ view, setView }: { view: string, setView: React.Dispatch<R
 );
 
 const AlbumPlaceholder = ({ size = 'default' }: { size?: 'small' | 'default' }) => (
-  <div className={`bg-gray-200 flex items-center justify-center rounded-lg ${
+  <div className={`bg-muted flex items-center justify-center rounded-lg ${
     size === 'small' ? 'w-16 h-16' : 'w-full h-full'
   }`}>
-    <Music2 className={`text-gray-400 ${size === 'small' ? 'h-6 w-6' : 'h-12 w-12'}`} />
+    <Music2 className={`text-muted-foreground ${size === 'small' ? 'h-6 w-6' : 'h-12 w-12'}`} />
   </div>
 );
 
@@ -82,9 +82,9 @@ const ContentCard = ({ item, onClick, view }: { item: ContentItem, onClick: () =
     return (
       <Card
         onClick={onClick}
-        className="group cursor-pointer bg-white border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 overflow-hidden"
+        className="group cursor-pointer bg-card border border-border hover:border-primary/50 hover:shadow-md transition-all duration-200 overflow-hidden"
       >
-        <div className="aspect-square relative overflow-hidden bg-gray-100">
+        <div className="aspect-square relative overflow-hidden bg-muted">
           {item.artwork?.fileUrl ? (
             <Image
               src={item.artwork.fileUrl}
@@ -98,7 +98,7 @@ const ContentCard = ({ item, onClick, view }: { item: ContentItem, onClick: () =
           
           {item.exclusive && (
             <div className="absolute top-3 right-3">
-              <Badge className="bg-red-500 hover:bg-red-600 text-white text-xs font-medium">
+              <Badge className="bg-destructive hover:bg-destructive/90 text-destructive-foreground text-xs font-medium">
                 Exclusive
               </Badge>
             </div>
@@ -107,19 +107,19 @@ const ContentCard = ({ item, onClick, view }: { item: ContentItem, onClick: () =
 
         <CardContent className="p-4">
           <div className="space-y-2">
-            <h3 className="font-semibold text-gray-900 line-clamp-1 text-base">
+            <h3 className="font-semibold text-foreground line-clamp-1 text-base">
               {item.title}
             </h3>
             
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>{item.releaseYear}</span>
               <span>•</span>
-              <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-700 hover:bg-gray-200">
+              <Badge variant="secondary" className="text-xs">
                 {item.genre}
               </Badge>
             </div>
 
-            <div className="flex items-center gap-4 text-xs text-gray-500">
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Disc className="h-3 w-3" />
                 <span>{item.totalSongs} tracks</span>
@@ -131,7 +131,7 @@ const ContentCard = ({ item, onClick, view }: { item: ContentItem, onClick: () =
             </div>
 
             <div className="flex items-center justify-between pt-2">
-              <Badge variant="outline" className="text-xs text-gray-600 border-gray-300">
+              <Badge variant="outline" className="text-xs">
                 {item.AES_code}
               </Badge>
               <ShareComponent mediaId={item.id} mediaType='collection' />
@@ -145,9 +145,9 @@ const ContentCard = ({ item, onClick, view }: { item: ContentItem, onClick: () =
   return (
     <div
       onClick={onClick}
-      className="group flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-sm cursor-pointer transition-all duration-200"
+      className="group flex items-center gap-4 p-4 bg-card border border-border rounded-lg hover:border-primary/50 hover:shadow-sm cursor-pointer transition-all duration-200"
     >
-      <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+      <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
         {item.artwork?.fileUrl ? (
           <Image
             src={item.artwork.fileUrl}
@@ -163,27 +163,27 @@ const ContentCard = ({ item, onClick, view }: { item: ContentItem, onClick: () =
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
-            <h3 className="font-semibold text-gray-900 line-clamp-1 text-base">
+            <h3 className="font-semibold text-foreground line-clamp-1 text-base">
               {item.title}
             </h3>
             
-            <div className="flex items-center gap-2 mt-1 text-sm text-gray-600">
+            <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
               <span>{item.releaseYear}</span>
               <span>•</span>
-              <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-700">
+              <Badge variant="secondary" className="text-xs">
                 {item.genre}
               </Badge>
               {item.exclusive && (
                 <>
                   <span>•</span>
-                  <Badge className="bg-red-500 text-white text-xs">
+                  <Badge className="bg-destructive text-destructive-foreground text-xs">
                     Exclusive
                   </Badge>
                 </>
               )}
             </div>
 
-            <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+            <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Disc className="h-3 w-3" />
                 <span>{item.totalSongs} tracks</span>
@@ -192,7 +192,7 @@ const ContentCard = ({ item, onClick, view }: { item: ContentItem, onClick: () =
                 <Calendar className="h-3 w-3" />
                 <span>{formatDate(item.releaseDate)}</span>
               </div>
-              <Badge variant="outline" className="text-xs text-gray-600 border-gray-300">
+              <Badge variant="outline" className="text-xs">
                 {item.AES_code}
               </Badge>
             </div>
@@ -200,7 +200,7 @@ const ContentCard = ({ item, onClick, view }: { item: ContentItem, onClick: () =
 
           <div className="flex items-center gap-2">
             <ShareComponent mediaId={item.id} mediaType='collection' />
-            <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-gray-600" />
+            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
           </div>
         </div>
       </div>
@@ -306,7 +306,7 @@ export default function ContentByYear() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -324,7 +324,7 @@ export default function ContentByYear() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <div key={i} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <div key={i} className="bg-card rounded-lg border border-border overflow-hidden">
                   <Skeleton className="aspect-square" />
                   <div className="p-4 space-y-2">
                     <Skeleton className="h-4 w-full" />
@@ -342,16 +342,16 @@ export default function ContentByYear() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center space-y-4 bg-white p-8 rounded-lg border border-gray-200">
-          <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto">
-            <Music2 className="h-6 w-6 text-red-600" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4 bg-card p-8 rounded-lg border border-border">
+          <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mx-auto">
+            <Music2 className="h-6 w-6 text-destructive" />
           </div>
-          <p className="text-lg font-medium text-gray-900">Unable to load content</p>
-          <p className="text-sm text-gray-600">{error}</p>
+          <p className="text-lg font-medium text-foreground">Unable to load content</p>
+          <p className="text-sm text-muted-foreground">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm"
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm"
           >
             Try again
           </button>
@@ -362,13 +362,13 @@ export default function ContentByYear() {
 
   if (!loading && !error && contentByYear.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center space-y-4 bg-white p-8 rounded-lg border border-gray-200">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
-            <Music2 className="h-8 w-8 text-gray-400" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4 bg-card p-8 rounded-lg border border-border">
+          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto">
+            <Music2 className="h-8 w-8 text-muted-foreground" />
           </div>
-          <p className="text-lg font-medium text-gray-900">No releases found</p>
-          <p className="text-sm text-gray-600">
+          <p className="text-lg font-medium text-foreground">No releases found</p>
+          <p className="text-sm text-muted-foreground">
             This artist doesn't have any content available yet.
           </p>
         </div>
@@ -377,14 +377,14 @@ export default function ContentByYear() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
+        <div className="bg-card rounded-lg border border-border p-6 mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Discography</h1>
-              <p className="text-gray-600 mt-1">
+              <h1 className="text-2xl font-bold text-foreground">Discography</h1>
+              <p className="text-muted-foreground mt-1">
                 {selectedArtist?.name}
               </p>
             </div>
@@ -393,43 +393,101 @@ export default function ContentByYear() {
 
           {/* Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-gray-900">{totalReleases}</div>
-              <div className="text-sm text-gray-600">Releases</div>
+            <div className="text-center p-3 bg-muted/50 rounded-lg">
+              <div className="text-2xl font-bold text-foreground">{totalReleases}</div>
+              <div className="text-sm text-muted-foreground">Releases</div>
             </div>
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-gray-900">{totalTracks}</div>
-              <div className="text-sm text-gray-600">Tracks</div>
+            <div className="text-center p-3 bg-muted/50 rounded-lg">
+              <div className="text-2xl font-bold text-foreground">{totalTracks}</div>
+              <div className="text-sm text-muted-foreground">Tracks</div>
             </div>
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-gray-900">{contentByYear.length}</div>
-              <div className="text-sm text-gray-600">Years Active</div>
+            <div className="text-center p-3 bg-muted/50 rounded-lg">
+              <div className="text-2xl font-bold text-foreground">{contentByYear.length}</div>
+              <div className="text-sm text-muted-foreground">Years Active</div>
             </div>
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-gray-900">{allGenres.length}</div>
-              <div className="text-sm text-gray-600">Genres</div>
+            <div className="text-center p-3 bg-muted/50 rounded-lg">
+              <div className="text-2xl font-bold text-foreground">{allGenres.length}</div>
+              <div className="text-sm text-muted-foreground">Genres</div>
             </div>
           </div>
 
           {/* Filters */}
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Search releases..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 border-gray-300 focus:border-gray-400"
+                className="pl-10"
               />
             </div>
             <Select value={filterGenre} onValueChange={setFilterGenre}>
-              <SelectTrigger className="w-full sm:w-[180px] border-gray-300">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="All Genres" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Genres</SelectItem>
                 {allGenres.map(genre => (
                   <SelectItem key={genre} value={genre}>{genre}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* No results state */}
+        {filteredContent.length === 0 && (
+          <div className="bg-card rounded-lg border border-border p-8 text-center">
+            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <p className="text-lg font-medium text-foreground mb-2">No releases match your search</p>
+            <p className="text-muted-foreground mb-4">Try adjusting your filters or search terms</p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setFilterGenre('all');
+              }}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm"
+            >
+              Clear all filters
+            </button>
+          </div>
+        )}
+
+        {/* Content Timeline */}
+        <div className="space-y-8">
+          {filteredContent.map((section) => (
+            <div key={section.year} className="space-y-4">
+              <div className="flex items-center gap-4">
+                <h2 className="text-xl font-semibold text-foreground">{section.year}</h2>
+                <Badge variant="secondary">
+                  {section.items.length} {section.items.length === 1 ? 'release' : 'releases'}
+                </Badge>
+                <div className="flex-1 h-px bg-border"></div>
+              </div>
+
+              <div className={
+                view === 'grid'
+                  ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                  : "space-y-3"
+              }>
+                {section.items.map((item) => (
+                  <ContentCard
+                    key={item.id}
+                    item={item}
+                    onClick={() => router.push(`/mwonya_release/${item.id}`)}
+                    view={view}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );  <SelectItem key={genre} value={genre}>{genre}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
