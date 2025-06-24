@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { format } from "date-fns"
-import { CalendarIcon, Music, Podcast, X } from 'lucide-react'
+import { CalendarIcon, Music, Podcast, X, Plus, Upload, ArrowLeft } from 'lucide-react'
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -31,14 +31,12 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Card, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { retrieveAllGenres } from '@/actions/getGenres'
 import { useArtist } from "@/contexts/ArtistContext";
 import { createNewRelease } from '@/actions/createTrack'
 import { useRouter } from 'next/navigation'
 import Link from "next/link"
-
 
 const formSchema = z.object({
     title: z.string().min(2, {
@@ -68,7 +66,6 @@ const formSchema = z.object({
     }),
     tags: z.array(z.string()).optional(),
 })
-
 
 export default function NewReleasePage() {
     const [artworkPreview, setArtworkPreview] = useState("/album_album_placeholder.svg?height=300&width=300")
@@ -100,7 +97,6 @@ export default function NewReleasePage() {
     const watchedValues = watch()
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-
         setStatus('uploading')
 
         const formData = new FormData()
@@ -126,10 +122,7 @@ export default function NewReleasePage() {
                     title: "Success",
                     description: "Track and cover art uploaded successfully!",
                 })
-
-                // Route to release/releaseID
                 router.push(`/mwonya_release/${result.releaseID}`);
-
             } else {
                 throw new Error(result.error || "Unknown error occurred")
             }
@@ -145,12 +138,10 @@ export default function NewReleasePage() {
 
     useEffect(() => {
         if (!selectedArtist) {
-            // Reset states when no artist is selected
             setArtistID(undefined);
             setArtistName(undefined);
             return;
         }
-
         setArtistID(selectedArtist.id);
         setArtistName(selectedArtist.name);
     }, [selectedArtist]);
@@ -208,339 +199,437 @@ export default function NewReleasePage() {
         form.setValue("tags", updatedTags)
     }
 
-    const calculateProgress = () => {
-        const fields = Object.keys(formSchema.shape) as Array<keyof typeof watchedValues>
-        const filledFields = fields.filter((field) => watchedValues[field])
-        return (filledFields.length / fields.length) * 100
-    }
-
     return (
-        <div className="min-h-screen bg-background text-foreground">
-            <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-               
-                <div className="bg-card/80 backdrop-blur-sm rounded-lg p-6 mb-8 shadow-md border border-border/50">
-                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
+        <div className="min-h-screen bg-gray-50">
+            {/* Header */}
+            <div className="bg-white border-b border-gray-200">
+                <div className="max-w-7xl mx-auto px-6 py-6">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                            <Button variant="ghost" size="sm" className="text-gray-600">
+                                <ArrowLeft className="h-4 w-4 mr-2" />
+                                Back
+                            </Button>
                             <div>
-                            <p className=" mb-2">Create a New Release For</p>
-                            <h1 className="mb-4 text-3xl font-bold">Create a New Release For <span className="text-primary "> {selectedArtist ? selectedArtist.name : "No artist selected"}</span></h1>
-                            
-                            </div>
-                            <div className="mt-6 md:mt-0 gap-2 flex flex-col md:flex-row items-center">
-
-
-                                <Link href="/mwonya_release" >
-                                    <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">Already created Release?,  Then Add Tracks</Button>
-                                </Link>
+                                <h1 className="text-2xl font-semibold text-gray-900">Create New Release</h1>
+                                <p className="text-gray-600 mt-1">
+                                    {selectedArtist ? `For ${selectedArtist.name}` : "No artist selected"}
+                                </p>
                             </div>
                         </div>
+                        <Link href="/mwonya_release">
+                            <Button variant="outline" className="border-gray-300">
+                                Add Tracks to Existing Release
+                            </Button>
+                        </Link>
                     </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card className="md:col-span-2">
-                        <CardContent className="p-6">
-                            <Form {...form}>
-                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                                    <FormField
-                                        control={form.control}
-                                        name="title"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Title</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="Enter release title" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="releaseType"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Release Type</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select release type" />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value="music">
-                                                            <div className="flex items-center">
-                                                                <Music className="mr-2 h-4 w-4" />
-                                                                Music
-                                                            </div>
-                                                        </SelectItem>
-                                                        <SelectItem value="podcast">
-                                                            <div className="flex items-center">
-                                                                <Podcast className="mr-2 h-4 w-4" />
-                                                                Podcast
-                                                            </div>
-                                                        </SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="genre"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Genre</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select genre" />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
+                </div>
+            </div>
 
-                                                        {genres.map((genre) => (
-                                                            <SelectItem key={genre.id} value={genre.id}>
-                                                                {genre.name}
-                                                            </SelectItem>
-                                                        ))}
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormDescription>
-                                                    Select the genre that best fits your {watchedValues.releaseType === "music" ? "music" : "podcast"}.
-                                                </FormDescription>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="aesCode"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Release Format</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select release format" />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value="single">Single</SelectItem>
-                                                        <SelectItem value="ep">EP</SelectItem>
-                                                        <SelectItem value="album">Album</SelectItem>
-                                                        <SelectItem value="mixtape">Mixtape</SelectItem>
-                                                        <SelectItem value="episode">Episode</SelectItem>
-                                                        <SelectItem value="live">Live</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormDescription>
-                                                    Select the format of your  {watchedValues.releaseType === "music" ? "music" : "podcast"} release.
-                                                </FormDescription>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="releaseDate"
-                                        render={({ field }) => (
-                                            <FormItem className="flex flex-col">
-                                                <FormLabel>Release Date</FormLabel>
-                                                <Popover>
-                                                    <PopoverTrigger asChild>
-                                                        <FormControl>
-                                                            <Button
-                                                                variant={"outline"}
-                                                                className={cn(
-                                                                    "w-[240px] pl-3 text-left font-normal",
-                                                                    !field.value && "text-muted-foreground"
-                                                                )}
-                                                            >
-                                                                {field.value ? (
-                                                                    format(field.value, "PPP")
-                                                                ) : (
-                                                                    <span>Pick a date</span>
-                                                                )}
-                                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                            </Button>
-                                                        </FormControl>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent className="w-auto p-0" align="start">
-                                                        <Calendar
-                                                            mode="single"
-                                                            selected={field.value}
-                                                            onSelect={field.onChange}
-                                                            disabled={(date) =>
-                                                                date < new Date(new Date().setHours(0, 0, 0, 0)) || date < new Date("1900-01-01")
-                                                            }
-                                                            initialFocus
-                                                        />
-                                                    </PopoverContent>
-                                                </Popover>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="description"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Description</FormLabel>
-                                                <FormControl>
-                                                    <Textarea
-                                                        placeholder="Enter release description"
-                                                        className="resize-none"
-                                                        {...field}
+            <div className="max-w-7xl mx-auto px-6 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Main Form */}
+                    <div className="lg:col-span-2">
+                        <Card className="bg-white shadow-sm border-gray-200">
+                            <CardContent className="p-8">
+                                <Form {...form}>
+                                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                                        {/* Basic Information */}
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h3 className="text-lg font-medium text-gray-900 mb-4">Basic Information</h3>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="title"
+                                                        render={({ field }) => (
+                                                            <FormItem className="md:col-span-2">
+                                                                <FormLabel className="text-gray-700 font-medium">Release Title</FormLabel>
+                                                                <FormControl>
+                                                                    <Input 
+                                                                        placeholder="Enter your release title" 
+                                                                        className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                                                        {...field} 
+                                                                    />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
                                                     />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                                                    
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="releaseType"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-gray-700 font-medium">Content Type</FormLabel>
+                                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                    <FormControl>
+                                                                        <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                                                            <SelectValue placeholder="Select type" />
+                                                                        </SelectTrigger>
+                                                                    </FormControl>
+                                                                    <SelectContent>
+                                                                        <SelectItem value="music">
+                                                                            <div className="flex items-center">
+                                                                                <Music className="mr-2 h-4 w-4 text-blue-600" />
+                                                                                Music
+                                                                            </div>
+                                                                        </SelectItem>
+                                                                        <SelectItem value="podcast">
+                                                                            <div className="flex items-center">
+                                                                                <Podcast className="mr-2 h-4 w-4 text-purple-600" />
+                                                                                Podcast
+                                                                            </div>
+                                                                        </SelectItem>
+                                                                    </SelectContent>
+                                                                </Select>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
 
-                                    <FormField
-                                        control={form.control}
-                                        name="exclusive"
-                                        render={({ field }) => (
-                                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                                                <FormControl>
-                                                    <Checkbox
-                                                        checked={field.value}
-                                                        onCheckedChange={field.onChange}
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="genre"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-gray-700 font-medium">Genre</FormLabel>
+                                                                <Select onValueChange={field.onChange} value={field.value}>
+                                                                    <FormControl>
+                                                                        <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                                                            <SelectValue placeholder="Select genre" />
+                                                                        </SelectTrigger>
+                                                                    </FormControl>
+                                                                    <SelectContent>
+                                                                        {genres.map((genre) => (
+                                                                            <SelectItem key={genre.id} value={genre.id}>
+                                                                                {genre.name}
+                                                                            </SelectItem>
+                                                                        ))}
+                                                                    </SelectContent>
+                                                                </Select>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
                                                     />
-                                                </FormControl>
-                                                <div className="space-y-1 leading-none">
-                                                    <FormLabel>
-                                                        Exclusive
-                                                    </FormLabel>
-                                                    <FormDescription>
-                                                        Make this release available only to premium users.
-                                                    </FormDescription>
+
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="aesCode"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-gray-700 font-medium">Format</FormLabel>
+                                                                <Select onValueChange={field.onChange} value={field.value}>
+                                                                    <FormControl>
+                                                                        <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                                                            <SelectValue placeholder="Select format" />
+                                                                        </SelectTrigger>
+                                                                    </FormControl>
+                                                                    <SelectContent>
+                                                                        <SelectItem value="single">Single</SelectItem>
+                                                                        <SelectItem value="ep">EP</SelectItem>
+                                                                        <SelectItem value="album">Album</SelectItem>
+                                                                        <SelectItem value="mixtape">Mixtape</SelectItem>
+                                                                        <SelectItem value="episode">Episode</SelectItem>
+                                                                        <SelectItem value="live">Live</SelectItem>
+                                                                    </SelectContent>
+                                                                </Select>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="releaseDate"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-gray-700 font-medium">Release Date</FormLabel>
+                                                                <Popover>
+                                                                    <PopoverTrigger asChild>
+                                                                        <FormControl>
+                                                                            <Button
+                                                                                variant={"outline"}
+                                                                                className={cn(
+                                                                                    "w-full justify-start text-left font-normal border-gray-300 focus:border-blue-500 focus:ring-blue-500",
+                                                                                    !field.value && "text-gray-500"
+                                                                                )}
+                                                                            >
+                                                                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                                                                {field.value ? (
+                                                                                    format(field.value, "PPP")
+                                                                                ) : (
+                                                                                    <span>Select date</span>
+                                                                                )}
+                                                                            </Button>
+                                                                        </FormControl>
+                                                                    </PopoverTrigger>
+                                                                    <PopoverContent className="w-auto p-0" align="start">
+                                                                        <Calendar
+                                                                            mode="single"
+                                                                            selected={field.value}
+                                                                            onSelect={field.onChange}
+                                                                            disabled={(date) =>
+                                                                                date < new Date(new Date().setHours(0, 0, 0, 0)) || date < new Date("1900-01-01")
+                                                                            }
+                                                                            initialFocus
+                                                                        />
+                                                                    </PopoverContent>
+                                                                </Popover>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
                                                 </div>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="artwork"
-                                        render={({ field: { value, onChange, ...field } }) => (
-                                            <FormItem>
-                                                <FormLabel>Release Artwork</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        type="file"
-                                                        accept="image/*"
-                                                        onChange={(e) => {
-                                                            const file = e.target.files?.[0]
-                                                            if (file) {
-                                                                onChange(file)
-                                                                const reader = new FileReader()
-                                                                reader.onloadend = () => {
-                                                                    setArtworkPreview(reader.result as string)
-                                                                }
-                                                                reader.readAsDataURL(file)
-                                                            }
-                                                        }}
-                                                        {...field}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="tags"
-                                        render={() => (
-                                            <FormItem>
-                                                <FormLabel>Tags</FormLabel>
-                                                <FormControl>
-                                                    <div className="space-y-2">
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {tags.map((tag) => (
-                                                                <span
-                                                                    key={tag}
-                                                                    className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-sm flex items-center"
-                                                                >
-                                                                    {tag}
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => removeTag(tag)}
-                                                                        className="ml-1 text-secondary-foreground hover:text-primary-foreground"
+                                            </div>
+                                        </div>
+
+                                        {/* Description */}
+                                        <div className="space-y-4">
+                                            <h3 className="text-lg font-medium text-gray-900">Description</h3>
+                                            <FormField
+                                                control={form.control}
+                                                name="description"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormControl>
+                                                            <Textarea
+                                                                placeholder="Describe your release..."
+                                                                className="min-h-[120px] border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                                                {...field}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+
+                                        {/* Artwork Upload */}
+                                        <div className="space-y-4">
+                                            <h3 className="text-lg font-medium text-gray-900">Artwork</h3>
+                                            <FormField
+                                                control={form.control}
+                                                name="artwork"
+                                                render={({ field: { value, onChange, ...field } }) => (
+                                                    <FormItem>
+                                                        <FormControl>
+                                                            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+                                                                <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                                                                <div className="space-y-2">
+                                                                    <p className="text-gray-600">Upload your release artwork</p>
+                                                                    <Input
+                                                                        type="file"
+                                                                        accept="image/*"
+                                                                        className="hidden"
+                                                                        id="artwork-upload"
+                                                                        onChange={(e) => {
+                                                                            const file = e.target.files?.[0]
+                                                                            if (file) {
+                                                                                onChange(file)
+                                                                                const reader = new FileReader()
+                                                                                reader.onloadend = () => {
+                                                                                    setArtworkPreview(reader.result as string)
+                                                                                }
+                                                                                reader.readAsDataURL(file)
+                                                                            }
+                                                                        }}
+                                                                        {...field}
+                                                                    />
+                                                                    <label 
+                                                                        htmlFor="artwork-upload"
+                                                                        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer transition-colors"
                                                                     >
-                                                                        <X size={14} />
-                                                                    </button>
-                                                                </span>
-                                                            ))}
+                                                                        Choose File
+                                                                    </label>
+                                                                    <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                                                </div>
+                                                            </div>
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+
+                                        {/* Tags */}
+                                        <div className="space-y-4">
+                                            <h3 className="text-lg font-medium text-gray-900">Tags</h3>
+                                            <FormField
+                                                control={form.control}
+                                                name="tags"
+                                                render={() => (
+                                                    <FormItem>
+                                                        <FormControl>
+                                                            <div className="space-y-3">
+                                                                {tags.length > 0 && (
+                                                                    <div className="flex flex-wrap gap-2">
+                                                                        {tags.map((tag) => (
+                                                                            <span
+                                                                                key={tag}
+                                                                                className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                                                                            >
+                                                                                {tag}
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() => removeTag(tag)}
+                                                                                    className="ml-2 text-blue-600 hover:text-blue-800"
+                                                                                >
+                                                                                    <X size={14} />
+                                                                                </button>
+                                                                            </span>
+                                                                        ))}
+                                                                    </div>
+                                                                )}
+                                                                <Input
+                                                                    placeholder="Add tags (press Enter or comma to add)"
+                                                                    value={tagInput}
+                                                                    onChange={(e) => setTagInput(e.target.value)}
+                                                                    onKeyDown={handleTagInput}
+                                                                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                                                />
+                                                            </div>
+                                                        </FormControl>
+                                                        <FormDescription className="text-gray-600">
+                                                            Add relevant tags to help users discover your release
+                                                        </FormDescription>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+
+                                        {/* Options */}
+                                        <div className="space-y-4">
+                                            <h3 className="text-lg font-medium text-gray-900">Options</h3>
+                                            <FormField
+                                                control={form.control}
+                                                name="exclusive"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                                                            <FormControl>
+                                                                <Checkbox
+                                                                    checked={field.value}
+                                                                    onCheckedChange={field.onChange}
+                                                                    className="border-gray-300"
+                                                                />
+                                                            </FormControl>
+                                                            <div>
+                                                                <FormLabel className="text-gray-900 font-medium">Exclusive Release</FormLabel>
+                                                                <FormDescription className="text-gray-600">
+                                                                    Make this release available only to premium users
+                                                                </FormDescription>
+                                                            </div>
                                                         </div>
-                                                        <Input
-                                                            placeholder="Enter tags (press Enter or comma to add)"
-                                                            value={tagInput}
-                                                            onChange={(e) => setTagInput(e.target.value)}
-                                                            onKeyDown={handleTagInput}
-                                                        />
-                                                    </div>
-                                                </FormControl>
-                                                <FormDescription>
-                                                    Add relevant tags to help users discover your release.
-                                                </FormDescription>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <div className="flex justify-between">
-                                        <Button type="button" variant="outline">Cancel</Button>
-                                        <Button type="submit" disabled={status === 'uploading'}>
-                                            {status === 'uploading' ? 'Uploading...' : 'Create Release'}
-                                        </Button>
-                                    </div>
-                                </form>
-                            </Form>
-                        </CardContent>
-                    </Card>
-                    <div className="space-y-6">
-                        <Card>
-                            <CardContent className="p-6">
-                                <h2 className="text-xl font-semibold mb-4">Release Preview</h2>
-                                <div className="space-y-4">
-                                    <img
-                                        src={artworkPreview || "/album_placeholder.svg"}
-                                        alt="Release Artwork"
-                                        className="w-full aspect-square object-cover rounded-md"
-                                    />
-                                    <div>
-                                        <h3 className="font-semibold">{watchedValues.title || "Untitled Release"}</h3>
-                                        <p className="text-sm text-muted-foreground">
-                                            {watchedValues.releaseType === "music" ? "Music Release" : "Podcast Release"}
-                                            {watchedValues.genre && ` • ${watchedValues.genre.charAt(0).toUpperCase() + watchedValues.genre.slice(1)}`}
-                                        </p>
-                                    </div>
-                                    <p className="text-sm">
-                                        {watchedValues.description || "No description provided."}
-                                    </p>
-                                    {watchedValues.releaseDate && (
-                                        <p className="text-sm">
-                                            Release Date: {format(watchedValues.releaseDate, "PPP")}
-                                        </p>
-                                    )}
-                                    {watchedValues.releaseType === "music" && watchedValues.aesCode && (
-                                        <p className="text-sm">
-                                            Format: {watchedValues.aesCode.charAt(0).toUpperCase() + watchedValues.aesCode.slice(1)}
-                                        </p>
-                                    )}
-                                    {watchedValues.exclusive && (
-                                        <p className="text-sm font-semibold text-primary">Exclusive Release</p>
-                                    )}
-                                </div>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+
+                                        {/* Submit Buttons */}
+                                        <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                                            <Button type="button" variant="outline" className="border-gray-300">
+                                                Cancel
+                                            </Button>
+                                            <Button 
+                                                type="submit" 
+                                                disabled={status === 'uploading'}
+                                                className="bg-blue-600 hover:bg-blue-700 text-white"
+                                            >
+                                                {status === 'uploading' ? 'Creating Release...' : 'Create Release'}
+                                            </Button>
+                                        </div>
+                                    </form>
+                                </Form>
                             </CardContent>
                         </Card>
-                        <Card>
-                            <CardContent className="p-6">
-                                <h2 className="text-xl font-semibold mb-4">Form Progress</h2>
-                                <Progress value={calculateProgress()} className="w-full" />
-                                <p className="text-sm text-muted-foreground mt-2">
-                                    {Math.round(calculateProgress())}% complete
-                                </p>
+                    </div>
+
+                    {/* Preview Sidebar */}
+                    <div className="space-y-6">
+                        <Card className="bg-white shadow-sm border-gray-200">
+                            <CardHeader className="pb-4">
+                                <CardTitle className="text-lg font-medium text-gray-900">Release Preview</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                {/* Artwork */}
+                                <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                                    <img
+                                        src={artworkPreview || "/album_placeholder.svg"}
+                                        alt="Release artwork"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+
+                                {/* Release Info */}
+                                <div className="space-y-3">
+                                    <div>
+                                        <h3 className="font-semibold text-gray-900 text-lg">
+                                            {watchedValues.title || "Untitled Release"}
+                                        </h3>
+                                        <p className="text-gray-600">
+                                            {selectedArtist?.name || "Unknown Artist"}
+                                        </p>
+                                    </div>
+
+                                    {/* Metadata */}
+                                    <div className="space-y-2 text-sm">
+                                        {watchedValues.releaseType && (
+                                            <div className="flex items-center text-gray-600">
+                                                {watchedValues.releaseType === "music" ? 
+                                                    <Music className="h-4 w-4 mr-2" /> : 
+                                                    <Podcast className="h-4 w-4 mr-2" />
+                                                }
+                                                {watchedValues.releaseType === "music" ? "Music" : "Podcast"}
+                                            </div>
+                                        )}
+                                        
+                                        {watchedValues.aesCode && (
+                                            <p className="text-gray-600">
+                                                Format: {watchedValues.aesCode.charAt(0).toUpperCase() + watchedValues.aesCode.slice(1)}
+                                            </p>
+                                        )}
+
+                                        {watchedValues.releaseDate && (
+                                            <p className="text-gray-600">
+                                                Release: {format(watchedValues.releaseDate, "PP")}
+                                            </p>
+                                        )}
+
+                                        {watchedValues.exclusive && (
+                                            <span className="inline-flex items-center px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+                                                Exclusive
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {/* Description */}
+                                    {watchedValues.description && (
+                                        <div>
+                                            <p className="text-gray-700 text-sm leading-relaxed">
+                                                {watchedValues.description}
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {/* Tags */}
+                                    {tags.length > 0 && (
+                                        <div className="space-y-2">
+                                            <p className="text-gray-600 text-sm font-medium">Tags</p>
+                                            <div className="flex flex-wrap gap-1">
+                                                {tags.map((tag) => (
+                                                    <span
+                                                        key={tag}
+                                                        className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                                                    >
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                             </CardContent>
                         </Card>
                     </div>
@@ -549,4 +638,3 @@ export default function NewReleasePage() {
         </div>
     )
 }
-
