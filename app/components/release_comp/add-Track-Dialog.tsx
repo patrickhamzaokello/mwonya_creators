@@ -181,6 +181,7 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
                                 description: "Failed to save track details",
                                 variant: "destructive",
                             })
+                            console.log(saveError);
                             setUploadingFiles(prev => prev.map((f, i) =>
                                 i === index ? { ...f, status: 'error' } : f
                             ));
