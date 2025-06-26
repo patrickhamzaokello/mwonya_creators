@@ -102,8 +102,13 @@ export async function createTrackDetails({ reference_id, title, artist, album, g
         releasedate
     }
 
+    console.log("inside_1");
+    console.log(trackDetails);
 
     const track_results = await saveTrackDetails(trackDetails);
+
+    console.log("inside_2");
+    console.log(track_results);
 
     if (!track_results) {
         return { failure: "Failed to save track details" }
