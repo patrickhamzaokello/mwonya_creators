@@ -144,6 +144,7 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
                         const reference_id = await generateContentId('track');
 
                         try {
+                             console.log(metadata);
                             const createTrackResponse = await createTrackDetails({
                                 reference_id,
                                 title: metadata.title,
@@ -156,6 +157,8 @@ export function AddTrackDialog({ onUploadSuccess, artist_id, album_id, genre_id,
                                 metadata: JSON.stringify(metadata),
                                 releasedate: album_release_date
                             });
+
+                            console.log(createTrackResponse);
 
                             if (!createTrackResponse.success) {
                                 toast({
